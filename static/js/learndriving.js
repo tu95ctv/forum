@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    /*
+
         $('.quest_button').click(function() {
             var catid;
             catid = $(this).attr("idquest");
@@ -144,7 +144,7 @@ $(document).ready(function() {
         });
 
 
-    */
+
 
 
 
@@ -442,6 +442,7 @@ $(document).ready(function() {
         hieu_ung_sau_load_form_va_table = "khong hieu ung"
         closest_wrapper = $(this).closest('div.form-table-wrapper')
         id_closest_wrapper = closest_wrapper.attr('id') // no importaince
+        console.log('id_closest_wrapper',id_closest_wrapper)
         table_name = '' // table_name dung de xac dinh table , sau khi submit form o modal se hien thi o day, trong truong hop force_allow_edit thi table_name attr se bi xoa 
         if (intended_for == 'intended_for_autocomplete') {
             is_both_table = "both form and table"
@@ -621,8 +622,10 @@ $(document).ready(function() {
 
                         } else if (is_both_table == "both form and table") {
                             formdata = $(data).find('.form-manager_r').html()
-                            obj = closest_wrapper.children('.form-manager')
-                            assign_and_fadeoutfadein(obj, formdata)
+                            
+                            obj = closest_wrapper.find('.form-manager')
+                            assign_and_fadeoutfadein(obj, formdata) 
+           
 
                             tabledata = $(data).find('.table-manager_r').html()
                             obj = closest_wrapper.children('.table-manager')
@@ -1287,10 +1290,10 @@ function assign_and_fadeoutfadein(jqueryobject, datahtml) {
 };
 
 
-$(function() {
-    PNotify.prototype.options.styling = "bootstrap3";
-    new PNotify({
-        title: 'Regular Notice',
-        text: 'Hello! Have a good day!'
-    });
-});
+//$(function() {
+    //PNotify.prototype.options.styling = "bootstrap3";
+    //new PNotify({
+        //title: 'Regular Notice',
+        //text: 'Hello! Have a good day!'
+    //});
+//

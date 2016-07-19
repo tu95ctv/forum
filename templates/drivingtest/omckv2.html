@@ -26,13 +26,7 @@
       </div>
    </div>
 </div>
-
-
-
 <div class="modal fade" id="modal-on-mll-table" role="dialog"></div>
-
-
-
 <div class="modal fade" id="config_ca_modal" role="dialog">
    <div class="modal-dialog modal-lg">
       <!-- Modal content-->
@@ -62,14 +56,14 @@
 </div>
 <div class="container-fluid main-body-page">
 <div class="panel-group">
-         <div class="panel panel-success">
-            <div class="panel-heading">
-               <h2 class = "tram-command text-danger" align="center" >
-               Tram
-               <h2>
-            </div>
-         </div>
+   <div class="panel panel-success">
+      <div class="panel-heading">
+         <h2 class = "tram-command text-danger" align="center" >
+         Tram
+         <h2>
       </div>
+   </div>
+</div>
 <div class="col-sm-3 search-and-category">
    <div class = "search-w input-group">
       <input type="text" class="form-control autocomplete_search_tram" id="text-search-input" placeholder="Search Trạm..." data-provide="typeahead" name="main_suggestion"/><span class="input-group-btn"><button class="btn btn-default search-botton" type="button"><i class ="glyphicon glyphicon-search"></i></button>
@@ -81,9 +75,9 @@
       {% crispy table3gform %}
    </div>
    <div class="col-sm-12 table-manager" style="padding-top:20px;">
-            {%if table3gtable%}
-            {% render_table table3gtable  "drivingtest/custom_table_template_mll.html"%}
-            {%endif%}
+      {%if table3gtable%}
+      {% render_table table3gtable  "drivingtest/custom_table_template_mll.html"%}
+      {%endif%}
    </div>
 </div>
 <!--form-table-wrapper-of-tram-info-->
@@ -103,7 +97,6 @@
    <div class="tab-content">
       <div id="home" class="tab-pane fade in active">
          <div class="col-sm-12 danh-sach-tram-tim-kiem" style="padding-top:20px;">
-
          </div>
       </div>
       <div id="command-for-toggle" class="tab-pane fade form-table-wrapper">
@@ -112,32 +105,28 @@
             <input type="text" class="form-control" style="width:400px;"placeholder="search lenh" id="search-lenh" >
             </br>
          </div>
-         <div class="row">
-            <div class="form-manager col-sm-6">
-               {% crispy commandform %}
-            </div>
+         <div class="form-manager col-sm-6" >
+            {% crispy commandform %}
          </div>
-         <div class="row">
-            <div class="col-sm-6 table-manager">
-               {% render_table lenhtable "drivingtest/custom_table_template_mll.html"%}
-            </div>
-            <div class="col-sm-6 ">
-               <table id="myTable" class="table  table-bordered">
-                  <thead>
-                     <tr>
-                        <th class="desc id orderable sortable">ID</th>
-                        <th class="command orderable sortable">command</th>
-                        <th class="orderable sortable ten_lenh">ten lenh</th>
-                        <th class="mo_ta orderable sortable">mo ta</th>
-                        <th class="edit_comlumn">Delelte</th>
-                     </tr>
-                  </thead>
-                  <tbody>
-                  </tbody>
-               </table>
-               <input type="button" class="generate-command  btn-primary "  value="generate-command" />
-               <textarea autocomplete="off" class="command-erea"></textarea>
-            </div>
+         <div class="col-sm-6 table-manager" style = "clear:both"> 
+            {% render_table lenhtable "drivingtest/custom_table_template_mll.html"%}
+         </div>
+         <div class="col-sm-6 ">
+            <table id="myTable" class="table  table-bordered">
+               <thead>
+                  <tr>
+                     <th class="desc id orderable sortable">ID</th>
+                     <th class="command orderable sortable">command</th>
+                     <th class="orderable sortable ten_lenh">ten lenh</th>
+                     <th class="mo_ta orderable sortable">mo ta</th>
+                     <th class="edit_comlumn">Delelte</th>
+                  </tr>
+               </thead>
+               <tbody>
+               </tbody>
+            </table>
+            <input type="button" class="generate-command  btn-primary "  value="generate-command" />
+            <textarea autocomplete="off" class="command-erea"></textarea>
          </div>
       </div>
       <div id="Hide-toggle" class="tab-pane fade">
