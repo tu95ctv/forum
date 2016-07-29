@@ -1,4 +1,3 @@
-a=[1,2]
-print id(a[0])
-print id(a[1])
-print id(a)
+END_CAN_LAY = [0,512,256,128,100,64,32,16]
+END_CAN_LAY.reverse()
+print END_CAN_LAY 

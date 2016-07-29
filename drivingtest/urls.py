@@ -18,6 +18,8 @@ urlpatterns = patterns('',
         
         
         url(r'^$', views.index, name='index'),
+        url(r'^omckv2/modelmanager/(?P<modelmanager_name>\w+)/(?P<entry_id>.*?)/$', views.modelmanager, name='suggestion'),
+        url(r'^taixiu/$', views.taixiu, name='index'),
         url(r'^select_forum/$',  views.select_forum, name='select_forum'),
         url(r'^get-thongbao/$',  views.get_thongbao, name='get-thongbao'),
         url(r'^leech/$',  views.leech, name='leech'),

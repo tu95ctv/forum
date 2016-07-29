@@ -1,1 +1,2 @@
-xlrd==0.9.3
+Django==1.8.3
+psycopg2==2.6.2

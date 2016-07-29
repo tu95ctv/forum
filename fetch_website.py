@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 import os
-
+from django.core.wsgi import get_wsgi_application
+from datetime import datetime
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LearnDriving.settings')
+application = get_wsgi_application()
 import requests
 import sys  
 reload(sys)  
@@ -26,8 +28,7 @@ SETTINGS_DIR = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(SETTINGS_DIR, 'media')
 from bs4 import BeautifulSoup
 
-from drivingtest.models import Ulnew   , AdminUl, ForumTable, PostLog, UlDaPost,\
-    PostLogDaPost, LeechSite,thongbao, postdict
+from drivingtest.models import Ulnew   , AdminUl, ForumTable, PostLog, LeechSite,thongbao
 class check_txt_line():
     pass
 def unique_list(seq):
@@ -221,31 +222,29 @@ def leech_one_entry_freedl2u(ahref_title):
     print 'ok'   
     
 class PostObject(Thread):
-    def __init__(self,sitedict,entry_id_lists):
+    def __init__(self,site_obj,entry_id_lists):
         Thread.__init__(self)
         self._stop = threading.Event()
         self.stop = False
         thongbao.thongbao = " da tao object post"
-        self.postlog = ""
         self.session = requests.session()
         self.khoitaohtml()
-        self.login_flag = 1
-        self.sitedict = sitedict
+        
+        self.site_obj = site_obj
         self.entry_id_lists = entry_id_lists
-        self.save_post_log_path = '/post_log_' + sitedict['url'].replace('www.','').replace('http://.','').replace('/.','') + '.html'
-        self.sitename = sitedict['url'].replace('www.','').replace('http://.','').replace('/.','') 
+        self.save_post_log_path = '/post_log_' + site_obj.url.replace('www.','').replace('http://.','').replace('/.','') + '.html'
         try:
-            self.is_reply = sitedict['is_reply']
+            self.is_reply = site_obj['is_reply']
         except:
             self.is_reply = False
         self.replyWithEnry = False
         if self.is_reply :
-            self.newthread_url = sitedict['url_thread_for_reply'] # for find token
+            self.newthread_url = site_obj['url_thread_for_reply'] # for find token
             if 'showthread' in self.newthread_url:
                 self.loai_forum = 0
                 self.url_reply=self.newthread_url.replace('showthread.php?','newreply.php?do=postreply&')
         else:
-            self.newthread_url = sitedict['newthread_url']
+            self.newthread_url = site_obj.newthread_url
             if 'newthread.php?do' in self.newthread_url:
                 self.loai_forum = 0
     def stop(self):
@@ -255,104 +254,78 @@ class PostObject(Thread):
         return self._stop.isSet()
     
     def run(self):
-        print 'vao ct post'
-        self.siteobj = ForumTable.objects.get(url = self.sitedict['url'])
-        print self.siteobj
-        self.url = self.siteobj.url
-        self.uname = self.siteobj.uname
-        self.passwd = self.siteobj.passwd
         self.sleep_time = 60
-        self.numer_entry_post = 'chua post bai nao'
+        self.login_flag = 1
         thongbao.thongbao = 'Start post'
         self.stop = False
         print thongbao.thongbao
-        self.admin_instance = AdminUl.objects.get(id=1)
         if self.is_reply and not self.replyWithEnry:
             so_bai_se_post =100
         elif self.entry_id_lists ==['all']:
-            print 'ban se post all'
-            entry_list = Ulnew.objects.all().order_by('-id')
-            so_bai_se_post = len (entry_list)
+            entry_lists = Ulnew.objects.all().order_by('-id')
+            so_bai_se_post = len(entry_lists)
             post_all = True
         else:
             so_bai_se_post = len (self.entry_id_lists)
-            print 'so_bai_se_post',so_bai_se_post
-            print 'entry_id_lists',self.entry_id_lists
             post_all = False
         count = 0
         while count < so_bai_se_post:
-            
             if not self.is_reply or  self.replyWithEnry:
                 if post_all:
-                    print 'in loop post all'
-                    last_Ulnew = entry_list[count]
+                    topic_entry = entry_lists[count]
                 else:
                     entry_id =  self.entry_id_lists[count]
-                    last_Ulnew = Ulnew.objects.get(id = entry_id )
-                try:
-                    lenMyUl = len(last_Ulnew.myul)
-                except:
-                    lenMyUl = 0
+                    topic_entry = Ulnew.objects.get(id = entry_id )
                 count = count + 1
-                if  post_all and lenMyUl <5 :
-                    print 'entry nay chua co myul'
+                if len(topic_entry.myul)<2 :
                     continue
-                self.entry = last_Ulnew
-                category = last_Ulnew.category.capitalize()
-                print 'category', [category]
+                self.entry = topic_entry
+                #category = topic_entry.category.capitalize()
+                
+                CATEGORY_NAME_DIST = {u'Music':'music',u'TV Show':'tv_show',u'Movie':'movie'}
                 if self.is_reply:
                     pass
-                    
-                elif category==u'Music':
-                    self.newthread_url = self.siteobj.music
-                elif 'TV Show' in category:
-                    print 'cate la TV show'
-                    self.newthread_url = self.siteobj.tv_show
-                    print 'self.newthread_url' ,self.newthread_url
-                elif 'Movie' in category:
-                    print 'cate la Movie'
-                    self.newthread_url = self.siteobj.movie
-                    print 'self.newthread_url' ,self.newthread_url
                 else:
-                    print 'chua co category de post bai'   
-                    continue
+                    self.newthread_url  = getattr(self.site_obj,CATEGORY_NAME_DIST[topic_entry.category])
+                    if not self.newthread_url:
+                        continue
+     
                 try:
-                    entry_da_post = Ulnew.objects.get(forumback=self.siteobj,postLog__Ulnew=last_Ulnew)
+                    entry_da_post = Ulnew.objects.get(forumback=self.site_obj,postLog__Ulnew=topic_entry)
                     print 'topic %s  post roi' %entry_da_post
                     continue
                 except:
+                    #tiep tuc de post
                     pass
-                self.numer_entry_post = 'bai so' + str(count + 1) + ' '
                 if self.stop:
                     thongbao.thongbao = "stop post"
                     print thongbao.thongbao
                     break
-                self.title  = last_Ulnew.title.decode('utf-8')
-                print 'sap post bai',self.title
-                self.content = last_Ulnew.description.decode('utf-8')
+                self.title  = topic_entry.title.decode('utf-8')
+                self.content = topic_entry.description.decode('utf-8')
                 dllink=''
-                admin_instance = self.admin_instance
+                admin_instance = AdminUl.objects.get(id=1)
                 link_dict = {}
                 rg_order = admin_instance.rg_order
                 ul_order = admin_instance.ul_order
                 up_order = admin_instance.up_order
-                if  last_Ulnew.myrg:
-                    rg_link =   '\n[code]' + last_Ulnew.myrg + '[/code]\n'
+                if  topic_entry.myrg:
+                    rg_link =   '\n[code]' + topic_entry.myrg + '[/code]\n'
                     link_dict[rg_order] = rg_link
-                elif admin_instance.show_not_my_link and last_Ulnew.rg:
-                    rg_link =   '\n[code]' + last_Ulnew.rg + '[/code]\n'
+                elif admin_instance.show_not_my_link and topic_entry.rg:
+                    rg_link =   '\n[code]' + topic_entry.rg + '[/code]\n'
                     link_dict[rg_order] = rg_link
-                if  last_Ulnew.myul:
-                    ul_link =   '\n[code]' + last_Ulnew.myul + '[/code]\n'
+                if  topic_entry.myul:
+                    ul_link =   '\n[code]' + topic_entry.myul + '[/code]\n'
                     link_dict[ul_order] = ul_link
-                elif admin_instance.show_not_my_link and last_Ulnew.ul:
-                    ul_link =   '\n[code]' + last_Ulnew.ul + '[/code]\n'
+                elif admin_instance.show_not_my_link and topic_entry.ul:
+                    ul_link =   '\n[code]' + topic_entry.ul + '[/code]\n'
                     link_dict[ul_order] = ul_link
-                if  last_Ulnew.myup:
-                    up_link =   '\n[code]' + last_Ulnew.myup + '[/code]\n'
+                if  topic_entry.myup:
+                    up_link =   '\n[code]' + topic_entry.myup + '[/code]\n'
                     link_dict[up_order] = up_link
-                elif admin_instance.show_not_my_link and last_Ulnew.up:
-                    up_link =   '\n[code]' + last_Ulnew.up + '[/code]\n'
+                elif admin_instance.show_not_my_link and topic_entry.up:
+                    up_link =   '\n[code]' + topic_entry.up + '[/code]\n'
                     link_dict[up_order] = up_link
                 od = collections.OrderedDict(sorted(link_dict.items()))  
                 for k, v in od.iteritems():
@@ -362,21 +335,16 @@ class PostObject(Thread):
                 if not_allowed_post_link:
                     p = re.compile( 'http://.*?\s',re.DOTALL)
                     self.content = p.sub( '', self.content)
-                print self.content
-            
             if self.login_flag :
                 self.login()
                 self.login_flag = 0
             self.findtoken()
-            print 'self.stop',self.stop
-            
             try:
                 if not self.stop:
                     self.post()
             except:
                 pass
             
-            print ' ( so bai da post)',count
             sleeptime = self.sleep_time + randint(10, 20)
             if (count != so_bai_se_post) and not self.stop:
                 print '\nwait %s s' % sleeptime
@@ -397,27 +365,22 @@ class PostObject(Thread):
 'User-Agent'    :'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0',
 'X-Requested-With'    :'XMLHttpRequest',}
     def login(self):
-        print self.sitename,'dau cua function login'
+        print self.site_obj.name,'dau cua function login'
         if self.loai_forum == 0:
-            loginurl = self.url + 'login.php?do=login'
-            md5 = hashlib.md5(self.passwd);md5 = md5.hexdigest()
+            loginurl = self.site_obj.url + 'login.php?do=login'
+            md5 = hashlib.md5(self.site_obj.passwd);md5 = md5.hexdigest()
             opts = {
             'vb_login_md5password': md5,
             'vb_login_md5password_utf': md5,
-            'vb_login_username': self.uname,
+            'vb_login_username': self.site_obj.uname,
             'do': 'login',
             }
-            #data = urllib.urlencode(opts)   
-            #response=self.opener.open(loginurl, data)
         count_repost = 0
         while count_repost < 10:
             try:
                 r = self.session.post(loginurl, data=opts)
-                #print r.cookies
-                self.postlog = "Yes....login ok"
                 thongbao.thongbao = "Login thanh cong..."
-                #self.postlog = login_ct
-                print self.sitename , '***login thanh cong***'
+                print self.site_obj.name , "Yes....login ok vo uname",self.site_obj.uname
                 login_ct = r.content 
                 with open(MEDIA_ROOT +'/login_log.html', 'wb') as f:
                     f.write(login_ct)
@@ -433,38 +396,24 @@ class PostObject(Thread):
             #print 'self.session',self.session.headers
             
     def findtoken(self):
-        #response2=self.opener.open(self.newthread_url)
-        #token = response2.read()
         count_repost = 0
         while count_repost < 10 and not self.stop:
-            print self.sitename,'find token lan thu ',count_repost+1
-            #print self.sitename,'newthread url',self.newthread_url
+            print self.site_obj.name,'find token lan thu ',count_repost+1
             try:
                 r = self.session.get(self.newthread_url)
                 token = r.content
                 self.security_token =re.findall('name="securitytoken" value="(.*?)"', token)[0]
                 thongbao.thongbao = self.security_token
-                print self.sitename,self.security_token
+                print self.site_obj.name,self.security_token
                 break
             except Exception as e:
                 thongbao.thongbao = " loi HTTP please wait for post again" + u'{0}'.format(type(e)) +  u'{0}'.format(e)
                 print thongbao.thongbao
                 sleep(15)
                 count_repost += 1
-                
-            
-            
-            
-        
-        #with open(MEDIA_ROOT +'/token_log.html', 'wb') as f:
-                #f.write(token)
-        
+
     def post (self):
-        count_repost = 0
-        print self.sitename, 'trong ham post'
-        
-        
-        print self.sitename, 'count_repost',count_repost
+        print 'Trong ham post',datetime.now()
         if self.is_reply:
             url_post = self.url_reply
             if self.replyWithEnry:
@@ -480,7 +429,6 @@ class PostObject(Thread):
                 'prefixid':'UL'
                 }
         else:
-            print 'chuan bi du lien'
             url_post = self.newthread_url
             print 'url_post',url_post
             posts = {
@@ -491,45 +439,27 @@ class PostObject(Thread):
                 'do':'postthread',
                 'prefixid':'UL'
                 }
-            print' chuan bi xong du lieu'
+        count_repost = 0
         while count_repost < 10:
-            print self.sitename,'count_repost in while',count_repost
-            try:
-                print self.sitename,'chuan bi submit...'
-                r = self.session.post(url_post, data=posts)
-                print self.sitename,'da submit'
-                ct = r.content
-                self.postlog = "Yes....post ok"
-                trave_add = r.url
-                if trave_add == url_post:
-                        print 'send request nhung bi loi' ,trave_add
-                        thongbao.thongbao = "post loi do time"
-                        print ct
-                        with open(MEDIA_ROOT +'/post_log.html', 'wb') as f:
-                            f.write(ct)
-                        print 'da save postlog vao disk'
-                else:
-                        print 'post ok ',trave_add
-                        thongbao.thongbao = "post thanh cong " + trave_add
-                        try:
-                            PostLog.objects.get_or_create(forum = self.siteobj,Ulnew = self.entry,pested_link=trave_add)
-                        except:
-                            PostLog.objects.get_or_create(forum = self.siteobj,Ulnew = self.entry,pested_link='post ok roi')
-                        '''
-                        
-                        postedUlDatabaseEntry = UlDaPost.objects.get_or_create(title = self.title)
-                        PostLogDaPost.objects.get_or_create(forum = self.siteobj,UlDaPost = postedUlDatabaseEntry,posted_link=trave_add)
-                        '''
-                break
-            except Exception as e:
-                print ' co loi khi submit ',type(e),e
-                thongbao.thongbao = " loi HTTP please wait for post again"
-                sleep(15)
-                count_repost += 1 
-        
-        
+            print self.site_obj.name,'count_repost in while',count_repost
+            print self.site_obj.name,'chuan bi submit...'
+            r = self.session.post(url_post, data=posts)
+            print self.site_obj.name,'da submit'
+            trave_add = r.url
+            if trave_add == url_post:
+                    print 'send request nhung bi loi' ,trave_add
+                    thongbao.thongbao = "post loi do time"
+                    with open(MEDIA_ROOT +'/post_log.html', 'wb') as f:
+                        f.write(r.content)
+            else:
+                    print 'post ok ',trave_add
+                    thongbao.thongbao = "post thanh cong " + trave_add
+                    print 'dang luu lich su post thanh cong'
+                    PostLog.objects.get_or_create(forum = self.site_obj,posted_topic = self.entry,posted_link=trave_add)
+                    print 'luu xong lich su post thanh cong'
 
-
+            break
+    
     
 class importUL(object):
     def __init__(self,imported_link):
@@ -565,7 +495,6 @@ class importUL(object):
         login_ul = r.content
         print 'url dirrect',r.url
         print 'after login reposnse header',r.headers
-        self.postlog = "Yes....login ok"
         thongbao.thongbao = "Login thanh cong..."
         print 'login thanh cong gia tri tra ve\n', 
         with open(MEDIA_ROOT +'/login_log.html', 'wb') as f:
@@ -587,7 +516,6 @@ class importUL(object):
         print 'after post reposnse ',ct
         print 'type of ct',type(ct)
         return ct
-        self.postlog = "Yes....post ok"
         thongbao.thongbao = "post thanh cong..."
         print '%s %post thanh cong ' ,ct
         with open(MEDIA_ROOT +'/login_post.html', 'wb') as f:
@@ -622,8 +550,8 @@ kho = {'url':'http://1kho.com/',
           'movie':'http://1kho.com/newthread.php?do=newthread&f=57',
           }
 amaderforum = {'url':'http://amaderforum.com/',
-        'is_reply':True,
-       'uname':'dicochno5',
+        'is_reply':False,
+       'uname':'mothtrdo',
        'passwd':'228787',
        'url_thread_for_reply':'http://amaderforum.com/showthread.php?t=4682391',
        #'url_reply':'http://amaderforum.com/newreply.php?do=postreply&t=4681089',#
@@ -631,6 +559,7 @@ amaderforum = {'url':'http://amaderforum.com/',
        'music':'http://amaderforum.com/newthread.php?do=newthread&f=21',
        'tv_show':'http://amaderforum.com/newthread.php?do=newthread&f=13',
        'movie':'http://amaderforum.com/newthread.php?do=newthread&f=8',
+       'sleep_time':60,
        }
 shaanig = {'url':'http://www.shaanig.com/',
        'uname':'mothtrdo5',
@@ -645,6 +574,7 @@ shaanig = {'url':'http://www.shaanig.com/',
        'anime':'http://www.shaanig.com/newthread.php?do=newthread&f=5',
        'mobile':'http://www.shaanig.com/newthread.php?do=newthread&f=88',
        'ebook':'http://www.shaanig.com/newthread.php?do=newthread&f=87',
+       'sleep_time':61,
        }
 forumwizard = {'url':'https://forumwizard.net/',
        'uname':'rimogiha',
@@ -737,7 +667,7 @@ def update_my_ul_link_to_db(ullink_txt):
     my_uls = ullink_txt.split('\n')
     print 'so file input',len(my_uls)
     for entry_db in entry_dbs:
-        print entry_db.title
+        #print entry_db.title
         leech_ul_text = entry_db.ul
         leech_uls = leech_ul_text.split('\n')
         my_ul_this_entry = ''
@@ -778,6 +708,11 @@ def createForumTable(kwarg):
     new_instance.uname = kwarg['uname']
     new_instance.passwd = kwarg['passwd'] 
     new_instance.newthread_url = kwarg['newthread_url'] 
+    new_instance.name = new_instance.url.replace('www.','').replace('http://','').replace('https://','').replace('/','').replace('.','_')
+    try:
+        new_instance.sleep_time = kwarg['sleep_time']
+    except:
+        pass 
     try:
         new_instance.music = kwarg['music']
     except:
@@ -920,7 +855,6 @@ def leech_bai(cate_page,begin_page,end_page):
     #cate_page= 'http://lastestmovie.com/category/tv-show/'
     #cate_page= 'http://lastestmovie.com/category/movie/'
     if 'lastestmovie.com' in cate_page:
-        
         for page_num in range(begin_page,end_page):
             page_url = cate_page + 'page/' + str(page_num) + '/'
             entry_lists = get_entry_link(page_url)
@@ -943,8 +877,8 @@ def init_d4():
     for site in danhsachLeechSite:
         createLeechSiteTable(site)
     create_admin_ul()
-def Postfunction(sitedict):
-    sitename = sitedict['url']
+def Postfunction(site_obj):
+    sitename = site_obj.url
     count = 0
     while 1:
         if count ==30:
@@ -953,22 +887,10 @@ def Postfunction(sitedict):
         print sitename ,count ,'\n'
         sleep(0.1) 
 if __name__ == '__main__':
-    #leech_bai('http://freedl2u.co/movies/', 1, 2)
-    #txt = get_link_from_db()
-    #import_ul_txt_to_myul(txt)
-    #Postfunction(shaanig)
-    '''
-    postdict[amaderforum['url']] = PostObject(amaderforum,['all'])
-    postdict[shaanig['url']] = PostObject(shaanig,['all'])
-    postdict[shaanig['url']].start()
-    postdict[amaderforum['url']].start()
-    sleep(20)
-    
-    postdict[amaderforum['url']].stop()
-    '''
-    init_d4()
-    leech_bai('http://lastestmovie.com/category/movie/', 2, 3)
-    #postdict[shaanig['url']] = PostObject(shaanig,['all'])
-    #postdict[shaanig['url']].start()
-    #newpost = PostObject(amaderforum,['all'])
-    #newpost.start()
+
+    #init_d4()
+    #leech_bai('http://lastestmovie.com/category/movie/', 5, 6)
+    #leech_bai('http://lastestmovie.com/category/music/', 1, 5)
+
+    newpost = PostObject(ForumTable.objects.get(url = "http://amaderforum.com/"),['all'])
+    newpost.start()

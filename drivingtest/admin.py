@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from drivingtest.models import Ulnew
+from drivingtest.models import Ulnew, ForumTable
 
 
 '''
@@ -23,3 +23,4 @@ class Table3gAdmin(admin.ModelAdmin):
 '''
 #admin.site.register(Ulnew,Table3gAdmin)
 admin.site.register(Ulnew)
+admin.site.register(ForumTable)

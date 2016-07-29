@@ -1,5 +1,5 @@
 import os
-from xu_ly_db_3g import read_line
+from soicau import read_line
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LearnDriving.settings')
 
 from drivingtest.forms import Mllform

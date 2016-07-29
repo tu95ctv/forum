@@ -1,3 +1,24 @@
+.even {
+	background-color: 	 #f2f2f2
+}
+#txxt-table .even {
+	background-color: 		 #ecffff
+}
+.row1 {
+    clear: left;
+}
+span.current-in-td {color: red}
+span.wanting-in-td {color:#009900}
+span.xiu-cau {
+	color:yellow;
+}
+
+span.tai-cau:after {
+    content: url('../../media/tai.png');
+}
+span.xiu-cau:after {
+    content: url('../../media/xiu.png');
+}
 label[for="id_RNC"] {
     color: green;
 }

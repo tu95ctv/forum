@@ -4,15 +4,22 @@
 {% if table.page %}
 <div class="table-container">
 {% endif %}
+
+
+
 {% block table %}
 <table{% if table.attrs %} {{ table.attrs.as_html }}{% endif %}>
-  
+    {% nospaceless %}
     {% block table.thead %}
-    <thead
+   
+    <thead>
+
         <tr>
         {% for column in table.columns %}
             {% if column.orderable %}
+            
             <th {{ column.attrs.th.as_html }}><a href="{{table.jquery_url}}{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}" class="searchtable_header_sort">{{ column.header }}</a>
+               
             </th>
             {% else %}
 
@@ -50,6 +57,7 @@
     {% block table.tfoot %}
     <tfoot></tfoot>
     {% endblock table.tfoot %}
+    {% endnospaceless %}
 </table>
 {% endblock table %}
 
@@ -66,11 +74,11 @@
 <ul class="pagination">
 
 
-{% block pagination.first %}<li class="first"><a href="{{table.jquery_url}}{% querystring table.prefixed_page_field=1 %}" onclick="{% if table.page.has_previous %}return true{% else %}return false{% endif %}" style="padding-bottom:12px" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-left" ></span><span class="glyphicon glyphicon-chevron-left"></span></a></li>{% endblock pagination.first %}
+{% nospaceless %}{% block pagination.first %}<li class="first"><a href="{{table.jquery_url}}{% querystring table.prefixed_page_field=1 %}" onclick="{% if table.page.has_previous %}return true{% else %}return false{% endif %}" style="padding-bottom:12px" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-left" ></span><span class="glyphicon glyphicon-chevron-left"></span></a></li>{% endblock pagination.first %}{% endnospaceless %}
 
-    {% block pagination.previous %}<li class="previous"><a href="{{table.jquery_url}}{% if table.page.has_previous %}{% querystring table.prefixed_page_field=table.page.previous_page_number %}{% endif %}" onclick="{% if table.page.has_previous %}return true{% else %}return false{% endif %}" style="padding-bottom:12px" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-left"></span></a></li>{% endblock pagination.previous %}
+    {% nospaceless %}{% block pagination.previous %}<li class="previous"><a href="{{table.jquery_url}}{% if table.page.has_previous %}{% querystring table.prefixed_page_field=table.page.previous_page_number %}{% endif %}" onclick="{% if table.page.has_previous %}return true{% else %}return false{% endif %}" style="padding-bottom:12px" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-left"></span></a></li>{% endblock pagination.previous %}{% endnospaceless %}
 
-
+{% nospaceless %}
 {% block pagination.current %}
 
 {% for i in table.page.paginator.page_range %}
@@ -86,15 +94,15 @@
 {% endfor%}
 
 {% endblock pagination.current %}
+{% endnospaceless %}
 
 
 
+    {% nospaceless %}{% block pagination.next %}<li class="next"><a href="{{table.jquery_url}}{% if table.page.has_next %}{% querystring table.prefixed_page_field=table.page.next_page_number %}{% endif %}" style="padding-bottom:12px" onclick="{% if table.page.has_next %}return true{% else %}return false{% endif %}" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-right"></span></a></li>{% endblock pagination.next %}{% endnospaceless %}
 
-    {% block pagination.next %}<li class="next"><a href="{{table.jquery_url}}{% if table.page.has_next %}{% querystring table.prefixed_page_field=table.page.next_page_number %}{% endif %}" style="padding-bottom:12px" onclick="{% if table.page.has_next %}return true{% else %}return false{% endif %}" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-right"></span></a></li>{% endblock pagination.next %}
+    {% nospaceless %}{% block pagination.last %}<li class="last"><a href="{{table.jquery_url}}{% querystring table.prefixed_page_field=thelastone %}" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding-bottom:12px" onclick="{% if table.page.has_next %}return true{% else %}return false{% endif %}" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></a></li>{% endblock pagination.last %}{% endnospaceless %}
 
-    {% block pagination.last %}<li class="last"><a href="{{table.jquery_url}}{% querystring table.prefixed_page_field=thelastone %}" style="border-top-right-radius:4px;border-bottom-right-radius:4px;padding-bottom:12px" onclick="{% if table.page.has_next %}return true{% else %}return false{% endif %}" class="searchtable_header_sort"><span class="glyphicon glyphicon-chevron-right"></span><span class="glyphicon glyphicon-chevron-right"></span></a></li>{% endblock pagination.last %}
-
-    {% block pagination.cardinality %}<li class="cardinality">{% if total != count %}{% blocktrans %}{{ count }} / {{ total }}{% endblocktrans %}{% else %}{{ total }}{% endif %} {% if total == 1 %}{{ table.data.verbose_name }}{% else %}{{ table.data.verbose_name_plural }}{% endif %}</li>{% endblock pagination.cardinality %}
+    {% nospaceless %}{% block pagination.cardinality %}<li class="cardinality">{% if total != count %}{% blocktrans %}{{ count }} / {{ total }}{% endblocktrans %}{% else %}{{ total }}{% endif %} {% if total == 1 %}{{ table.data.verbose_name }}{% else %}{{ table.data.verbose_name_plural }}{% endif %}</li>{% endblock pagination.cardinality %}{% endnospaceless %}
 
 </ul>
 </div>
