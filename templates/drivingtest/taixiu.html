@@ -6,63 +6,81 @@
 {% load index %}
 <div class="container-fluid">
    <div class="row">
-      <b> TX SOICAU </b>
-      <div class="col-sm-12 ">
-         last phien : <b style="font-size:20px;color:green">{{last_phien_so}}</b>
+      <div id="import100phienForm-wrapper" class="form-table-wrapper col-sm-12 ">
+         <b> Form </b>
+         <div class="form-manager col-sm-12" >
+            {%if importForm %}
+            {% crispy importForm %}
+            {%endif%}
+         </div>
+      </div>
+   </div>
+   <div id="special-for-auto-import">
+      <div class = "row">
+         <div id="autoImportForm-wrapper" class="form-table-wrapper col-sm-12 ">
+            <div class="form-manager col-sm-12" >
+               <b> Form </b>
+               {% crispy autoImportForm %}
+               {%if form_notification %}
+               {{form_notification |safe}}
+               {%endif%}
+            </div>
+         </div>
+      </div>
+      <div class="row">
+         <b> TX SOICAU </b>
+         <div class="col-sm-12 ">
+            last phien : <b style="font-size:20px;color:green">{{last_phien_so}}</b>
+            </br>
+            {{string_tai_xiu_soi_cau_100}}
+            </br>
+         </div>
+      </div>
+      <div class="row">
+         </br></br>
+         <b style="color:green"> REPEAT TABLE </b>
+         </br></br>
+         {% for taiXiuXiuTai_Table,repeat_table,x,y  in rp_tx_combines %}
+         <div class="col-sm-6 {% cycle 'row1' 'row2' %}">
+            </br></br></br>
+            <b style = "color: #006600;font-size:24px">{{taiXiuXiuTai_Table.len}}</b></br>
+            {% render_table taiXiuXiuTai_Table %}
+            </br>
+            {% render_table repeat_table %}
+            <span style="color:#ff80df">Cho xen ke</span>
+            {% render_table x %}
+            <b style = "color: #006600;font-size:24px">{{taiXiuXiuTai_Table.len}}</b></br>
+         </div>
+         {%endfor%}
          </br>
-         {{string_tai_xiu_soi_cau_100}}
-         </br>
-         <div class="row">
-   <div id="import100phienForm-wrapper" class="form-table-wrapper col-sm-12 ">
-      <b> Form </b>
-      <div class="form-manager col-sm-12" >
-         {% crispy importForm %}
       </div>
-      <div class = "table-manager col-sm-6" class="col-sm-6">
+      <div class="row">
+         <div class="col-sm-6 ">
+            <b> Tong 3 Dice </b>
+            {% render_table tong_3_table %}
+         </div>
       </div>
    </div>
-</div>
-         {% render_table thoi_gian_cho_su_lap_lai_Table %}
-      </div>
-   </div>
-      
+   <!--end special div-->
    <div class="row">
-      </br></br>
-      <b style="color:green"> REPEAT TABLE </b>
-      </br></br>
-      {% for taiXiuXiuTai_Table,repeat_table,x,y  in rp_tx_combines %}
-      <div class="col-sm-6 {% cycle 'row1' 'row2' %}">
-         </br></br></br>
-         <b style = "color: #006600;font-size:24px">{{taiXiuXiuTai_Table.len}}</b></br>
-         {% render_table taiXiuXiuTai_Table %}
-      </br>
-         {% render_table repeat_table %}
-         
-         <span style="color:#ff80df">Cho xen ke</span>
-         {% render_table x %}
-         {% render_table y %}
-         <b style = "color: #006600;font-size:24px">{{taiXiuXiuTai_Table.len}}</b></br>
+      <div id="taixiu-wrapper" class="form-table-wrapper col-sm-12 ">
+         <b> Form </b>
+         <div class="form-manager col-sm-6" >
+            {%if taiXiuForm %}
+            {% crispy taiXiuForm %}
+            {%endif%}
+         </div>
+         <div class = "table-manager col-sm-6" class="col-sm-6">
+            {%if taixiu_table %}
+            {% render_table taixiu_table "drivingtest/custom_table_template_mll.html" %}
+            {%endif%}
+         </div>
       </div>
-      {%endfor%}
-      </br>
    </div>
    <div class="row">
-      <div class="col-sm-6 ">
-         <b> Tong 3 Dice </b>
-         {% render_table tong_3_table %}
-      </div>
-   </div>
-</div>
-
-<div class="row">
-   <div id="taixiu-wrapper" class="form-table-wrapper col-sm-12 ">
-      <b> Form </b>
-      <div class="form-manager col-sm-6" >
-         {% crispy taiXiuForm %}
-      </div>
-      <div class = "table-manager col-sm-6" class="col-sm-6">
-         {% render_table taixiu_table "drivingtest/custom_table_template_mll.html" %}
-      </div>
+      {%if thoi_gian_cho_su_lap_lai_Table %}
+      {% render_table thoi_gian_cho_su_lap_lai_Table %}
+      {%endif%}
    </div>
 </div>
 {% endblock %}

@@ -4,13 +4,19 @@ import re
 from django.core.wsgi import get_wsgi_application
 from django.utils.safestring import mark_safe
 from django.db.models.query import QuerySet
+import urllib2
+import requests
+from django.db.models import Q
+import operator
+import threading
+from time import sleep
 SETTINGS_DIR = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(SETTINGS_DIR, 'media')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LearnDriving.settings')
 application = get_wsgi_application()
-from drivingtest.models import TaiXiu
+from drivingtest.models import TaiXiu, Tb_import
 from bs4 import BeautifulSoup
-#dict_attr = OrderedDict()
+from threading import Thread
 dict_attr ={}
 
 def read_line(path,split_item):
@@ -250,8 +256,8 @@ def create_giong_nhau_khac_nhau_lists(tai_xiu_lists,show_description = "khong xe
     xiu_sluong = 0
     string_tai_xiu_soi_cau = ''
     current_html_template = '<span class="current-in-td">%s</span>'
-    
-    
+    xen_ke_giong_nhau_bat_dau_tu_TAI_dict = {}
+    xen_ke_giong_nhau_bat_dau_tu_XIU_dict = {}
     
     for c,cau in enumerate(tai_xiu_lists):
         if isinstance(tai_xiu_lists, QuerySet):
@@ -283,13 +289,11 @@ def create_giong_nhau_khac_nhau_lists(tai_xiu_lists,show_description = "khong xe
                     xen_ke_or_giong_nhau_lists.append(XEN_KE)
                 if current_i==XIU:
                     taixiu +=1
-                    chot_tai = so_cau_tai_giong_nhau_trong_1_nhom
-                    tai_repeat_lists.append(chot_tai)
+                    tai_repeat_lists.append(so_cau_tai_giong_nhau_trong_1_nhom)
                     so_cau_tai_giong_nhau_trong_1_nhom =0
                 else:#chot so_luong_tai
                     xiutai +=1
-                    chot_xiu = so_cau_xiu_giong_nhau_trong_1_nhom
-                    xiu_repeat_lists.append(chot_xiu)
+                    xiu_repeat_lists.append(so_cau_xiu_giong_nhau_trong_1_nhom)
                     so_cau_xiu_giong_nhau_trong_1_nhom= 0
             else:
                 if is_created_xenKe_list:
@@ -430,7 +434,7 @@ def phien_100_to_html():
         
         thuc_te_so_import  = 0
         quet_qua_ma_khong_duoc_tao = 0
-        phien_co_gia_tri_khac_truoc=''
+        str_phien_co_gia_tri_khac_truoc=''
         so_phien_bi_khac = 0
         for c,entry in enumerate(entries):
             
@@ -453,7 +457,6 @@ def phien_100_to_html():
                     tai_or_xiu = 0
                 instance_dict['tai_1_xiu_0'] =tai_or_xiu
                 instance_dict['phien_so'] =phien
-                print c,phien,so_phien_in_100
                 try:
                     created = False
                     instance = TaiXiu.objects.get(phien_so = phien)
@@ -465,9 +468,9 @@ def phien_100_to_html():
                         database_data = getattr(instance, key)
                         if  database_data!=value:
                             field_bi_khac = '"%s"-%s-%s'%(key,value,database_data)
-                            phien_co_gia_tri_khac_truoc_1_item = '[%s (so thu tu %s) field khac %s]'%(str(instance.phien_so),so_phien_in_100,field_bi_khac)
-                            phien_co_gia_tri_khac_truoc += phien_co_gia_tri_khac_truoc_1_item +','
-                            print phien_co_gia_tri_khac_truoc_1_item,'key value',key,value
+                            str_phien_co_gia_tri_khac_truoc_1_item = '[%s (so thu tu %s) field khac %s]'%(str(instance.phien_so),so_phien_in_100,field_bi_khac)
+                            str_phien_co_gia_tri_khac_truoc += str_phien_co_gia_tri_khac_truoc_1_item +','
+                            print str_phien_co_gia_tri_khac_truoc_1_item,'key value',key,value
                             so_phien_bi_khac +=1
                             break 
                             
@@ -488,14 +491,132 @@ def phien_100_to_html():
                 so_phien_in_100 +=1
         tb='tong ket\n,'
         tb += '\n,' + 'last_phien %s'%last_phien
-        tb += '\n,' + 'phien_co_gia_tri_khac_truoc %s'%phien_co_gia_tri_khac_truoc
+        tb += '\n,' + 'str_phien_co_gia_tri_khac_truoc %s'%str_phien_co_gia_tri_khac_truoc
         tb +='\n,' +'last_phien_bat_dau_trong_html %s'%last_phien_bat_dau_trong_html
         tb +='\n,' +'ly_thuyet_se_co_so_luot_duoc_import %s'%ly_thuyet_se_co_so_luot_duoc_import
         tb +='\n,' +'thuc_te_so_import %s'%thuc_te_so_import
         tb +='\n,' +'quet_qua_ma_khong_duoc_tao %s'%quet_qua_ma_khong_duoc_tao
         tb +='\n,' +'so_phien_bi_khac %s'%so_phien_bi_khac
         print tb
-        return tb      
+        return tb
+def tim_phien_cua_100(dict_100_phien):
+    return 0000    
+def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or_test = True):
+        html = get_html('http://vuachoibai.com/miniluckydice/MiniGameLuckyDice/LuckyDiceSoiCau')
+        soup = BeautifulSoup(html)
+        class_entry_name = '.tx_ketqua_soicau'
+        entries = soup.select(class_entry_name)
+        #print 'entries',entries,'\n',len(entries)
+        
+
+
+        list_100_phiens = []
+        for c,entry in enumerate(entries):
+            lis = entry.select('li')
+            if c==2 or c==6:
+                lis.reverse()
+            for li in lis:
+                instance_dict = {}
+                li_title = li['title']#"Tài: 12 (6 3 3)"
+                rs = re.findall("(\S{3}?): (\d+) \((\d) (\d) (\d)\)",li_title)
+                tai_or_xiu_string= rs[0][0]
+                instance_dict['tong'] = int(rs[0][1])
+                instance_dict['cau_1'] = int(rs[0][2])
+                instance_dict['cau_2'] = int(rs[0][3])
+                instance_dict['cau_3'] = int(rs[0][4])
+                if tai_or_xiu_string ==u"Tài":
+                    tai_or_xiu = 1
+                elif tai_or_xiu_string ==u"Xỉu":
+                    tai_or_xiu = 0
+                instance_dict['tai_1_xiu_0'] =tai_or_xiu
+                #instance_dict['phien_so'] =phien
+                list_100_phiens.append(instance_dict)
+        
+        tb='tong ket\n,'
+        #print list_100_phiens
+        last_phien = TaiXiu.objects.latest('phien_so').phien_so
+        if last_phien_in_100_user_import:
+            phien = last_phien_in_100_user_import-1
+        else:#tim 
+            lastest_100_cau_in_dbs = TaiXiu.objects.filter(phien_so__gt = last_phien-100 )
+            same_100_html_querysets =[]
+            qgroup=Q()
+            
+            for count,i_tim in enumerate(range(98,90,-1)):
+                instance_dict = list_100_phiens[i_tim]
+                qgroup = reduce(operator.and_, (Q(**{key :value}) for key,value in instance_dict.items()))
+                if count ==0:
+                    pass
+                elif count!=0:
+                    instance_dict['phien_so'] = same_100_html_querysets[0].phien_so + 1
+                    qgroup_FRNAME = reduce(operator.or_, (Q(**{"phien_so" : (obj.phien_so + 1)}) for obj in same_100_html_querysets ))    
+                    qgroup = qgroup & qgroup_FRNAME       
+                
+                same_100_html_querysets  = lastest_100_cau_in_dbs.filter(qgroup)
+                    
+                if len(same_100_html_querysets ) == 1:
+                    last_phien_in_100_user_import = same_100_html_querysets [0].phien_so  + i_tim
+                    #print 'same_100_html_querysets [0] %s,instance_dict %s'%(same_100_html_querysets [0],instance_dict)
+                    break
+                elif len(same_100_html_querysets) ==0:
+                    raise ValueError ('databse chua co cau nao trong 100 cau')
+            phien = last_phien_in_100_user_import
+        str_phien_co_gia_tri_khac_truoc = ''
+        so_phien_bi_khac=0
+        thuc_te_so_import = 0
+        quet_qua_ma_khong_duoc_tao =0
+        so_phien_in_100 = 1
+        for instance_dict in list_100_phiens:
+            instance_dict['phien_so'] = phien
+            try:
+                created = False
+                instance = TaiXiu.objects.get(phien_so = phien)
+                if instance.cau_1 is None or ALOWED_change:
+                    instance.__dict__.update(instance_dict)
+                    instance.save()
+                    created = True
+                for (key, value) in instance_dict.items():
+                    database_data = getattr(instance, key)
+                    if  database_data!=value:
+                        #print '@@@@@@@@@@da co su khac biet'
+                        #print instance_dict
+                        #for k,v in instance_dict.items():
+                            #print k,getattr(instance, k)
+                        field_bi_khac = '"%s"-%s-%s'%(key,value,database_data)
+                        str_phien_co_gia_tri_khac_truoc_1_item = '[%s (so thu tu %s) field khac %s (tong o html %s,tong o db %s ]'%(str(instance.phien_so),so_phien_in_100,field_bi_khac,instance_dict['tong'],instance.tong)
+                        str_phien_co_gia_tri_khac_truoc += str_phien_co_gia_tri_khac_truoc_1_item +','
+                        so_phien_bi_khac +=1
+                        break 
+                        
+            except TaiXiu.DoesNotExist:
+                instance = TaiXiu(**instance_dict)
+                if save_or_test:
+                    instance.save()
+                created = True
+            if created:
+                thuc_te_so_import +=1
+            else:
+                quet_qua_ma_khong_duoc_tao +=1
+            #except  :
+                #if so_phien_in_100 ==100 :
+                    #continue
+                #else:
+                    #raise ValueError('abcfdsfd')
+            phien -=1
+            so_phien_in_100 +=1
+        
+        #print 'count',count,i_tim,same_100_html_querysets [0].phien_so ,'list_100_phiens',len(list_100_phiens),same_100_html_querysets [0]
+        ly_thuyet_se_co_so_luot_duoc_import = last_phien_in_100_user_import - last_phien
+        tb='tong ket\n,'
+        tb += '\n,' + 'last_phien %s'%TaiXiu.objects.latest('phien_so').phien_so
+        tb += '\n,' + 'str_phien_co_gia_tri_khac_truoc %s'%str_phien_co_gia_tri_khac_truoc
+        tb +='\n,' +'last_phien_in_100_user_import %s'%last_phien_in_100_user_import
+        tb +='\n,' +'ly_thuyet_se_co_so_luot_duoc_import %s'%ly_thuyet_se_co_so_luot_duoc_import
+        tb +='\n,' +'thuc_te_so_import %s'%thuc_te_so_import
+        tb +='\n,' +'quet_qua_ma_khong_duoc_tao %s'%quet_qua_ma_khong_duoc_tao
+        tb +='\n,' +'so_phien_bi_khac %s'%so_phien_bi_khac
+        print tb
+        return tb    
 def xoa_100_cai_cu_nhat():
     qrs = TaiXiu.objects.all().order_by('id')[:100]
     print len(qrs)
@@ -536,14 +657,118 @@ def create_how_many_phien_for_same_cau():
         re_dict = {'so_lan_lap':i,'xac_suat':lythuyet_repeat_xac_suat_i,'so_phien_can_thiet':so_phien_can_thiet, 'so_phut':so_phut,'so_gio':so_gio,'so_ngay':so_ngay}
         re_lists.append(re_dict)
     return re_lists
+def soicau_2():
+    TAI  =1
+    XIU = 0
+    qrs = TaiXiu.objects.all().order_by('-phien_so')[0:100]
+    thong_ke_lan_lap_TAI  ={}
+    thong_ke_lan_lap_XIU ={}
+    so_luong_cau_XIU_trong_nhom = 0
+    so_luong_cau_TAI_trong_nhom = 0
+    before_diff_same_value 
+    for c,cau in enumerate(qrs):
+        current_value = cau.tai_1_xiu_0 
+        if current_value ==TAI:
+            so_luong_cau_TAI_trong_nhom +=1
+        else:
+            so_luong_cau_XIU_trong_nhom +=1
+        if c == 0:
+            before_value = current_value
+            before_DIFFERENT_SAME_value = current_value
+        else:
+            if current_value != before_value:
+                if before_value == TAI: #current_value la tai
+                    try:
+                        thong_ke_lan_lap_TAI[so_luong_cau_TAI_trong_nhom] +=1
+                    except KeyError:
+                        thong_ke_lan_lap_TAI[so_luong_cau_TAI_trong_nhom] =1
+                    so_luong_cau_TAI_trong_nhom = 0
+                else:
+                    try:
+                        thong_ke_lan_lap_XIU[so_luong_cau_XIU_trong_nhom] +=1
+                    except KeyError:
+                        thong_ke_lan_lap_XIU[so_luong_cau_XIU_trong_nhom] =1   
+                    so_luong_cau_XIU_trong_nhom = 0
+                before_value = current_value
+    
+    print thong_ke_lan_lap_TAI,thong_ke_lan_lap_XIU 
+    print max(k for k, v in thong_ke_lan_lap_TAI.iteritems())
+def read_html_dice():
+    html = read_file_from_disk(MEDIA_ROOT +'/taixiu/html.txt')
+    rs = re.findall('<script src="(.*?)"', html, re.IGNORECASE)
+    #print 'rs',rs
+    
+    if 1:
+        for i in rs:
+            print i
+    return rs
+    #print html  
+def get_html(url):    
+    opener = urllib2.build_opener()
+    opener.addheaders = [('User-agent', 'Mozilla/5.0')]
+    html = None 
+    for i in xrange(13):
+        try:
+            html = opener.open(url).read()
+            break
+        except:
+            print 'Get html.. again for timeout'
+    return html   
+def check_dice_in_script():
+    for i in read_html_dice():
+        print i
+        if '//vuachoibai.com' in i:
+            i = i.replace('//','')
+            continue
+        if 'vuachoibai.com' not in i:
+            i = 'http://vuachoibai.com/' + i
+        script =  get_html(i)
+        if 'dice' in script or 'Dice' in script:
+            print 'da tim thay',i
+        else:
+            print 'sorry'
+            
+            
+class AutoImportObject(Thread):
+    def __init__(self):
+        Thread.__init__(self)
+        #self._stop = threading.Event()
+        self.stop = False
+    def stop(self):
+        #self._stop.set()
+        self.stop = True
+    def stopped(self):
+        return self._stop.isSet()
+    def run(self):
+        so_lan_quet = 0
+        while (not self.stop) :
+            print 'begin '
+            Tb_import.thongbao = autoimport() + '\n so lan quet %s',so_lan_quet
+            Tb_import.Da_import_xong_global_from_model_module = True
+            #print '****Da_import_xong_global_from_model_module',Tb_import.Da_import_xong_global_from_model_module
+            i = 5
+            while i:
+                print i
+                i =i-1
+                sleep(1)
+            so_lan_quet += 1 
 if __name__ == '__main__':
-    phien_100_to_html()
+    #phien_100_to_html()
     #check_continous()
     #xoa_from()
     #create_how_many_phien_for_same_cau()
-    
+    #soicau_2()
     #xen_ke_or_giong_nhau_lists,tai_repeat_lists,xiu_repeat_lists,repeat_dict_lists,txxt_dict_list,string_tai_xiu_soi_cau = create_giong_nhau_khac_nhau_lists(TaiXiu.objects.all().order_by('-phien_so'),show_description = "khong xen ke type",is_created_xenKe_list = True)
     #print len(xen_ke_or_giong_nhau_lists)
+    #soicau_2()
+    #check_dice_in_script()
+    #print get_html('vuachoibai.com/event/Scripts/jquery.ui.touch-punch.min.js')
+    #read_html_dice()
+    #check_dice_in_script()
+    
+    #r = requests.get('http://vuachoibai.com/miniluckydice/MiniGameLuckyDice/LuckyDiceSoiCau')
+    #print r.text
+    autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or_test = True)
     pass
     
 

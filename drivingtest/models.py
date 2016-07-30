@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.utils import timezone
 print 'in model 2'
 from django.db import models
 from django.template.defaultfilters import default
@@ -8,13 +9,15 @@ from django import forms
 #from drivingtest.forms import D4_DATETIME_FORMAT
 D4_DATETIME_FORMAT = '%H:%M %d/%m/%Y'
 postdict ={}
-
-
-    
+autoimportdict ={}
+Notification_global_from_model_module = 'this is Notification_global_from_model_module'
+Da_import_xong_global_from_model_module = False
+class Tb_import(object):
+    thongbao = 'chua co thong bao j'
+    Da_import_xong_global_from_model_module = False
 class thongbao(object):
     thongbao = 'chua co thong bao j'
     log = 'chua co log gi'
-    #def __init__(self):        
 
 
         
@@ -86,9 +89,12 @@ class LeechSite (models.Model):
     ebook= models.CharField(max_length=100,null=True,blank=True)#3
 class TaiXiu (models.Model):
     phien_so= models.IntegerField(unique=True)#3
+    ngay_gio_tao= models.DateTimeField(default = timezone.now(),verbose_name=u"Ngày giờ tạo",blank=True)#3
+
     cau_1= models.IntegerField(null=True,blank=True)#3
     cau_2= models.IntegerField(null=True,blank=True)#3
     cau_3= models.IntegerField(null=True,blank=True)#3
     tong= models.IntegerField(null=True,blank=True)#
     tai_1_xiu_0= models.IntegerField()#
-    
+    def __unicode__(self):
+        return '+phien %s,cac cau %s,%s,%s+'%(self.phien_so,self.cau_1,self.cau_2,self.cau_3)

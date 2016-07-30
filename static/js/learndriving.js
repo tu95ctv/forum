@@ -323,12 +323,14 @@ $(document).ready(function() {
 
                 
                 
-                if (id_closest_wrapper=='profile-loc-ca'||id_closest_wrapper=='taixiu-wrapper'||id_closest_wrapper=='import100phienForm-wrapper') {
+                if (id_closest_wrapper=='profile-loc-ca'||id_closest_wrapper=='taixiu-wrapper'||id_closest_wrapper=='import100phienForm-wrapper'
+                    ||id_closest_wrapper=='autoImportForm-wrapper') {
                     console.log('khong show 2 nut cancel va loc')
                     is_table = false
                     is_form = true
                     //khong_show_2_nut_cancel_va_loc = false
-                    //url = updateURLParameter(url, 'khong_show_2_nut_cancel_va_loc', khong_show_2_nut_cancel_va_loc)
+                    which_start_or_stop_btn= $(this).val()
+                    url = updateURLParameter(url, 'which-start-or-stop-btn',which_start_or_stop_btn)
                     
                 }
                 else {
@@ -427,10 +429,23 @@ $(document).ready(function() {
             url: url,
             data: data, // serializes the form's elements.
             success: function(data) {
+                if (id_closest_wrapper=='autoImportForm-wrapper' && (which_start_or_stop_btn =="Start")) {
+                            comback_normal_template  = $(data).find('.form-manager_r').length
+                            if (comback_normal_template !=1){
+                                form_table_template = "autoImportForm-wrapper-form_table_template"
+                            }
+                                //show_map_from_longlat()
+                        }
 
                 switch (form_table_template) {
-                    case "normal form template":
+                    case "autoImportForm-wrapper-form_table_template":
+                            formdata = $(data).find('#special-for-auto-import').html()
+                            obj = $("#special-for-auto-import")
+                            assign_and_fadeoutfadein(obj, formdata)
+                        break;
 
+                    case "normal form template":
+                        
                         if (is_form & !is_no_show_return_form) {
                             formdata = $(data).find('.form-manager_r').html()
                             if (id_closest_wrapper == 'form-table-of-tram-info') {
@@ -464,7 +479,6 @@ $(document).ready(function() {
 
                             }
                             if (must_shown_tab_ok) {
-                                console.log('tao khong muon')
 
                                 $('#tram-manager-lenh-nav-tab-wrapper-div .nav-tabs a').on('shown.bs.tab', function() {
                                     assign_and_fadeoutfadein(obj, tabledata)
@@ -486,41 +500,11 @@ $(document).ready(function() {
                                 scrolify(obj.find('table.table-bordered'), 580); // 160 is height    
 
                             }
-                            /*
-                            if (obj.attr('id') == 'mll-table-wrapper-div-id') {
-                                scrolify($('#mll-table-id'), 650); // 160 is height    
-                            }
-                            */
-
-
+                       
 
                         }
 
-                        /*else if (is_both_table == "both form and table") {
-                            console.log('url', url)
-                            formdata = $(data).find('.form-manager_r').html()
-                            if (id_closest_wrapper == 'form-table-of-tram-info') {
-                                obj = $('#tram-form')
-
-                            } else {
-                                obj = closest_wrapper.children('.form-manager')
-                            }
-
-                            assign_and_fadeoutfadein(obj, formdata)
-                            show_map_from_longlat()
-                            tabledata = $(data).find('.table-manager_r').html()
-
-
-                            if (id_closest_wrapper == 'form-table-of-tram-info') {
-                                obj = $('#tram-table')
-                            } else if (table_object) {
-                                obj = table_object
-                            } else {
-                                obj = closest_wrapper.children('.table-manager')
-                            }
-                            assign_and_fadeoutfadein(obj, tabledata)
-                            
-                        }*/
+                        
                         break;
                     case 'form on modal': // chi xay ra trong truong hop click vao link show-modal
                         {
@@ -614,8 +598,20 @@ $(document).ready(function() {
         });
         return false; //ajax thi phai co cai nay. khong thi , gia su click link thi 
     }
+var refreshIntervalId 
+var is_stop_auto_import = false
+    $(this).on('click', '#submit-id-tb-auto-import-phien',function() {
+        loop=5
+        console.log('@iiiiiiiiiiii',loop)
+            var interval = 1000  * 1; // where X is your every X giay
+        refreshIntervalId = setInterval(function(){
+            console.log('abc')
+        }, interval);
+        });
 
-
+    $(this).on('click', '#submit-id-stop-auto-import-phien',function() {
+        clearInterval(refreshIntervalId);
+        });
 
 
 

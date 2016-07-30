@@ -152,6 +152,18 @@ class ImportForm(forms.Form):
         self.helper.form_id = 'model-manager'
         self.helper.form_action = '/omckv2/modelmanager/ImportForm/new/'
         self.helper.add_input(Submit('add-new', 'ADD NEW',css_class="submit-btn"))
+class AutoImportForm(forms.Form):
+    now_phien = forms.IntegerField()
+    
+
+    def __init__(self, *args, **kwargs):
+        super(AutoImportForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(form=self)
+        self.helper.form_id = 'model-manager'
+        self.helper.form_action = '/omckv2/modelmanager/AutoImportForm/new/'
+        self.helper.add_input(Submit('start-auto-import-phien', 'Start',css_class="submit-btn"))
+        self.helper.add_input(Submit('stop-auto-import-phien', 'Stop',css_class="submit-btn"))
+        self.helper.add_input(Submit('tb-auto-import-phien', 'thongbao',css_class="submit-btn"))
 class TaiXiuTable(TableReport):
     jquery_url= '/omckv2/modelmanager/TaiXiuForm/new/'
     is_report_download = True
@@ -337,6 +349,7 @@ class BaseFormForManager(forms.ModelForm):
         return self.cleaned_data
     
 class TaiXiuForm(BaseFormForManager):
+    ngay_gio_tao =forms.DateTimeField(label=u"Ngày giờ tạo",input_formats = [D4_DATETIME_FORMAT],required =False,widget =forms.DateTimeInput(format=D4_DATETIME_FORMAT,attrs={"readonly":"readonly"}))
     #id =forms.CharField(required =  False,widget = forms.TextInput(attrs={"readonly":"readonly"}))
     #ngay_gio_tao =forms.DateTimeField(label=u"Ngày giờ tạo",input_formats = [D4_DATETIME_FORMAT],required =False,widget =forms.DateTimeInput(format=D4_DATETIME_FORMAT,attrs={"readonly":"readonly"}))
     def __init__(self, *args, **kwargs):

@@ -1,0 +1,2001 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Vua Chơi Bài</title>
+    <link id="page_favicon" href="http://vuachoibai.com/a_favicon.png" rel="icon" type="image/x-icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+
+
+    <meta title="Vua Chơi Bài - Game đánh bài online hay  nhất, kiếm quà thật duy nhất tại Việt Nam." />
+    <meta name="description" content="Đã có hơn 1 triệu tay bài cùng so tài và nhận quà thật khi chơi: Game xoc dia, ba cay, tien len mien nam, Ta la, Tien len, Mau binh, Xi to, poker online, Sam, Lieng online">
+    <meta name="keywords" content="Game bai, danh bai online, xoc dia, tien len mien nam, Sam, Loc, choi phom, lieng online, choi ta la, binh xap xam,mau binh, xi to, poker, game ba cay">
+    <meta name="author" content="vuachoibai.com">
+
+    <!-- Open Graph data -->
+    <meta property="og:title" content="Vua chơi bài - Game bài, Đánh bài online đổi quà thật" />
+    <meta property="og:type" content="Game" />
+    <meta property="og:url" content="http://vuachoibai.com/portal/public/index.html" />
+    <meta property="og:image" content="http://vuachoibai.com/portal/public/img/icon-200-tile.png" />
+    <meta property="og:description" content="Vua chơi bài - game bài online đổi quà thật đa nền tảng: website, mobile, wap. Thỏa thích chơi game tá lả, 3 cây, tiến lên miền nam, xì tố, mậu binh, chắn, poker online." />
+
+
+
+    <!-- Bootstrap -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
+    <link href="/Public/css/slider.css?v=1.0.2" rel="stylesheet" />
+    <link href="/Public/css/styles.css?v=1.2.61" rel="stylesheet" />
+    <link href="/Public/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/Public/css/hover.css" rel="stylesheet" />
+    <link href="/Public/css/popup.css?v=1.1.4" rel="stylesheet" />
+    <link href="/Public/css/default.css?V=1.1.2" rel="stylesheet" />
+    <link href="/Public/css/animate.css" rel="stylesheet" />
+    <link href="/Public/css/jquery.mCustomScrollbar2.css" rel="stylesheet" />
+    <link href="/Public/css/popup-new.css?v=1.1.2" rel="stylesheet" />
+    
+    <link href="/Public/css/game/jquery.mCustomScrollbar.css" rel="stylesheet" />
+    <!-- <link href="//vuachoibai.com/event/MiniEvents/XocDia2016T3/css/duatop.css?v=1.2.3" rel="stylesheet" /> -->
+    <link href="//vuachoibai.com/event/MiniEvents/BangVang2016T3/css/bangvang.css?v=1.0.5" rel="stylesheet"/>
+    <link href="//vuachoibai.com/event//Contents/PopupThuongNhan/css/popuptn.css?v=1.0.4" rel="stylesheet" />
+    <link href="//vuachoibai.com/event/Contents/ListJackpot/css/style_quyhoach.css" rel="stylesheet" />
+    
+    <link href="//vuachoibai.com/event/MiniEvents/EventTX2016T5/css/duatop.css" rel="stylesheet" />
+    <link href="//vuachoibai.com/event/MiniEvents/EventTX2016T5/css/taixiu.css" rel="stylesheet" />
+    
+    <script src="/Public/js/Vendor/createjs.min.js"></script>
+    <script src="/Public/js/Vendor/json2.min.js"></script>
+    <script src="/Public/js/Vendor/jquery-1.10.2.min.js"></script>
+    <script src="/Public/js/Vendor/jquery-ui.js"></script>
+    <script src="/Public/js/Vendor/modernizr-2.6.2.min.js"></script>
+    <script src="/Public/js/Vendor/detectizr.min.js"></script>
+    <script src="/Public/js/Vendor/md5.min.js"></script>
+    <script src="/Public/js/Vendor/detect-zoom.min.js"></script>
+    <script src="/Public/js/Vendor/preloadjs-0.6.1.js"></script>
+    <script src="/Public/js/Vendor/soundjs-0.6.1.js"></script>
+    <script src="/Public/js/Vendor/easeljs-0.8.1.js"></script>
+    <script src="/Public/js/Vendor/tweenjs-0.6.1.js"></script>
+
+    <script src="/Public/js/Vendor/jquery.signalR-1.1.4.js"></script>
+    <script src="/Public/js/Vendor/jquery.jemotion.js"></script>
+    <script src="/Public/js/Vendor/jquery.mousewheel.min.js"></script>
+    
+    <script src="/Public/js/Vendor/jquery.mCustomScrollbar.concat.min.js"></script>
+
+    <script src="http://vuachoibai.com/event/Scripts/jquery.ui.touch-punch.min.js"></script>
+
+    <!-- config -->
+    <script src="/Public/js/config.js?v=1.2.32" defer="defer"></script>
+    <!-- common-->
+    <script src="/Public/js/common/navigator.js?v=1.0.15" defer="defer"></script>
+    <script src="/Public/js/common/preloader.js" defer="defer"></script>
+    <script src="/Public/js/common/gameAudio.js" defer="defer"></script>
+    <script src="/Public/js/common/enums.js" defer="defer"></script>
+    <script src="/Public/js/common/resizeWindow.js?v=1.0.7" defer="defer"></script>
+    <script src="/Public/js/common/timer.js?v=1.0" defer="defer"></script>
+    <script src="/Public/js/common/popup.js?v=1.0.4" defer="defer"></script>
+    <script src="/Public/js/common/button.js" defer="defer"></script>
+    <script src="/Public/js/common/tabContent.js" defer="defer"></script>
+    <script src="/Public/js/common/notify.js?v=1.0.0" defer="defer"></script>
+    <script src="/Public/js/notifications/notifyHub.js" defer="defer"></script>
+    <script src="/Public/js/notifications/notifySlot.js?v=1.0.5" defer="defer"></script>
+    <script src="/Public/js/common/common.js?v=1.0.14" defer="defer"></script>
+    <script src="/Public/js/common/commonHub.js" defer="defer"></script>
+    <script src="/Public/js/Vendor/countUp.js"></script>
+    
+    <script src="/Public/js/common/jquery.pager.js?v=1.0.3" defer="defer"></script>
+    <!--module-->
+    <script src="/Public/js/modules/PopupQueue.js"></script>
+    <script src="/Public/js/modules/accountInfo.js?v=1.14.57" defer="defer"></script>
+    <script src="/Public/js/modules/chosenGame.js" defer="defer"></script>
+    <script src="/Public/js/modules/lobby.js?v=1.0.4" defer="defer"></script>
+    <script src="/Public/js/modules/profile.js?v=1.2" defer="defer"></script>
+    <script src="/Public/js/modules/friend.js?V=1.1" defer="defer"></script>
+    <script src="/Public/js/modules/exchange.js?v=1.9.1" defer="defer"></script>
+    <script src="/Public/js/modules/quest.js" defer="defer"></script>
+    <script src="/Public/js/modules/help.js" defer="defer"></script>
+    <script src="/Public/js/modules/agreement.js?v=1.1" defer="defer"></script>
+    <script src="/Public/js/modules/setting.js" defer="defer"></script>
+    <script src="/Public/js/modules/chat/chatHub.js?v=1.2.1" defer="defer"></script>
+    <script src="/Public/js/modules/chat/chat.js?v=1.0.4" defer="defer"></script>
+    <script src="/Public/js/modules/security.js?v=1.1" defer="defer"></script>
+    <script src="/Public/js/modules/tooltips.js" defer="defer"></script>
+    
+    <script src="/Public/js/modules/Eshop.js?v=1.3" defer="defer"></script>
+    <script src="/Public/js/App/App.js?v=1.02.66" defer="defer"></script>
+    <script type="text/javascript" async="" src="http://www.google-analytics.com/ga.js"></script>
+    <script src="/Public/js/Vendor/slider.js?v=1.0.4"></script>
+    <script src="/Public/js/Vendor/simple-expand.js"></script>
+        
+    <!-- Penalty -->
+    <link href="/Public/css/Penalty/Penalty.css?v=1.0.6" rel="stylesheet" />
+    <link href="/Public/css/Penalty/animate.css?v=1.0.5" rel="stylesheet" />
+    <link href="/Public/css/Penalty/roundabout-shapes2.css?v=1.0.4" rel="stylesheet" />
+    <script src="/Public/js/Libs/plugin/jquery.easing.js"></script>
+    <script src="/Public/js/Libs/projects/roundabout/jquery.roundabout2.js"></script>
+    <script src="/Public/js/Libs/projects/roundabout-shapes/jquery.roundabout-shapes2.js"></script>
+    <!-- End Penalty -->
+    
+    <script>
+        if (location.href == "http://vuachoibai.com/" || location.href == "http://vuachoibai.com#games" || location.href == "http://vuachoibai.com") {
+            location.href = "http://vuachoibai.com/#games";
+        }
+        if (location.href.indexOf('www.') > 0) {
+            location.href = location.href.replace('www.', '')
+        }
+        var  isLoggedIn = 0 > 0 ? true : false;
+    </script>
+    <script>
+        (function (i, s, o, g, r, a, m) {
+            i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+        })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+        ga('create', 'UA-54302113-26', 'auto');
+        ga('send', 'pageview');
+        var firefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+        if (firefox && createjs) {
+            createjs.Text.prototype._drawTextLine = function (ctx, text, y) {
+                // Adjust text position only if textBaseline is "top"
+                if (this.textBaseline === "top") {
+                    var lineHeight = this.lineHeight || this.getMeasuredLineHeight();
+                    y += lineHeight * 0.3;
+                }
+                // Chrome 17 will fail to draw the text if the last param is included but null, so we feed it a large value instead:
+                if (this.outline) {
+                    ctx.strokeText(text, 0, y, this.maxWidth || 0xFFFF);
+                } else {
+                    ctx.fillText(text, 0, y, this.maxWidth || 0xFFFF);
+                }
+            };
+        }
+    </script>
+
+    
+
+
+    <!-- <script type="text/javascript">
+        (function (p, u, s, h) {
+            p._pcq = p._pcq || [];
+            p._pcq.push(['_currentTime', Date.now()]);
+            s = u.createElement('script');
+            s.type = 'text/javascript';
+            s.async = true;
+            s.src = 'https://cdn.pushcrew.com/js/e8e161595511266355cbdfd8627f2198.js';
+            h = u.getElementsByTagName('script')[0];
+            h.parentNode.insertBefore(s, h);
+        })(window, document);
+    </script> -->
+
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function (f, b, e, v, n, t, s) {
+            if (f.fbq) return; n = f.fbq = function () {
+                n.callMethod ?
+                n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            }; if (!f._fbq) f._fbq = n;
+            n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = []; t = b.createElement(e); t.async = !0;
+            t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s)
+        }(window,
+        document, 'script', '//connect.facebook.net/en_US/fbevents.js');
+
+        fbq('init', '1503588516532599');
+        fbq('track', "PageView");</script>
+    <noscript>
+        <img height="1" width="1" style="display:none"
+             src="https://www.facebook.com/tr?id=1503588516532599&ev=PageView&noscript=1" />
+    </noscript>
+    <!-- End Facebook Pixel Code -->
+
+</head>
+
+<body>
+
+
+    <script src="/Public/js/Vendor/wz_tooltip.min.js"></script>
+
+    <!-- <div id="divDiemVpt" style="background: url(http://vuachoibai.com/event/Contents/VuaPhatTai/iconsukienvcb.png) no-repeat; z-index: 99999; width: 330px; height: 400px; position: absolute;right: -46px; top: -47px;">
+        <p id="currentFireworksVcb"  style="font-family: 'UTM Aurora'; color: #ff0000; font-weight: bold; font-size: 30px; text-align: center; margin: 171px 0px 100px 94px;"></p>
+        <a style="background: url(http://vuachoibai.com/event/Contents/VuaPhatTai/buttonthele.png) no-repeat; width: 98px; height: 52px; position: absolute; top: 260px; left: 165px;" href="javascript:;" onclick="$('#popupwrapVpt').show()"></a>
+        <a style="background: url(http://vuachoibai.com/event/Contents/VuaPhatTai/buttonthamgia.png) no-repeat; width: 120px; height: 120px; position: absolute; top: 287px; left: 50px;" href="http://vuachoibai.com/vua-phat-tai" target="_blank"></a>
+    </div>
+    
+        
+    <div id="popupwrapVpt" style="z-index: 9999; width: 100%; height: 100%; position: absolute; top: 0px; display: none;">
+        <div class="popup-bosung">
+            <a href="javascript:;" class="btn-close" onclick="$('#popupwrapVpt').hide()"><img src="http://vuachoibai.com/event/Contents/VuaPhatTai/btn-close.png"></a>
+            <center>
+                <ul class="nav-popup">
+                    <li> <img src="http://vuachoibai.com/event/Contents/VuaPhatTai/text-dd.png">
+                        <div class="clear"></div> <span>Thời gian : 10/6 đến 26/6</span>
+                        <div class="clear"></div> <span>Phần thưởng : Kim cương</span>
+                        <div class="clear"></div>
+                        <div class="btn-all"> <a href="http://vuachoibai.com/vua-phat-tai/" target="_blank" class="btn-thele">Tham gia</a> </div>
+                    </li>
+                    <li style="   margin-top: -31px;"> <img src="http://vuachoibai.com/event/Contents/VuaPhatTai/text-sukien-santhe.png">
+                        <div class="clear"></div> <span>Thời gian : tháng 6 - tháng 7</span>
+                        <div class="clear"></div>
+                        <div class="btn-all" style=" bottom: -17px;"> <a href="http://vuachoibai.com/vua-phat-tai/" target="_blank" class="btn-thele">Tham gia</a> </div>
+                    </li>
+                </ul>
+                <div class="clear"></div>
+                <ul class="nav-popup nav-popup-2">
+                    <li> <img src="http://vuachoibai.com/event/Contents/VuaPhatTai/text-sukien-thangquan.png">
+                        <div class="clear"></div> <span>Thời gian : 10/6 đến 26/6</span>
+                        <div class="clear"></div> <span>Phần thưởng :Ducati Monster 795, Tour du lịch Châu Âu 2 người, SH 150i</span>
+                        <div class="clear"></div>
+                        <div class="btn-all"> <a href="http://vuachoibai.com/vua-phat-tai/" target="_blank" class="btn-thele">Tham gia</a> </div>
+                    </li>
+                    <li> <img src="http://vuachoibai.com/event/Contents/VuaPhatTai/text-vongquay.png">
+                        <div class="clear"></div> <span>Thời gian : 10/6 đến 26/6</span>
+                        <div class="clear"></div> <span>Phần thưởng :  Máy tính bảng, Ipad, Sao</span>
+                        <div class="clear"></div>
+                        <div class="btn-all"> <a href="http://vuachoibai.com/vua-phat-tai/" target="_blank" class="btn-thele">Tham gia</a> </div>
+                    </li>
+                </ul> <img class="img-center" src="http://vuachoibai.com/event/Contents/VuaPhatTai/img-big.png"> </center>
+        </div>
+    </div>
+    <style>
+        
+    .popup-bosung {
+        border-radius: 10px;
+        background: url("http://vuachoibai.com/event/Contents/VuaPhatTai/bg.png") top center #412305 no-repeat;
+        margin: 0 auto;
+        width: 750px;
+        position: relative;
+        margin-top: 100px;
+        padding: 44px 0;
+    }
+
+    .text-title {
+        position: absolute;
+        transform: translate(-50%,0);
+        left: 50%;
+        top: -22px;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+    }
+
+
+    .nav-popup {
+        display: inline-block;
+        margin: 0 0 53px 0;
+    }
+
+    .nav-popup-2 {
+        margin: 0;
+    }
+
+    .nav-popup li {
+        float: left;
+        width: 245px;
+        height: 215px;
+        margin: 0 62px;
+        position: relative;
+    }
+
+        .nav-popup li:first-child {
+            margin-left: -15px;
+        }
+
+        .nav-popup li:last-child {
+            margin-right: 15px;
+        }
+
+        .nav-popup li img {
+            margin: 35px 0 13px 0;
+        }
+
+        .nav-popup li span {
+            color: #fff;
+            font-size: 15px;
+            font-family: 'Roboto', sans-serif;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+
+    .btn-all {
+        position: absolute;
+        display: inline-block;
+        transform: translate(-50%,0);
+        left: 50%;
+        width: 220px;
+        bottom: 13px;
+    }
+
+    .btn-thele, .btn-diemdanh {
+        display: inline-block;
+        background-image: url("http://vuachoibai.com/event/Contents/VuaPhatTai/btn-all.png");
+        background-position: 0 0;
+        background-repeat: no-repeat;
+        width: 101px;
+        line-height: 40px;
+        color: #1e0b03;
+        font-size: 18px;
+        font-family: 'UTM face';
+        margin: 0 2px;
+        text-decoration: inherit;
+        font-weight:bold;
+    }
+
+    .btn-diemdanh {
+        background-position: 0 bottom;
+    }
+
+    .img-center {
+        position: absolute;
+        transform: translate(-50%,0);
+        top: 160px;
+        left: 50%;
+    }
+    </style> -->
+
+
+    
+
+<div id="htmlRoot" style="width: 100%; height: 100%; overflow:hidden">
+    <div style="position:absolute; right: 170px; top: -13px; z-index: 3000">
+     
+    </div>
+    <div id="htmlroot3" style="width: 100%; margin: auto auto;position: relative; z-index: 1000;">
+        
+<header style="z-index:1000">
+    <!-- den trang tri -->
+    <div class="container">
+        <div class="back-btn shakeit2 " onclick="App.LastCurrentID = -1; backBtn();">
+        </div>
+        <!-- <div class="den2">
+            <img src="~/public/img/ChosenGame/den_2.png" alt="">
+
+        </div> -->
+        <a style="margin-top:2px" class="logo" href="javascript:;" onclick=" location.href = Config.Url_Root " id="img_logo">
+            <img src="/public/img/ChosenGame/logo777.png" alt="">
+            <i class="tooltip03"><span>Vua Chơi Bài - Cổng Game Bài</span></i>
+        </a>
+        <!-- thông tin user -->
+        <div style="position:relative; display: none" class="user-info">
+             <img width="33" height="33" src=" http://vuachoibai.com/serverupload/public/avatar/avatar.jpg"  class="user-ava">
+            <div class="name-left"> </div>
+            <div style="position:relative;">
+                <span class="user-name1"><span class="name-right"></span></span>
+            </div>
+            <div class="settings_table">
+                <ul>
+                    <li onclick="AccountInfo.showPopupAccInfo()">
+                        <!-- <img src="images/setting_taikhoan.png"> -->
+                        <p>Thông tin tài khoản</p>
+                    </li>
+                    <li onclick="AccountInfo.showTransactionLogs(1, 1)">
+                        <!-- <img src="images/setting_napsao.png"> -->
+                        <p>Lịch sử giao dịch</p>
+                    </li>
+
+                    <li>
+                        <!-- <img src="images/setting_lichsu.png"> -->
+                        <p onclick="AccountInfo.showPopupAccInfo(1)">Đổi mật khẩu</p>
+                    </li>
+                    <li onclick="AccountInfo.showPopupLogout()">
+                        <!-- <img src="images/setting_dangxuat.png"> -->
+                        <p>Đăng xuất</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="user-money" id="btnExchange">
+            <div class="user-sao">
+                <div class="nap-the" id="btn_napthe">
+                    <i class="tooltip01"><span>Nạp Tài Khoản</span></i>
+                </div>
+                <ul>
+                    <li class="vp-number">
+                      <img src="/public/img/ChosenGame/crown.png" alt="" style="margin-top: -2px;">
+                      <p style="color:yellow">0</p>
+                    </li>
+                    <li class="sao-number">
+                        <img src="/public/img/ChosenGame/sao.png" alt="">
+                        <p style="color:yellow"></p>
+                    </li>
+                    <li class="xu-number">
+                        <img src="/public/img/ChosenGame/xu.png" alt="">
+                        <p></p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div id="vp_area" onclick="AccountInfo.showPopupAccInfo(5)" style="position:absolute;width: 126px;height: 28px;left: 390px;top: 8px;cursor: pointer;"></div>
+       <!-- minigame-btn -->
+        <div class="minigamelist" id="minigamelist" style="display: none">
+            <div id="headerMinigame" style="width: 114px; height: 33px; position: absolute; z-index: 9999; "></div>
+            <div class="light">
+                <img src="/public/img/ChosenGame/minigame_chay.png" alt="">
+            </div>
+            <div id="lightMinigame1" class="light-gift-2">
+                <img src="/public/img/ChosenGame/den_led.png" alt="">
+            </div>
+            <div id="lightMinigame2" class="light-gift">
+                <img src="/public/img/ChosenGame/den_led.png" alt="">
+            </div>
+            <div class="game-mini2" id="listMinigame">
+                <div id="taixiuHeaderGame" data-item="1" class="headerMinigameIcon">
+                    <span id="time" style="color: rgb(255, 198, 0); display: none; position: absolute; top: 45px; left: 2px"></span>
+                    <span id="prizebet" style="display:none; position: absolute;top: 40px; left: -22px; color: yellow;"></span>
+                    <i class="tooltip03">
+                        <span>Tài Xỉu</span>
+                    </i>
+                    <img src="/public/img/ChosenGame/mini_2_ico.png">
+                    
+                </div>
+                <div id="minipokerHeaderGame" data-item="2" class="headerMinigameIcon">
+                    <i class="tooltip03">
+                        <span>Mini Poker</span>
+                    </i>
+                    <img class="" src="/public/img/ChosenGame/mini_1_ico.png">
+                </div>
+                <div id="tranhtaicaothapHeaderGame" data-item="3" class="headerMinigameIcon">
+                <!-- <span id="time" style="color: rgb(255, 198, 0); display: none; position: absolute; top: 45px; left: 2px"></span>
+                    <span id="prizebet" style="display:none; position: absolute;top: 40px; left: -22px; color: yellow;"></span> -->
+                    <i class="tooltip03">
+                        <span>Tranh Tài Cao Thấp</span>
+                    </i>
+                    <img class="" src="/public/img/ChosenGame/mini_5_ico.png">
+                    <!--    <h4>Event</h4> -->
+                </div>
+                <div id="minivuabaiHeaderGame" data-item="4" class="headerMinigameIcon">
+                    <i class="tooltip03">
+                        <span>Mini Vua Bài</span>
+                    </i>
+                    <img class="" src="/public/img/ChosenGame/mini_4_ico.png">
+                </div>
+                <div id="balaHeaderGame" data-item="5" class="headerMinigameIcon">
+                    <i class="tooltip03">
+                        <span>Ba Lá</span>
+                    </i>
+                    <img class="" src="/public/img/ChosenGame/mini_3_ico.png">
+                </div>
+                <div id="notifySlot" style="margin-top: -70px; margin-left: -90px"></div>
+            </div>
+            <div class="game-mini"></div>
+        </div>
+        <!-- game-button -->
+        <div class="game-popup slider js_slider" style="display: none;">
+            <div class="frame js_frame" style="">
+                <ul class="slides js_slides">
+                    <span class="preview"><img src="/public/img/ChosenGame/game_back.png" alt=""></span>
+                    <div id="gamebound" style="
+                display: block;
+                margin-top: 8px;
+                margin-left: 35px;
+                width: 357px;
+                height: 57px;
+                overflow: hidden;
+            ">
+                        <div id="gamecontainer" style="position:relative;">
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tlmn_solo');"><img class="solo" src="/public/img/ChosenGame/solo.png"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('bacay');"><img src="/public/img/ChosenGame/3cay.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tamquocxenghd');"><img src="/public/img/ChosenGame/iconTqx.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('loc_solo');"><img class="solo" src="/public/img/ChosenGame/solo.png"><img src="/public/img/ChosenGame/sam.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('poker');"><img src="/public/img/ChosenGame/poker.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('xocdia');"><img src="/public/img/ChosenGame/xocxoc.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('maubinh');"><img src="/public/img/ChosenGame/maubinh.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tienlenmienbac');"><img src="/public/img/ChosenGame/tienlenmienbac.png" alt=""></a></li>
+                            <li class="js_slide"><a href="http://vuachoibai.com/portal/public/index.html#chan/lobby"><img src="/public/img/ChosenGame/chan.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tala');"><img src="/public/img/ChosenGame/tala.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('lieng');"><img src="/public/img/ChosenGame/lieng.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('xito');"><img src="/public/img/ChosenGame/xito.png" alt=""></a></li>
+                            <li class="js_slide"><a href="http://chanvip.com/"  target="_blank"><img src="/public/img/ChosenGame/chanvip_up.png" alt=""></a></li>
+                            
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('loc');"><img src="/public/img/ChosenGame/sam.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tienlenmiennam');"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a></li>
+                            <li class="js_slide"><a href="javascript:Common.CheckInGamePlay('tlmn_nhatantat');"><img src="/public/img/ChosenGame/nhatantat.png" alt=""></a></li>
+                        </div>
+                    </div>
+                    <span class="next"><img src="/public/img/ChosenGame/game_next.png" alt=""></span>
+                </ul>
+            </div>
+        </div>
+        <!-- end -->
+        <div id="ag"></div>
+        <!-- nap the - bao mat -->
+
+        <div class="napthe-baomat" id="dangkydangnhap" style="margin-top: 7px">
+            <ul>
+                <li>
+                    <div style="padding: 10px">Đăng Nhập Bằng</div>
+                </li>
+                <li>
+                    <a href="http://vuachoibai.com//starservices/api/account/LoginOpenId?LoginType=facebook&ReturnUrl=http://vuachoibai.com//?loginfbPortal=1">
+                        <div style="cursor: pointer" id="loginfacebook">
+                            <p class="tooltip01">
+                                <span>Đăng nhập bằng Facebook</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a href="http://vuachoibai.com//starservices/api/account/LoginOpenId?LoginType=google&ReturnUrl=http://vuachoibai.com//">
+                        <div style="cursor: pointer" id="logingoogle">
+                            <p class="tooltip01">
+                                <span>Đăng nhập bằng Google+</span>
+                            </p>
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <div id="btn_login" class="bold">
+                        ĐĂNG NHẬP
+                        <p class="tooltip01">
+                            <span>Đăng nhập bằng ID</span>
+                        </p>
+                    </div>
+                </li>
+                <li>
+                    <div id="btn_reg" class="bold">
+                        ĐĂNG KÝ
+                        <p class="tooltip01">
+                            <span>Đăng ký tài khoản</span>
+                        </p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="napthe-baomat" id="napthebaomat" style="display:none; margin-top: 6px">
+
+            <ul>
+
+                <li>
+
+                    <ul class="btn-chucnang">
+                        <li id="linotifyHeader">
+                            <div onclick="AccountInfo.showToolTipNotify()" id="btnSecurity1" class="thongbao"></div>
+                            <div id="divTooltipNotify" style="display:none">
+                            </div>
+                        </li>
+                        <li onclick="AccountInfo.showPopupAccInfo(5)"><div class="crown"><i class="tooltip01"><span>Thành tựu</span></i></div></li>
+                        <li>
+                            <div id="btnSecurity" class="nhacai"><i class="tooltip01"><span>Bảo Mật</span></i></div>
+                        </li>
+                        <!--<li>
+                            <div class="events" id="btn_events" onclick="EventsGame.ShowMainEventNew()"><i class="tooltip01"><span>Sự Kiện</span></i></div>
+                        </li>-->
+                        <li>
+                            <div class="gameshop" onclick="Exchange.showShop();" id="btn_goShop"><i class="tooltip01"><span>Đổi Thưởng</span></i></div>
+                        </li>
+                        <li>
+                            <div id="btnGameInstruction" class="gameinstruction" style="display:none"><i class="tooltip01"><span>Hướng dẫn chơi game</span></i></div>
+                        </li>
+                        
+                        <li style="display:none"><div class="settings"></div></li>
+                    </ul>
+                </li>
+                <li class="game-btn"></li>
+            </ul>
+        </div>
+        <div class="clear"></div>
+        <!-- chay-chu -->
+    </div>
+</header>
+
+
+    </div>
+    <div id="htmlroot2" style="width: 100%; height: 100%; margin: auto auto;position:relative">
+        <div id="canvasWrap" class="disable-tuch" style="display: block; margin: auto; ">
+            <canvas id="easelCanvas" width="1000" height="680" style="border: 0px solid red; z-index: 0; position: absolute; display: none; margin: auto auto">
+                Trình duyệt của bạn không hỗ trợ HTML5. Tải trình duyệt mới về để chơi nhé.
+            </canvas>
+        </div>
+        <div class="container" id="tainer"> 
+            <div class="marqueeNotify" id="marqueeNotify">
+    <marquee id="marqueeNotifyContent" behavior="scroll" direction="left" onmouseover=" this.stop(); " onmouseout=" this.start(); ">
+                <span class='item marqueeNotifyItem'><a href="http://vuachoibai.net/hot-xoc-lau-xoc-khoe-nhan-the-tha-ga.html/?utm_source=wcgdg&utm_medium=text&utm_term=Ly&utm_content=f&utm_campaign=Vuaxocxoc" target="_blank"><span style="color:#FFFF00"><em><strong>[HOT] Vua Xóc Xóc: Xóc lâu xóc khoẻ - Nhận thẻ thả ga! - Vào xem ngay!</strong></em></span></a></span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ TTCT ] </span> <span style ="color : #ff1010" ><b>conchuticht*** </b></span> <span style ="color : #00ff00" ><b> nổ Quỹ 45K</b></span> <span style ="color : #ffffff" > trị giá </span><span style ="color : #ffd428" ><b>45.192</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>ilove1*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>505.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>560.050</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>620.200</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>630.050</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>ilove1*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>525.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>ilove1*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>920.300</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>phongvan8*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>880.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>801.050</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>550.850</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ XocXoc ] </span> <span style ="color : #ff1010" ><b>thanhdat6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>660.200</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>docmnr9*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>130.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>trunghoa6*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>500.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>caspe*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>500.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>84969467*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>130.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>congainhome*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>500.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>minh0935415*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>130.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>thud*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>500.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>thud*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>130.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>thaopha*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>150.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ MiniPoker ] </span> <span style ="color : #ff1010" ><b>batistr*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>150.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>taoda*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>1.188.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>tepma*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>792.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>thomcama*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>990.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>thomxoai*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>792.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>timuo*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>990.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>trungkien9*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>685.080</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>truong19892*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>693.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>vtcid.2*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>1.485.000</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>vtcid0901061*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>633.600</b> Sao</span> </span>
+                <span class='item marqueeNotifyItem'><span style ="color : #10eae2" >[ Taixiu ] </span> <span style ="color : #ff1010" ><b>vuabaixuong*** </b></span> <span style ="color : #ffffff" > thắng </span><span style ="color : #ffd428" ><b>1.980.000</b> Sao</span> </span>
+    </marquee>
+        <input type="hidden" id="notifyIdMarqueMax" value="4305132"/>
+</div>
+    
+            
+            
+            <script>                
+                    
+                function showBangVangT3(tuan)
+                {
+                    $.ajax({
+                            type: "GET",
+                            url: "//vuachoibai.com/event/BangVang2016T3/MainPopup?week="+tuan,
+                            success: function (data) {
+                                ChumTaXi2015.ShowPopup(data, 750, 500);
+                                $("#popupwrap2").draggable();
+                                $("#scrollMiniEvent").mCustomScrollbar({autoHideScrollbar: true});
+                            }
+                        });
+                }   
+                function showChiTietBangVangT3(tuan, page)
+                {
+                    $.ajax({
+                            type: "GET",
+                            url: "//vuachoibai.com/event/BangVang2016T3/Details?week="+tuan+"&currPage="+page,
+                            success: function (data) {
+                                ChumTaXi2015.ShowPopup(data, 750, 500);
+                                $("#popupwrap2").draggable();
+                                $("#scrollMiniEvent").mCustomScrollbar({autoHideScrollbar: true});
+                            }
+                        });
+                }
+                function ShowVipPointEvent()
+                {
+                    $("#BVVipPoint").show();
+                }               
+                
+                $(document).ready(function(){
+                    $("#BVVipPoint").draggable();
+                })
+            </script>
+            
+            <div id="choosenGame">
+                    <div class="slider-wrapper">
+        <ul class="banner slider">
+                        <li class="slide active" style=""><a href="http://bit.ly/HSCT-PL" target="_blank"><img src="http://vuachoibai.com/multimedia//files/1020x250-min%20(1).png" alt=""></a></li>
+                        <li class="slide" style="opacity:0"><a href="https://www.facebook.com/vua.choi.bai.fanpage/posts/1632882473688544" target="_blank"><img src="http://vuachoibai.com/multimedia//files/Banner-Template%20(1).png" alt=""></a></li>
+                        <li class="slide" style="opacity:0"><a href="http://vuachoibai.net/hot-xoc-lau-xoc-khoe-nhan-the-tha-ga.html/?utm_source=wcgdg&amp;utm_medium=bn&amp;utm_term=Ly&amp;utm_content=f&amp;utm_campaign=Vuaxocxoc" target="_blank"><img src="http://vuachoibai.com/multimedia//files/Thanh-xoc.png" alt=""></a></li>
+                        <li class="slide" style="opacity:0"><a href="http://vuachoibai.net/chu-y-doi-diem-vip-truoc-23h59-ngay-182016.html/?utm_source=wcgdg&amp;utm_medium=bn&amp;utm_term=Ly&amp;utm_content=f&amp;utm_campaign=Loyalty" target="_blank"><img src="http://vuachoibai.com/multimedia//files/Banner-Doi-diem-VIP-t8-min.png" alt=""></a></li>
+                        <li class="slide" style="opacity:0"><a href="http://vuachoibai.net/thu-5-phu-quy-x2-gia-tri-hu-sao-hoang-gia-100-000-000-sao.html/?utm_source=wcgdg&amp;utm_medium=bn&amp;utm_term=Ly&amp;utm_content=f&amp;utm_campaign=Thu5PhuQuy" target="_blank"><img src="http://vuachoibai.com/multimedia//files/banner-vcb%20(1).png" alt=""></a></li>
+                        <li class="slide" style="opacity:0"><a href="http://vuachoibai.net/ngay-chan-gio-chan-vao-app-vua-choi-bai-san-the-free.html/?utm_source=wcgdg&amp;utm_medium=bn&amp;utm_term=Ly&amp;utm_content=f&amp;utm_campaign=SanThe " target="_blank"><img src="http://vuachoibai.com/multimedia//files/Banner-San-the-tren-App.png" alt=""></a></li>
+        </ul>
+        
+
+    </div>
+    <div class="clear"></div>
+
+                
+                <div class="icon-game">
+    <div class="game-type">
+        <ul id="listTabChosenGame">
+            <li dataTab="1" class="game-type-active">
+                <img src="/public/img/ChosenGame/tatca_icon.png" class="active" alt="">
+                <span class="ruou-chat">TẤT CẢ</span>
+            </li>
+
+            <li datatab="2">
+                <img src="/public/img/ChosenGame/dangian_ico.png" alt="">
+                <span class="ruou-chat">GAME BÀI</span>
+            </li>
+
+            <li datatab="3">
+                <img src="/public/img/ChosenGame/gamebai_icon.png" alt="">
+                <span class="ruou-chat">DÂN GIAN</span>
+            </li>
+            <li datatab="4">
+                <img src="/public/img/ChosenGame/minigames/minigame_icon.png" alt="">
+                <span class="ruou-chat">MINIGAME</span>
+            </li>
+        </ul>
+
+    </div>
+
+
+    <!-- icon -->
+
+    <div class="game">
+        <div style="width: 760px;height: 230px; overflow: hidden">
+            <div class="chosengameContent">
+                <ul id="listChosenGame1" style="float: left;position:relative;">
+                    <li class="game-icon">
+                        
+                        
+                        <a href="#penalty/lobby" onclick="App.UserClickInGame('penalty')"><img src="/public/img/Penalty/penalty_icon.png?v=1.0.0" alt=""><img class="eventborder" src="/public/img/ChosenGame/event.png" style="top: 10px;left: 10px;position: absolute; z-index:0; border-radius:0; box-shadow:none;display:block"></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" style="margin-left: 6px;" class="vbd7_timer_run"></p> -->
+                        <img class="solo" src="/public/img/ChosenGame/solo.png">
+                        <a href="#tlmn_solo/lobby" onclick="App.UserClickInGame('tlmn_solo')"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#bacay/lobby" onclick="App.UserClickInGame('bacay')"><img src="/public/img/ChosenGame/3cay.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">          
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" style="margin-left: 6px;" class="vbd7_timer_run"></p>  -->                
+                        <img class="solo" src="/public/img/ChosenGame/solo.png">
+                        <a href="#loc_solo/lobby" onclick="App.UserClickInGame('loc_solo')"><img src="/public/img/ChosenGame/sam.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <a href="#poker/lobby" onclick="App.UserClickInGame('pocker')"><img src="/public/img/ChosenGame/poker.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL" src="/public/img/ChosenGame/event.gif" style="top: 0px;left: 37px;position: absolute; z-index:1; border-radius:0;display:block">
+                        <img class="eventborder" src="/public/img/ChosenGame/event.png" style="top: 10px;left: 10px;position: absolute; z-index:0; border-radius:0; box-shadow:none;display:block">
+                        <a href="#xocdia/lobby" onclick="App.UserClickInGame('xocdia')"><img src="/public/img/ChosenGame/xocxoc.png" alt=""></a>
+                    </li>
+<!--                <li class="game-icon">
+
+                        <a href="#maubinh/lobby" onclick="App.UserClickInGame('maubinh')"><img src="~/public/img/ChosenGame/maubinh.png" alt=""></a>
+                    </li> -->
+                     <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('so-do')"><img src="/public/img/ChosenGame/iconsodo.png?v=1.1" width="100" height="99" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="#tala/lobby" onclick="App.UserClickInGame('tala')"><img src="/public/img/ChosenGame/tala.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#loc/lobby" onclick="App.UserClickInGame('loc')"><img src="/public/img/ChosenGame/sam.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="#lieng/lobby" onclick="App.UserClickInGame('lieng')"><img src="/public/img/ChosenGame/lieng.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#tienlenmiennam/lobby" onclick="App.UserClickInGame('tienlenmiennam')"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a>
+                    </li>
+                   
+                    <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('thattruyen')"><img src="/public/img/ChosenGame/thattruyen.png?v=1.1" width="100" height="99" alt=""></a>
+                    </li>
+                    <li class="game-icon">                      
+                        <a href="#loc/lobby" onclick="App.UserClickInGame('loc')"><img src="/public/img/ChosenGame/sam.png" alt=""></a>
+                    </li>
+                </ul>
+
+                <ul id="listChosenGame1-1" style="float: left;position:relative;">
+                    
+                    <li class="game-icon">
+                        <!-- 
+                        
+                        <img class="eventIMGPL" src="~/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">
+                        <img class="eventborder" src="~/public/img/ChosenGame/event.png" style="top: 10px;left: 10px;position: absolute; z-index:0; border-radius:0; box-shadow:none;display:block">
+                        <img class="eventIMGPL" src="~/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0;display:block"> -->
+                        
+                        <a href="javascript:;" onclick="LuckyDiceGame.ShowHideLuckyDice();"><img src="/public/img/ChosenGame/minigames/minitx.png?v=1.1" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamepoker')"><img src="/public/img/ChosenGame/minigames/minipoker.png?v=1.1" alt=""></a>
+                    </li>
+                     <li class="game-icon">
+                        <img class="eventIMGPLAD" src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0;display:none">
+                        <a  href="javascript:;" onclick="App.UserClickInGame('tamquocxeng')"><img src="/public/img/ChosenGame/iconTqx.png"></a>
+                    </li>
+                    
+                    <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('thanden')"><img src="/public/img/ChosenGame/thanden.png" width="100" height="99" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <a href="http://phatloc.vtcgame.vn/long-cung?utm_source=wcgdg&utm_medium=listgamebd&utm_term=cgdg&utm_content=f&utm_campaign=CGDG"  target="_blank"><img src="/public/img/ChosenGame/icon_long-cung.png"></a>
+                    </li>
+                    
+              
+              <!--       <li class="game-icon">
+                        <img  class="solo"  src="~/public/img/ChosenGame/qc1.png"/>
+                        <a href="javascript:;" onclick="App.UserClickInGame('so-do')"><img src="~/public/img/ChosenGame/iconsodo.png?v=1.1" width="100" height="99" alt=""></a>
+                    </li>    -->
+                                 
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#maubinh/lobby" onclick="App.UserClickInGame('maubinh')"><img src="/public/img/ChosenGame/maubinh.png" alt=""></a>
+                    </li> 
+                    
+                     <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('deCheSao')"><img src="/public/img/ChosenGame/icon_dechesao.png?v=1.1" width="100" height="99" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('daotraicay')"><img src="/public/img/ChosenGame/daotraicay.png" width="100" height="99" alt=""></a>
+                    </li>    
+                    
+                     <li class="game-icon">
+                        
+                        
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamettct')"><img src="/public/img/ChosenGame/minigames/minittct.png?v=1.2" alt=""></a>
+                    </li>
+                     <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamevuabai')"><img src="/public/img/ChosenGame/minigames/minivuabai.png?v=1.1" alt=""></a>
+                    </li>
+                     <li class="game-icon" >
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamebala')"><img src="/public/img/ChosenGame/minigames/minibala.png?v=1.1" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="#xito/lobby" onclick="App.UserClickInGame('xito')"><img src="/public/img/ChosenGame/xito.png" alt=""></a>
+                    </li>
+
+                </ul>
+                
+                <ul id="listChosenGame1-2" style="float: left;position:relative;top:-106px;">
+                    <li class="game-icon">
+                        <a href="#tienlenmienbac/lobby" onclick="App.UserClickInGame('tienlenmienbac')"><img src="/public/img/ChosenGame/tienlenmienbac.png" alt=""></a>
+                    </li>                                       
+                    <li class="game-icon" >
+                        <a href="http://chess.vuachoibai.com/coup/public/" target="_blank" onclick="App.UserClickInGame('coup')"><img src="/public/img/ChosenGame/iconcoup.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="http://chess.vuachoibai.com/cotuong/public/" target="_blank" onclick="App.UserClickInGame('cotuong')"><img src="/public/img/ChosenGame/iconcotuong.png" alt=""></a>
+                    </li>
+                     <li class="game-icon" >
+                     <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#tlmn_nhatantat/lobby" onclick="App.UserClickInGame('tlmn_nhatantat')"><img src="/public/img/ChosenGame/nhatantat.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="http://chanvip.com/"  target="_blank"><img src="/public/img/ChosenGame/chanvip_up.png"></a>
+                    </li>           
+                </ul>
+                <ul id="listChosenGame2" style="display: none; position: relative;">
+                    
+                    <li class="game-icon">
+                        
+                        <a href="#poker/lobby" onclick="App.UserClickInGame('pocker')"><img src="/public/img/ChosenGame/poker.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#bacay/lobby" onclick="App.UserClickInGame('bacay')"><img src="/public/img/ChosenGame/3cay.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#tienlenmiennam/lobby" onclick="App.UserClickInGame('tienlenmiennam')"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a>
+                <!--     </li>
+                          <li class="game-icon">
+                        <img  class="solo"  src="~/public/img/ChosenGame/qc1.png"/>
+                        <a href="javascript:;" onclick="App.UserClickInGame('so-do')"><img src="~/public/img/ChosenGame/iconsodo.png?v=1.1" width="100" height="99" alt=""></a>
+                    </li>  -->  
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#maubinh/lobby" onclick="App.UserClickInGame('maubinh')"><img src="/public/img/ChosenGame/maubinh.png" alt=""></a>
+                    </li> 
+                    <li class="game-icon">
+                        <a href="#xito/lobby" onclick="App.UserClickInGame('xito')"><img src="/public/img/ChosenGame/xito.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#loc/lobby" onclick="App.UserClickInGame('loc')"><img src="/public/img/ChosenGame/sam.png" alt=""></a>
+                    </li>
+                    <li class="game-icon" style=" margin-left: -612px; margin-top: 112px; ">
+                        <a href="#tala/lobby" onclick="App.UserClickInGame('tala')"><img src="/public/img/ChosenGame/tala.png" alt=""></a>
+                    </li>
+                    <li class="game-icon" style=" margin-left: -733px; margin-top: 112px; ">
+                        <a href="#lieng/lobby" onclick="App.UserClickInGame('lieng')"><img src="/public/img/ChosenGame/lieng.png" alt=""></a>
+                    </li>
+                    
+                    <li class="game-icon" style=" margin-left: -486px; margin-top: 112px; ">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" class="vbd7_timer_run"></p> -->
+                        <a href="#tlmn_nhatantat/lobby" onclick="App.UserClickInGame('tlmn_nhatantat')"><img src="/public/img/ChosenGame/nhatantat.png" alt=""></a>
+                    </li>
+                     <li class="game-icon" style="margin-left:-359px; margin-top: 113px">
+                        <a href="http://chanvip.com/"  target="_blank"><img src="/public/img/ChosenGame/chanvip_up.png"></a>
+                    </li>
+                    <li class="game-icon" style="margin-left:-108px; margin-top: 113px">
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" style="margin-left: 6px;" class="vbd7_timer_run"></p> -->
+                        <img class="solo" src="/public/img/ChosenGame/solo.png">
+                        <a href="#tlmn_solo/lobby" onclick="App.UserClickInGame('tlmn_solo')"><img src="/public/img/ChosenGame/tlmn_ico.png" alt=""></a>
+                    </li>
+                    
+                    <li class="game-icon" style="margin-left:-235px; margin-top: 113px">    
+                        <img class="eventIMGPL vbd7_img_event"  src="/public/img/ChosenGame/event.gif" style="top: 84px;left: 37px;position: absolute; z-index:1; border-radius:0; display:none">                        
+                        <!-- <p id="vdb7_timer02" style="margin-left: 6px;" class="vbd7_timer_run"></p> -->                 
+                        <img class="solo" src="/public/img/ChosenGame/solo.png">
+                        <a href="#loc_solo/lobby" onclick="App.UserClickInGame('loc_solo')"><img src="/public/img/ChosenGame/sam.png" alt=""></a>
+                    </li>
+                </ul>
+
+
+                <ul id="listChosenGame3" style="display: none; position: relative;">
+
+                    <li class="game-icon">
+                        <img class="eventIMGPL" src="/public/img/ChosenGame/event.gif" style="top: 0px;left: 37px;position: absolute; z-index:1; border-radius:0;display:block">
+                        <img class="eventborder" src="/public/img/ChosenGame/event.png" style="top: 10px;left: 10px;position: absolute; z-index:0; border-radius:0; box-shadow:none;display:block">
+                        <a href="#xocdia/lobby" onclick="App.UserClickInGame('xocdia')"><img src="/public/img/ChosenGame/xocxoc.png" alt=""></a>
+                    </li>
+
+                    <li class="game-icon">
+                        <a href="http://chess.vuachoibai.com/cotuong/public/" target="_blank" onclick="App.UserClickInGame('cotuong')"><img src="/public/img/ChosenGame/iconcotuong.png" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        <a href="http://chess.vuachoibai.com/coup/public/" target="_blank" onclick="App.UserClickInGame('coup')"><img src="/public/img/ChosenGame/iconcoup.png" alt=""></a>
+                    </li>
+                     <li class="game-icon">
+                        <a href="http://chanvip.com/"  target="_blank"><img src="/public/img/ChosenGame/chanvip_up.png"></a>
+                    </li>
+
+                </ul>
+
+
+                <ul id="listChosenGame4" style="display: none; position: relative;">
+                    <li class="game-icon">
+                    
+                        
+                        <a href="javascript:;" onclick="LuckyDiceGame.ShowHideLuckyDice();"><img src="/public/img/ChosenGame/minigames/minitx.png?v=1.1" alt=""></a>
+                    </li>
+                    <li class="game-icon">
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamepoker')"><img src="/public/img/ChosenGame/minigames/minipoker.png?v=1.1" alt=""></a>
+                    </li>
+                    <li class="game-icon" >
+                        
+                        
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamettct')"><img src="/public/img/ChosenGame/minigames/minittct.png?v=1.1" alt=""></a>
+                    </li>
+                     <li class="game-icon" >
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamevuabai')"><img src="/public/img/ChosenGame/minigames/minivuabai.png?v=1.1" alt=""></a>
+                    </li>
+                     <li class="game-icon" >
+                        
+                        <a href="javascript:;" onclick="App.UserClickInGame('minigamebala')"><img src="/public/img/ChosenGame/minigames/minibala.png?v=1.1" alt=""></a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="game_control">
+        <div class="game_back"></div>
+        <div class="game_next"></div>
+    </div>
+    <a href="javascript:;" onclick="Exchange.showGiftCodeStar2()"><img id="btn_GetVipCode" src="/Public/img/ChosenGame/Giftcode.png"></a>
+    <div class="clear"> </div>
+    <!-- footer -->
+<footer>
+
+    <ul class="taigame">
+        <li>
+            <span style="vertical-align: super; margin-right: 10px;">Tải game cho di động</span><span>
+                <i style="font-size: 30px; margin-top: -15px" class="fa fa-angle-double-right"></i>
+            </span>
+        </li>
+        <li id="AppstoreClick">
+            <a style="color:inherit" href="https://itunes.apple.com/us/app/vua-choi-bai-xoc-ia-online/id1019389616?mt=8" target="_blank"><span><i class="fa fa-apple cricle-cus "></i></span><span>Appstore</span></a>
+            <i class="tooltip02"><span>iOS</span></i>
+        </li>
+        <li id="GoogleClick">
+            <a style="color:inherit" href="https://play.google.com/store/apps/details?id=vuachoibai.gamedanhbai.choibaionline" target="_blank">
+                <span><i class="fa fa-play cricle-cus "></i></span><span>Google</span>
+            </a>
+                <i class="tooltip02"><span>Android</span></i>
+        </li>
+        <li id="WindowPhoneClick">
+            <a style="color:inherit" href="https://www.microsoft.com/en-us/store/apps/vua-choi-bai/9wzdncrdsr27" target="_blank">
+                <span><i class="fa fa-windows cricle-cus "></i></span><span>Window Phone</span>
+                <i class="tooltip02"><span>Window Phone</span></i>
+            </a>
+    </li>
+    </ul>
+
+    <ul class="hotline">
+        <li class="lienhe">
+            <span style="color: #E21F31;">Hotline : 096 999 4232<br></span>
+        </li>
+        <li class="facebook-fanpage">
+            <a style="color:inherit" href="https://www.facebook.com/vua.choi.bai.fanpage/?ref=ts&fref=ts" target="_blank">
+                <i class="fa fa-facebook cricle-cus  xanh " atl="https://www.facebook.com/vua.choi.bai.fanpage"></i>
+                <div class="tooltip"><span>https://www.facebook.com/vua.choi.bai.fanpage</span></div>
+
+            </a>
+        </li>
+    </ul>
+</footer>
+</div>
+            </div>
+            <div id="lobbygame" style="display: none; position: absolute;">
+    <div class="type-table">
+        <p id="lobbyGameName" class="game-name">
+
+        </p>
+        <ul class="type">
+            <li id="lobbyVipTab" class="banvip"></li>
+            <li id="lobbyNomalTab" class="banda"></li>
+        </ul>
+        <div class="clear"></div>
+        <div class="chonban">
+            <ul id="ulLobbyGame" style="display: none">
+                <p style="color: #ff9b42;">Mời các bạn chọn bàn chơi</p>
+
+            </ul>
+            <div id="loadingUlLobby" style=" margin-top: 150px;" class="loader" >
+                <div>Loading</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="nguoichoi" style="margin-top: 38px; position: absolute; right: 70px;">
+
+        <div class="nguoichoi-tab">
+            <ul>
+                <li id="playerLobby" class="tab-nguoichoi nguoichoi-active">NGƯỜI CHƠI</li>
+                <li id="playerBXHLobby" class="tab-nguoichoi ">BẢNG XẾP HẠNG</li>
+            </ul>
+            <div class="clear"></div>
+            <div id="listNguoiChoi" class="list-nguoichoi" style=" height: 160px; padding-top: 3px; ">
+                <div id="contentUserInRoom">
+                    <ul id="listUserInRoom"></ul>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div id="listBXH" class="list-xephang" style="height: 160px; display: none; ">
+                <ul>
+                    <li id="vipBXH">BÀN VIP</li>
+                    <li id="nomalBXH" class="active">BÀN MIỄN PHÍ</li>
+                    <li style="float:right;">
+                        <select id="selectNumberBXH">
+                            <option value="tuan">XẾP HẠNG TUẦN</option>
+                            <option value="tong">TỔNG</option>
+                        </select>
+                    </li>
+                </ul>
+
+                <div class="clear"></div>
+
+                <div class="bxh-content mCustomScrollbar">
+                    <ul id="danhsach_BXH"></ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="nguoichoi" style="margin-top: -32px; position: relative; top: 281px; right: 6px;">
+        <div class="nguoichoi-tab">
+            <ul id="tabChatLobby">
+                <li id="roomChatLobby" class="tab-nguoichoi nguoichoi-active">PHÒNG CHỜ</li>
+                <li id="worlChatLobby" class="tab-nguoichoi">THẾ GIỚI</li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="chatbox" style="position: absolute; right: 70px; margin-top: -11px;">
+        <div class="contentChatBoxLobby">
+            <ul id="listChatLobby"></ul>
+        </div>
+        <div class="chat-box">
+            <input type="text" id="txtboxchatportal" name="txtboxchatportal" maxlength="70" placeholder="Nhập nội dung chat...">
+            <a href="javascript:;" id="btnchatportal" class="submitChat"><span>OK</span></a>
+        </div>
+    </div>
+    <div class="clear"></div>
+
+    <!-- footer -->
+<footer>
+
+    <ul class="taigame">
+        <li>
+            <span style="vertical-align: super; margin-right: 10px;">Tải game cho di động</span><span>
+                <i style="font-size: 30px; margin-top: -15px" class="fa fa-angle-double-right"></i>
+            </span>
+        </li>
+        <li id="AppstoreClick">
+            <a style="color:inherit" href="https://itunes.apple.com/us/app/vua-choi-bai-xoc-ia-online/id1019389616?mt=8" target="_blank"><span><i class="fa fa-apple cricle-cus "></i></span><span>Appstore</span></a>
+            <i class="tooltip02"><span>iOS</span></i>
+        </li>
+        <li id="GoogleClick">
+            <a style="color:inherit" href="https://play.google.com/store/apps/details?id=vuachoibai.gamedanhbai.choibaionline" target="_blank">
+                <span><i class="fa fa-play cricle-cus "></i></span><span>Google</span>
+            </a>
+                <i class="tooltip02"><span>Android</span></i>
+        </li>
+        <li id="WindowPhoneClick">
+            <a style="color:inherit" href="https://www.microsoft.com/en-us/store/apps/vua-choi-bai/9wzdncrdsr27" target="_blank">
+                <span><i class="fa fa-windows cricle-cus "></i></span><span>Window Phone</span>
+                <i class="tooltip02"><span>Window Phone</span></i>
+            </a>
+    </li>
+    </ul>
+
+    <ul class="hotline">
+        <li class="lienhe">
+            <span style="color: #E21F31;">Hotline : 096 999 4232<br></span>
+        </li>
+        <li class="facebook-fanpage">
+            <a style="color:inherit" href="https://www.facebook.com/vua.choi.bai.fanpage/?ref=ts&fref=ts" target="_blank">
+                <i class="fa fa-facebook cricle-cus  xanh " atl="https://www.facebook.com/vua.choi.bai.fanpage"></i>
+                <div class="tooltip"><span>https://www.facebook.com/vua.choi.bai.fanpage</span></div>
+
+            </a>
+        </li>
+    </ul>
+</footer>
+</div>
+
+<script type="text/javascript">
+   $("#contentUserInRoom").mCustomScrollbar({
+        advanced: {
+            updateOnContentResize: true
+        }
+    });
+
+    $(".contentChatBoxLobby").mCustomScrollbar({
+        advanced: {
+            updateOnContentResize: true
+        }
+    });
+</script>
+            <div class="card-select" style="display: none;">
+    <ul>
+        <li><img src="/public/img/cards/1.png"/></li>
+        <li><img src="/public/img/cards/13.png"/></li>
+        <li><img src="/public/img/cards/12.png"/></li>
+        <li><img src="/public/img/cards/11.png"/></li>
+        <li><img src="/public/img/cards/10.png"/></li>
+        <li>
+            <p>Sảnh chúa</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/51.png"/></li>
+        <li><img src="/public/img/cards/50.png"/></li>
+        <li><img src="/public/img/cards/49.png"/></li>
+        <li><img src="/public/img/cards/48.png"/></li>
+        <li><img src="/public/img/cards/47.png"/></li>
+        <li>
+            <p>Thùng phá sảnh</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/1.png"/></li>
+        <li><img src="/public/img/cards/14.png"/></li>
+        <li><img src="/public/img/cards/40.png"/></li>
+        <li><img src="/public/img/cards/27.png"/></li>
+        <li><img src="/public/img/cards/24.png"/></li>
+        <li>
+            <p>Tứ quý</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/26.png"/></li>
+        <li><img src="/public/img/cards/52.png"/></li>
+        <li><img src="/public/img/cards/39.png"/></li>
+        <li><img src="/public/img/cards/9.png"/></li>
+        <li><img src="/public/img/cards/48.png"/></li>
+        <li>
+            <p>Cù lũ</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/27.png"/></li>
+        <li><img src="/public/img/cards/38.png"/></li>
+        <li><img src="/public/img/cards/36.png"/></li>
+        <li><img src="/public/img/cards/34.png"/></li>
+        <li><img src="/public/img/cards/32.png"/></li>
+        <li>
+            <p>Thùng</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/24.png"/></li>
+        <li><img src="/public/img/cards/10.png"/></li>
+        <li><img src="/public/img/cards/48.png"/></li>
+        <li><img src="/public/img/cards/21.png"/></li>
+        <li><img src="/public/img/cards/33.png"/></li>
+        <li>
+            <p>Sảnh</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/26.png"/></li>
+        <li><img src="/public/img/cards/52.png"/></li>
+        <li><img src="/public/img/cards/39.png"/></li>
+        <li><img src="/public/img/cards/1.png"/></li>
+        <li><img src="/public/img/cards/36.png"/></li>
+        <li>
+            <p>Xám</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/8.png"/></li>
+        <li><img src="/public/img/cards/47.png"/></li>
+        <li><img src="/public/img/cards/24.png"/></li>
+        <li><img src="/public/img/cards/37.png"/></li>
+        <li><img src="/public/img/cards/10.png"/></li>
+        <li>
+            <p>Hai đôi</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/13.png"/></li>
+        <li><img src="/public/img/cards/39.png"/></li>
+        <li><img src="/public/img/cards/22.png"/></li>
+        <li><img src="/public/img/cards/40.png"/></li>
+        <li><img src="/public/img/cards/49.png"/></li>
+        <li>
+            <p>Một đôi</p></li>
+    </ul>
+    <ul>
+        <li><img src="/public/img/cards/14.png"/></li>
+        <li><img src="/public/img/cards/39.png"/></li>
+        <li><img src="/public/img/cards/48.png"/></li>
+        <li><img src="/public/img/cards/30.png"/></li>
+        <li><img src="/public/img/cards/42.png"/></li>
+        <li>
+            <p>Bài cao</p></li>
+    </ul>
+    <img src="/public/img/arrow-select.png" class="arrow"/>
+    <div class="clear"></div>
+</div>
+<div style="display: none; position: absolute; z-index: 400; width:432px; height:170px; margin-left:310px; margin-top: 210px;" class="popupcay3 dangky3cay" id="popup3cay">
+
+    <div class="popup-content3cay ma-otp3cay thoat">
+        <img src="/Public/img/ChosenGame/girl_2.png" alt="">
+        <center>
+            <p style="margin-top: 35px !important; padding-left: 95px; padding-right: 20px;" id="message3cay">
+                Bạn có chắc chắn muốn thoát khỏi Game bài 777 không?
+            </p>
+            <ul>
+                <li><p class="popup-btn3cay" id="buttonLeft3cay" style="width: 105px; margin-right: -35px;">ĐỒNG Ý</p></li>
+                <li style="left: 50px;"><p class="popup-btn3cay" id="buttonright3cay" style="width: 105px;">TỪ CHỐI</p></li>
+            </ul>
+        </center>
+    </div>
+</div>
+
+            
+
+
+
+<nav class="chat" style="display: block;">
+    <li><a href="javascript:;" id="chatbutton01" class="shakeit" style="display: none"><img src="/Public/img/ShareResources/chat-btn.png"></a></li>
+    <li><a href="javascript:;" class="shakeit" style="display: none;" id="card_button"><img src="/Public/img/ShareResources/card-btn.png"></a></li>
+    <li><a href="javascript:;" id="chip_button" class="shakeit" style="display: none;"><img src="/Public/img/ShareResources/gold-btn.png"></a></li>
+    <li><a href="javascript:;" id="owner_button" class="shakeit" style="display: none;"><img src="/Public/img/ShareResources/boss-btn.png"></a></li>
+    <div class="clear"></div>
+    <div class="clear"></div>
+</nav>
+
+    <div class="control" style="display: none;">
+        <ul>
+            <li id="startGame" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/batdau-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="getCard" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/boc-btn.png" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="unchooseCard" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/bochon-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="eatCard" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/an-btn.png" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="dropCard" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/danh-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="endTurn" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/boluot-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="downCardsAuto" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/tuha-btn.png" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="downCards" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/ha-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            
+            <li id="sendCards" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/gui-btn.png" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="u" style="display: none;"><a href="javascript:;"><img src="/public/img/button/btn-u.png" /><img src="/public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="u-khan" style="display: none;"><a href="javascript:;"><img src="/public/img/button/btn-u.png" /><img src="/public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+            <li id="xito_btn_allin" class="bet-button" style="display: none;"><a href="javascript:;"><img src="public/img/button/btn-xalang.png"><img src="public/img/button/cuoc.png" class="circle spin"></a><p id="xito-btn-allin-html"></p></li>
+            <li id="xito-btn-bet" class="bet-button" style="display: none; z-index:2;"><a href="javascript:;"><img src="public/img/button/to-btn.png"><img src="public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="xito-btn-theo" class="bet-button" style="display: none;"><a href="javascript:;"><img src="public/img/button/theo-btn.png" /><img src="public/img/button/cuoc.png" class="circle spin" /></a><p id="xito-btn-theo-html"></p></li>
+            <li id="xito-btn-up" class="bet-button" style="display: none;"><a href="javascript:;"><img src="public/img/button/upbai-btn.png"><img src="public/img/button/cuoc.png" class="circle spin"></a></li>
+            <li id="btn-nhuong" class="bet-button" style="display: none;"><a href="javascript:;"><img src="public/img/button/nhuong-btn.png" /><img src="public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+            
+
+            <li id="poker_mobai" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/btn-xong.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin"/></a></li>
+            <li id="poker_bobai" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/bobai-btn.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+
+            <li id="poker_xembai" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/xembai-btn.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+            <li id="poker_theo" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/theo-btn.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin"  /></a></li>
+
+            <li id="poker_tangcuoc" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/btn-b-tangcuoc.png" class="pokerbutton02" /><img src="/Public/img/button/cuoc.png" class="circle spin"  /></a></li>
+
+            <li id="poker_datcuoc" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/btn-datcuoc.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+            <li id="poker_xalang" class="pokerbutton" style="display: none;"><a href="javascript:;"><img src="/Public/img/poker/btn-xalang.png" class="pokerbutton01" /><img src="/Public/img/button/cuoc.png" class="circle spin" /></a></li>
+
+            
+            <li id="baoSam" style="display: none;"><a href="javascript:;"><img src="Public/img/sam/xinsam-btn.png" /><img src="public/img/button/cuoc.png" class="circle spin" /></a></li>
+            <li id="boSam" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/boluot-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+            
+            <li id="sortCards" style="display: none;"><a href="javascript:;"><img src="/Public/img/button/xepbai-btn.png"><img src="/Public/img/button/cuoc.png" class="circle spin"></a></li>
+
+        </ul>
+        
+        <div class="clear"></div>
+    </div>
+    <div class="xito-cuoc">
+        <img src="/public/img/button/bobai.png" class="title" style="display: none" />
+        <ul>
+            <li id="btn-tatca" class="bet-button sub-action" style="display: none">
+                <img src="/public/img/button/tatca.png" />
+                <span id="btn-tatca-html"></span>
+                <div class="clear"></div>
+            </li>
+            <li id="btn-x2" class="bet-button sub-action" style="display: none">
+                <img src="/public/img/button/x2.png" />
+                <span id="btn-x2-html"></span>
+                <div class="clear"></div>
+            </li>
+            <li id="btn-12" class="bet-button sub-action" style="display: none">
+                <img src="/public/img/button/12.png" />
+                <span id="btn-12-html"></span>
+                <div class="clear"></div>
+            </li>
+            <li id="btn-14" class="bet-button sub-action" style="display: none">
+                <img src="/public/img/button/14.png" />
+                <span id="btn-14-html"></span>
+                <div class="clear"></div>
+            </li>
+            <li id="btn-1" class="bet-button sub-action" style="display: none">
+                <img src="/public/img/button/to1.png" />
+                <span id="btn-1-html"></span>
+                <div class="clear"></div>
+            </li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+<div class="chatboxingame" id="chat" style="display: none">
+    <p style="display:none" class="animated3 flash" id="chatWindowNoti">Bạn đang có <span>5 tin chat</span> chưa đọc</p>
+    <nav class="turn">
+        <li><a href="javascript:;" id="minimizeChatWindowInGame"><i class="fa fa-minus fa-lg"></i></a></li>
+        <li><a href="javascript:;" id="closeChatWindowInGame"><i class="fa fa-times fa-lg"></i></a></li>
+    </nav>
+    <div class="icons-chat">
+        <div id="icons" style="display:none;" class="mCustomScrollbar _mCS_3 mCS-autoHide mCS_no_scrollbar">
+            <div id="mCSB_3" s class="mCustomScrollBox mCS-default mCSB_vertical mCSB_inside" tabindex="0">
+                <div id="mCSB_3_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; left: 0px; top: 0px;" dir="ltr">
+                    <ul class="icon-img">                      
+                    </ul>
+                </div><div id="mCSB_3_scrollbar_vertical" class="mCSB_scrollTools mCSB_3_scrollbar mCS-default mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_3_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; top: 0px;" oncontextmenu="return false;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
+            </div>
+        </div>
+        <a href="javascript:;"><img src="/Public/img/chat/smiley.png" class="button-icon"></a>
+    </div>
+    <a class="expander collapsed" href="#"><img src="/Public/img/chat/chat.png"></a>
+    <div id="quickChat1" class="content mCustomScrollbar _mCS_2 mCS-autoHide mCS_no_scrollbar" style="display: none;">
+        <div id="mCSB_2" class="mCustomScrollBox mCS-default mCSB_vertical mCSB_inside" tabindex="0">
+            <div id="mCSB_2_container" class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y" style="position: relative; left: 0px; top: 0px;" dir="ltr">
+                <div class="pre-text">
+                    <ul>
+                        <li><button>Bài đẹp!</button></li>
+                        <li><button>Sợ gì mà không theo!</button></li>
+                        <li><button>Hèn vãi!</button></li>
+                        <li><button>Nhanh lên!</button></li>
+                        <li><button>Thua đi cưng!</button></li>
+                        <li><button>Chết cmn đi!</button></li>
+                        <li><button>Sợ bố chưa con!</button></li>
+                        <li><button>Bài đẹp!</button></li>
+                        <li><button>Sợ gì mà không theo!</button></li>
+                        <li><button>Hèn vãi!</button></li>
+                        <li><button>Nhanh lên!</button></li>
+                        <li><button>Thua đi cưng!</button></li>
+                        <li><button>Chết cmn đi!</button></li>
+                        <li><button>Sợ bố chưa con!</button></li>
+                    </ul>
+                </div>
+            </div><div id="mCSB_2_scrollbar_vertical" class="mCSB_scrollTools mCSB_2_scrollbar mCS-default mCSB_scrollTools_vertical" style="display: none;"><div class="mCSB_draggerContainer"><div id="mCSB_2_dragger_vertical" class="mCSB_dragger" style="position: absolute; min-height: 30px; top: 0px;" oncontextmenu="return false;"><div class="mCSB_dragger_bar" style="line-height: 30px;"></div></div><div class="mCSB_draggerRail"></div></div></div>
+        </div>
+    </div>
+    <div id="tabs" class="channel ui-tabs ui-widget ui-widget-content ui-corner-all">
+        <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+            <li class="ui-state-default ui-corner-top ui-tabs-selected ui-state-active"><a href="javascript:;">Room</a></li>
+            <li class="ui-state-default ui-corner-top"><a href="javascript:;">Game</a></li>
+            <li class="ui-state-default ui-corner-top"><a href="javascript:;">All</a></li>
+        </ul>
+        <div id="contentChatIngame">
+            <div id="chatIngameContent"></div>                   
+        </div>
+    </div>
+    <input id="chatTextBox" maxlength="50" type="text" placeholder="Nhập text vào đây nè!">
+    <img src="/Public/img/chat/arrow-select.png" class="arrow">
+    <div class="clear"></div>
+</div>
+
+
+
+            
+            
+        </div>
+    </div>
+     <div id="penaltyContainer" style="width: 100%; height: 100%;top: 0px;position:absolute;display:none">
+        
+    
+    
+    
+    
+    
+
+<script>
+
+    var CheckSound = function (setter) {
+
+        var soundCheck = localStorage.getItem('enableSound');
+        if (setter != undefined) {
+            localStorage.setItem('enableSound', (soundCheck == undefined || soundCheck == 0) ? 1 : 0);
+        }
+        soundCheck = localStorage.getItem('enableSound');
+        if (soundCheck == undefined || soundCheck == 0) {
+            $(".sound i").removeClass("fa-volume-up");
+            $(".sound i").addClass("fa-volume-off");
+            App.backgroundSound.stop();
+        } else {
+            $(".sound i").removeClass("fa-volume-off");
+            $(".sound i").addClass("fa-volume-up");
+            App.backgroundSound.setLoop(9999);
+            App.backgroundSound.play();
+        }
+    }
+
+
+</script>
+<div id="penaltyBounder" style="width:1000px;margin: 0 auto; display:block">
+    <div class="wrap" id="penaltyWrap">
+        <a onclick="CheckSound(true);" class="sound"><i class="fa fa-volume-off fa-2x"></i></a>
+        
+
+<div class="penaltyloading">
+    <img src="http://vuachoibai.com//Public/img/Penalty/ball-loading.png" alt="" class="spin">
+    <p class="penaltytext1" id="loadingStatusText">Đang tải Game</p>
+    <div class="penaltybg1"><div class="penaltybg2" id="preLoadGraphics"></div></div>
+    <p class="penaltytext2" id="preloadPercent">0%</p>
+</div>
+<div class="clear"></div>
+
+
+
+
+
+
+        <div id="lobbyContainer" style="opacity: 0; filter: alpha(opacity=0);">
+            
+
+
+
+<div class="penaltyblack"></div>
+<div id="penaltyTeamName" style="position: absolute; top: 480px; left: 440px; font-size: 40px; color: white;">Pháp</div>
+<div class="penaltyexample">
+    
+    <div class="penaltyshow">
+        <ul id="example-figure8">
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/france-round-flag.png" alt="" onclick="App.SelectTeam(1)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/germany-round-flag.png" alt="" onclick="App.SelectTeam(2)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/spain-round-flag.png" alt="" onclick="App.SelectTeam(9)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/belgium-round-flag.png" alt="" onclick="App.SelectTeam(3)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/italy-round-flag.png" alt="" onclick="App.SelectTeam(4)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/sweden-round-flag.png" alt="" onclick="App.SelectTeam(5)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/aland-round-flag.png" alt="" onclick="App.SelectTeam(6)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/wales-round-flag.png" alt="" onclick="App.SelectTeam(7)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/croatia-round-flag.png" alt="" onclick="App.SelectTeam(8)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/portugal-round-flag.png" alt="" onclick="App.SelectTeam(10)"></li>
+            <li><img src="http://vuachoibai.com//Public/img/Penalty/flags/vietnam-round-flag.png" alt="" onclick="App.SelectTeam(0)"></li>
+        </ul>
+    </div>
+</div>
+<!--End Slide-->
+<!--Begin Info-->
+<div class="penaltyinfo">
+    <img src="http://vuachoibai.com//Public/img/Penalty/cauthudaidien/france.png" class="penaltycauthu-img" alt="">
+</div>
+<!--End Info-->
+<!--Begin Nguoi Choi-->
+
+
+<div class="control-main">
+    <ul>
+        <li>
+            <a onclick="PenaltyPopup.ShowRank(1)">
+                <img src="http://vuachoibai.com//Public/img/Penalty/cup.png" alt="" class="cup"><br>
+                <span>Vinh danh</span>
+            </a>
+        </li>
+        <li>
+            <a onclick="PenaltyPopup.ShowHistory(1, 1);">
+                <img src="http://vuachoibai.com//Public/img/Penalty/shose.png" alt="" class="shose"><br>
+                <span>Lịch sử giao dịch</span>
+            </a>
+        </li>
+        <li>
+            <a onclick="PenaltyPopup.ShowGuide();">
+                <img src="http://vuachoibai.com//Public/img/Penalty/help.png" alt="" class="help-icon"><br>
+                <span>Hướng dẫn luật chơi</span>
+            </a>
+        </li>
+    </ul>
+</div>
+
+<!--End Help-->
+<!--Begin Chat Box-->
+<div class="penaltychatbox">
+    <div class="penaltytitle"><i class="fa fa-comments fa-2x"></i><br>Chat Box</div>
+    
+
+<div class="chatforum">
+    <div class="box boxchat">
+        <div id="chat-content"></div>
+        <div class="chatchat" id="chatTextBox">
+            <input type="text" value="">
+            <span class="matcuoi"><a href="javascript:;" id="showEmoticon"></a></span>
+        </div>
+        <div class="emoticon">
+            <label data-value="&gt;:)">&gt;:)</label>
+            <label data-value=":))">:))</label>
+            <label data-value="/:)">/:)</label>
+            <label data-value="<):)"><):)</label>
+            <label data-value=":)]">:)]</label>
+            <label data-value=":)">:)</label>
+            <label data-value=":((">:((</label>
+            <label data-value=":(">:(</label>
+            <label data-value=";;)">;;)</label>
+            <label data-value=";)">;)</label>
+            <label data-value="&gt;:D">&gt;:D<</label>
+            <label data-value=":D">:D</label>
+            <label data-value=":-SS">:-SS</label>
+            <label data-value="#:-S">#:-S</label>
+            <label data-value=":-?">:-?</label>
+            <label data-value="&gt;:P">&gt;:P</label>
+            <label data-value=":P">:P</label>
+            <label data-value="(:|">(:|</label>
+            <label data-value=":|">:|</label>
+            <label data-value=":-/">:-/</label>
+            <label data-value=":-*">:-*</label>
+            <label data-value="=((">=((</label>
+            <label data-value="~X(">~X(</label>
+            <label data-value="B-)">B-)</label>
+            <label data-value=":-S">:-S</label>
+            <label data-value="=))">=))</label>
+            <label data-value="O:-)">O:-)</label>
+            <label data-value=":-B">:-B</label>
+            <label data-value="=;">=;</label>
+            <label data-value="8-|">8-|</label>
+            <label data-value="L-)">L-)</label>
+            <label data-value=":-&">:-&</label>
+            <label data-value=":-$">:-$</label>
+            <label data-value="[-(">[-(</label>
+            <label data-value=":O)">:O)</label>
+            <label data-value="8-}">8-}</label>
+            <label data-value="<:-P"><:-p</label>
+            <label data-value=":x">:x</label>
+            <label data-value="=P~">=P~</label>
+            <label data-value="#-o">#-o</label>
+            <label data-value="=D>">=D></label>
+            <label data-value="&#64;-)">&#64;-)</label>
+            <label data-value=":^o">:^o</label>
+            <label data-value=":-w">:-w</label>
+            <label data-value=":-<">:-<</label>
+            <label data-value=":-O">:-O</label>
+            <label data-value=":>">:></label>
+            <label data-value=":-c">:-c</label>
+            <label data-value="X(">X(</label>
+            <label data-value=":-h">:-h</label>
+            <label data-value="8->">8-></label>
+        </div>
+        <div class="pre-text"></div>
+    </div>
+</div>
+<style type="text/css">
+    .slimScrollDiv {
+        width: 100% !important;
+        height: 185px !important;
+    }
+
+    .chatforum .zoom {
+        float: right;
+        background: url(images/slot/iconzom.png) 0 2px no-repeat;
+        width: 30px;
+        height: 30px;
+        cursor: pointer;
+    }
+
+    .chatforum .vd, .chatforum .chat2 {
+        display: block;
+        height: 28px;
+    }
+
+        .chatforum .vd p, .chatforum .chat2 p {
+            float: left;
+            font-size: 14px;
+            font-weight: normal;
+            color: #F90;
+            margin: 0px;
+            display: block;
+            padding: 5px 18px;
+            background: #360;
+            cursor: pointer;
+        }
+
+            .chatforum .vd p:hover, .chatforum .chat2 p:hover {
+                color: #333;
+                background: #090;
+            }
+
+    .box {
+        font-weight: normal;
+        width: 100%;
+        height: 100%;
+        display: block;
+        position: relative;
+    }
+
+    #vd-content, #chat-content {
+        padding: 0;
+        width: 100% !important;
+        height: 185px !important;
+        /*background-color: #e0d0a1;*/
+    }
+
+        #chat-content > p {
+            font-size: 12px;
+            padding: 3px 4px;
+            margin: 0;
+            color: #fff;
+        }
+
+    .chatchat {
+        margin-top: 9px;
+        background-color: #000;
+        z-index: 10;
+        border: 1px solid #d3d3d3;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+    }
+
+        .chatchat input {
+            padding: 5px;
+            background: #000;
+            width: 80%;
+            color: #fff;
+            border: none;
+        }
+
+    .matcuoi {
+        margin: 0px;
+        padding: 0px;
+        float: right;
+        z-index: 10;
+        width: 25px;
+        margin-top: 5px;
+    }
+
+    .chatforum #showEmoticon {
+        background: url(Public/img/chat/smiley.png) no-repeat;
+        background-size: 100% 100%;
+        width: 22px;
+        height: 22px;
+        display: block;
+        margin-top: -3px;
+    }
+
+    .ten2 {
+        background: url(images/slot/right.png) no-repeat;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        position: absolute;
+        top: 340px;
+        right: 0;
+    }
+
+        .ten2.min {
+            background-image: url(images/slot/left.png);
+        }
+
+    .boxvd {
+        font-size: 11px;
+    }
+
+        .boxvd .jackpot_big > p, .boxvd li.jackpot_big {
+            font-size: 120%;
+            padding: 5px 5px 0 5px;
+            margin: 0;
+        }
+
+        .boxvd .jackpot_small > p, .boxvd li.jackpot_small {
+            font-size: 110%;
+            padding: 5px 5px 0 5px;
+            margin: 0;
+        }
+
+        .boxvd ul {
+            list-style: none;
+            padding: 5px;
+            margin: 0;
+        }
+
+            .boxvd ul li {
+                list-style: none;
+                padding: 3px 0;
+                margin: 0;
+            }
+
+        .boxvd span.username, .boxvd span.jackpot_small, .boxvd span.jackpot_big, .boxvd span.money {
+            color: #AC1407;
+            font-weight: bold;
+        }
+
+    .emoticon {
+        display: none;
+        position: absolute;
+        bottom: 40px;
+        background: rgba(100,100,100,0.8);
+        height: 130px;
+        width: 85%;
+        padding: 5px;
+        right: 0;
+        overflow: hidden;
+    }
+</style>
+
+
+
+
+
+
+</div>
+<!--End Chat Box-->
+<!--Begin Sao/Xu-->
+<div class="penaltysaoxu">
+    <a id="selectStarRoom"><img src="http://vuachoibai.com//Public/img/Penalty/sao-btn.png" alt="" class="penaltysao-btn animated shake penaltyhide"></a>
+    <a id="selectCoinRoom"><img src="http://vuachoibai.com//Public/img/Penalty/xu-btn.png" alt="" class="penaltyxu-btn"></a>
+    <ul>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/100.png" alt="" class="animated tada"></a></li>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/1000.png" alt="" class="animated tada"></a></li>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/5000.png" alt="" class="animated tada"></a></li>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/20k.png" alt="" class="animated tada"></a></li>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/100k.png" alt="" class="animated tada"></a></li>
+        <li><a><img src="http://vuachoibai.com//Public/img/Penalty/ball/xu/500k.png" alt="" class="animated tada"></a></li>
+    </ul>
+    <div class="penaltynote animated flash">Click vào phòng chơi để tìm đối thủ</div>
+</div>
+<!--End Sao/Xu-->
+<div class="penaltyclear"></div>
+<script>
+    (function ($) {
+        $(window).load(function () {
+            $("#content-1").mCustomScrollbar({
+                autoHideScrollbar: false,
+                theme: "default"
+            });
+            $("#content-2").mCustomScrollbar({
+                autoHideScrollbar: false,
+                theme: "default"
+            });
+        });
+    })(jQuery);
+    $(document).ready(function () {
+
+    });
+
+</script>
+
+
+
+        </div>
+
+        <div id="FindMatchScene" style="display:none">
+            
+
+<div class="penaltyvs"><img src="http://vuachoibai.com//Public/img/Penalty/vs.png" alt=""></div>
+<div class="penaltyload-left player1">
+    <img src="http://vuachoibai.com//Public/img/Penalty/loading1.gif" alt="">
+    <h1></h1>
+    <h2>
+    </h2>
+</div>
+<div class="penaltyload-left penaltyload-right player2">
+    <img src="http://vuachoibai.com//Public/img/Penalty/loading1.gif" alt="">
+    <h1></h1>
+    <h2>
+    </h2>
+</div>
+<div class="penaltytext-loading"></div>
+
+
+
+        </div>
+
+        <div id="GamePlayScene" style="display:none">
+            
+
+<div id="penaltyAnim">
+    <img src="http://vuachoibai.com//public/img/penalty/animations/thumon_idle.png" alt="thumon" class="penaltythumon" width="1000" height="680">
+    <img src="http://vuachoibai.com//public/img/penalty/animations/bong_idle.png" alt="bong" class="penaltybong" width="1000" height="680">
+    <img src="http://vuachoibai.com//public/img/penalty/animations/cauthu_idle.gif" alt="cauthu" class="penaltycauthu" width="1000" height="680">
+</div>
+
+<div class="penaltykinhdien"><img src="http://vuachoibai.com//public/img/penalty/text-trancau.png" alt=""></div>
+
+<canvas width="1000" height="680" id="penaltyGameCanvas" style="margin: auto auto;display: block;position:absolute;">Trình duyệt không hỗ trợ html5</canvas>
+
+<div class="penaltyx2" onclick="App.game.doubleBet()">
+    <img src="http://vuachoibai.com//public/img/penalty/x2-hide.png" alt="">
+    <img style="display:none" src="http://vuachoibai.com//public/img/penalty/vongtron.png" alt="" class="penaltyvongtron spin">
+</div>
+
+<div class="penaltychat-auto" style="display:none">
+    <ul class="penaltyemo-img">
+        <li onclick="App.game.SendMessage(0, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/amazed.png" alt=""></li>
+        <li onclick="App.game.SendMessage(1, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/angry.png" alt=""></li>
+        <li onclick="App.game.SendMessage(2, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/beat_brick.png" alt=""></li>
+        <li onclick="App.game.SendMessage(3, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/beat_plaster.png" alt=""></li>
+        <li onclick="App.game.SendMessage(4, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/beauty.png" alt=""></li>
+        <li onclick="App.game.SendMessage(5, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/big_smile.png" alt=""></li>
+        <li onclick="App.game.SendMessage(6, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/burn_joss_stick.png" alt=""></li>
+        <li onclick="App.game.SendMessage(7, 2)"><img src="http://vuachoibai.com//public/img/penalty/chatIcon/canny.png" alt=""></li>
+    </ul>
+    <ul class="penaltytext">
+        <li onclick="App.game.SendMessage(0, 1)">A con gà</li>
+        <li onclick="App.game.SendMessage(1, 1)">Trái này</li>
+        <li onclick="App.game.SendMessage(2, 1)">Trượt đê cưng</li>
+        <li onclick="App.game.SendMessage(3, 1)">Thanks</li>
+        <li onclick="App.game.SendMessage(4, 1)">Đỡ vào mắt</li>
+        <li onclick="App.game.SendMessage(5, 1)">Phải này</li>
+        <li onclick="App.game.SendMessage(6, 1)">X2 đi cưng</li>
+        <li onclick="App.game.SendMessage(7, 1)">Ahihi</li>
+        <li onclick="App.game.SendMessage(8, 1)">Lừa đảo</li>
+        <li onclick="App.game.SendMessage(9, 1)">HiHi, Đồ ngốc</li>
+    </ul>
+</div>
+
+<div class="penaltychat-emo">
+    <a onclick="App.game.ShowHideChat()"><img src="http://vuachoibai.com//public/img/penalty/chat-icon.png" alt="" class="chat-icon"></a>
+</div>
+
+<div id="penaltyResultGoal" style="width:1000px;height:680px">
+    <div id="goalMessage" style="display:none;width: 588px;height: 312px;top: 50%;left: 50%;position: absolute;margin-left: -294px;margin-top: -300px;">
+        <img src="http://vuachoibai.com//public/img/penalty/goal.png">
+    </div>
+
+    <div id="defenseMessage-def" class="defense" style="position:absolute;left: -175px;display:none">
+        <img src="http://vuachoibai.com//public/img/penalty/def.png">
+    </div>
+
+    <div id="defenseMessage-sucess" class="defense" style="position: absolute; top: 50px; left: 200px; display: none">
+        <img src="http://vuachoibai.com//public/img/penalty/sucess.png">
+    </div>
+</div>
+<div class="clear"></div>
+
+
+
+        </div>
+
+        <div id="GameResultScene" style="display:none">
+            
+<div class="penaltyresult-win">
+    <div class="penaltyuser-left">
+        <img src="http://vuachoibai.com//public/img/Penalty/flags/belgium-round-flag.png" alt="">
+        <p>England</p>
+    </div>
+    <div class="penaltyuser-right">
+        <img src="http://vuachoibai.com//public/img/Penalty/flags/portugal-round-flag.png" alt="">
+        <p>Belgium</p>
+    </div>
+    <div class="penaltynumber">2 - 3</div>
+</div>
+<!--End Result-->
+<!--Begin Info-->
+<div class="penaltyinfo-result">
+    <p><img id="winorlose" src="http://vuachoibai.com//public/img/Penalty/thuacuoc.png" alt="" style="
+    margin-top: 150px;"></p>
+    <p class="penaltysao"><moneyValue></moneyValue><br><img src="http://vuachoibai.com//public/img/Penalty/sao.png" alt=""></p>
+    <p class="penaltytime">10s</p>
+</div>
+<!--End Info-->
+<!--Begin Button-->
+<div class="penaltybutton">
+    <a id="penaltyQuit"><img src="http://vuachoibai.com//public/img/Penalty/thoat-btn.png" alt="" class="penaltythoat-btn"></a>
+    <a id="penaltyContinue" onclick=""><img src="http://vuachoibai.com//public/img/Penalty/choitiep-btn.png" alt="" class="penaltychoitiep-btn"></a>
+</div>
+<!--End Button-->
+
+        </div>
+        <div class="penaltygoal" style="display:none"></div>
+        <div class="penaltyyeah" style="display:none"></div>
+    </div>
+</div>
+
+    </div>
+</div>
+
+<div id="TopMostPopUp" style="width: 100%; height: 100%; z-index: -9999; position: absolute; top: 0px; display: block">
+    <div id="TMPU" style="margin: auto auto; width: 1000px; height: 680px; z-index: 999">
+        <canvas id="buychipcanvas" width="1000" height="680" style="margin: auto auto;"></canvas>
+    </div>
+
+    <div id="TMPU1" style="width: 100%; height: 100%; z-index: 1000; position: absolute; top: 0px; display: block;">
+        <div id="TMPU2" style="margin: auto auto; width: 1000px; height: 680px; z-index: 9998">
+            <div id="TMPU3" style="margin: auto auto; width: 1000px; height: 680px; z-index: 9998; position: relative">
+
+            </div>
+        </div>
+    </div>
+</div>
+        
+    
+    <a id="btnIconShowChat" onclick="AccountInfo.ShowChatBox('0','')"></a>
+    <div id="wr_ChatChat" style="position:fixed !important;"></div>
+
+    <script src="//vuachoibai.com/event/Events/EventPocker/EventSkPocker.js?v=1.2.15" type="text/javascript" defer="defer"></script>
+    <script src="//vuachoibai.com/event/Events/ChumSk11/ChumTaXi2015.js?v=1.4.9" type="text/javascript" defer="defer"></script>
+    
+    <script src="//vuachoibai.com/event/Events/LobbyEvents/js/LobbyEvent.js?v=1.2.4" type="text/javascript" defer="defer"></script>
+    <!-- <script src="//vuachoibai.com/clientminigame/Scripts/jquery-jtemplates.js?v=1.1" type="text/javascript" defer="defer"></script> -->
+    <script src="//vuachoibai.com/public/js/minigame/jquery-jtemplates.js?v=1.1" type="text/javascript" defer="defer"></script>
+    <!-- <script src="//vuachoibai.com/clientminigame/Scripts/game/commongame.js?v=1.7.00" type="text/javascript" defer="defer"></script> -->
+    <script src="//vuachoibai.com/public/js/minigame/commongame.js?v=1.6.119" type="text/javascript" defer="defer"></script>
+    
+    <script src="//vuachoibai.com/minivuabai/Scripts/js_vuabai.js?v=2.25" type="text/javascript" defer="defer"></script>
+    <!-- <script src="//vuachoibai.com/clientminigame/Content/ThreeCards/Resources/js/threecards-js.js?v=2.17" type="text/javascript" defer="defer"></script>    -->
+    <script src="//vuachoibai.com/threeCards/Resources/js/threecards-js.js?v=2.21" type="text/javascript" defer="defer"></script> 
+ 
+    
+    
+    <!-- <script src="//vuachoibai.com/event/MiniEvents/EventTX2016T5/js/EventTX2016T5.js?v=1.7" ></script> -->
+    <!-- <script src="http://vuachoibai.com/event/MiniEvents/EventBaiDep2016T7/js/EvenBaiDep2016T7.js"></script> 
+    <link href="http://vuachoibai.com/event/MiniEvents/EventBaiDep2016T7/css/style.css"  rel="stylesheet" /> -->
+    
+    <!-- 25072016 -->
+    <script src="http://vuachoibai.com/event/MiniEvents/EventXocDia2016T7/js/EventXocDia2016T7.js"></script>
+    <link href="http://vuachoibai.com/event/MiniEvents/EventXocDia2016T7/css/style.css"  rel="stylesheet" />
+    <!--Start of Zopim Live Chat Script-->
+    
+    <!--End of Zopim Live Chat Script-->
+
+
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        var google_conversion_id = 955582811;
+        var google_custom_params = window.google_tag_params;
+        var google_remarketing_only = true;
+        /* ]]> */
+    </script>
+    <script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js">
+    </script>
+    <noscript>
+        <div style="display:inline;">
+            <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/955582811/?value=0&amp;guid=ON&amp;script=0" />
+        </div>
+    </noscript>
+<a href="http://v2.zopim.com/widget/livechat.html?key=3Tkuk78xM8NykMxfFCEQhRK6ZKjaeOur&lang=vi&hostname=vuachoibai.com&api_calls=%5B%5D" target="_blank" style=" position: absolute; bottom: 0px; right: 1px; "><img src="/Public/img/button/zopim.png"/></a>
+</body>
+</html>

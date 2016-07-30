@@ -1,3 +1,3 @@
-END_CAN_LAY = [0,512,256,128,100,64,32,16]
-END_CAN_LAY.reverse()
-print END_CAN_LAY 
+print len (range(9, -1, -1))
+for i in range(5, 3, -1):
+    print i

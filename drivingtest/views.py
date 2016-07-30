@@ -2,11 +2,11 @@
 #from django.db.models import F
 from django.template import RequestContext
 from django.shortcuts import render_to_response, render
-from models import Ulnew,ForumTable, PostLog, LeechSite, thongbao, postdict
+from models import Ulnew,ForumTable, PostLog, LeechSite, thongbao, postdict,autoimportdict
 import forms
 from drivingtest.forms import  ForumChoiceForm, UlnewForm, UlnewTable,\
     RepeatTable, TaiXiuXiuTaiTable, Tong3DiceTable, TaiXiuForm, TaiXiuTable,\
-    ImportForm, Thoi_gian_cho_su_lap_lai_Table
+    ImportForm, Thoi_gian_cho_su_lap_lai_Table, AutoImportForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
@@ -16,10 +16,11 @@ from fetch_website import danhsachforum, PostObject, leech_bai,\
     get_link_from_db, import_ul_txt_to_myul
 from exceptions import Exception
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
-from drivingtest.models import TaiXiu
+from drivingtest.models import TaiXiu, Notification_global_from_model_module,\
+    Da_import_xong_global_from_model_module, Tb_import
 from soicau import create_giong_nhau_khac_nhau_lists,\
     test_xac_suat_tong_3_dice_database, phien_100_to_html,\
-    create_how_many_phien_for_same_cau
+    create_how_many_phien_for_same_cau, autoimport, AutoImportObject
 from django.db.models.aggregates import Min, Max, Count
 import re
 from django.utils import timezone
@@ -29,7 +30,8 @@ VERBOSE_CLASSNAME ={'TaiXiu':u'Nguyên Nhân'}
 from django.db.models import Q
 
 ################CHUNG######################
-
+stop_auto_import = True
+run_auto_import = False
 def user_login(request):
     print request
     
@@ -105,11 +107,11 @@ def create_table(tai_xiu_lists,show_description = 'ko xen ke type',is_created_xe
     return repeat_table_2,taiXiuXiuTai_Table_2,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists
 
 
-def taixiu(request):
-    thoi_gian_cho_su_lap_lai_Table = Thoi_gian_cho_su_lap_lai_Table(create_how_many_phien_for_same_cau())
+def taixiu(request,for_only_return_dict = False):
+    
     IS_display_xen_ke = True
     rp_tx_combines = []
-    END_CAN_LAY = [0,512,256,128,100,64,32,16]
+    END_CAN_LAY = [0,512,256,128,100,68,64,32,16]
     END_CAN_LAY.reverse()
     last_phien_so =  TaiXiu.objects.latest('phien_so').phien_so
     taixiu_table = TaiXiuTable(TaiXiu.objects.all().order_by('-phien_so'))
@@ -138,16 +140,31 @@ def taixiu(request):
     
     tong_3_dict_lists = test_xac_suat_tong_3_dice_database(tai_xiu_lists_100)
     tong_3_table = Tong3DiceTable(tong_3_dict_lists)
+    autoImportForm = AutoImportForm()
     
-    
-    taiXiuForm = TaiXiuForm ()
-    return render(request, 'drivingtest/taixiu.html', {'thoi_gian_cho_su_lap_lai_Table':thoi_gian_cho_su_lap_lai_Table,\
+    if not for_only_return_dict:
+        thoi_gian_cho_su_lap_lai_Table = Thoi_gian_cho_su_lap_lai_Table(create_how_many_phien_for_same_cau())
+        taiXiuForm = TaiXiuForm ()
+        importForm = ImportForm()
+        render_dict = {'thoi_gian_cho_su_lap_lai_Table':thoi_gian_cho_su_lap_lai_Table,\
+                                                       'importForm':importForm,\
+                                                       'taiXiuForm':taiXiuForm,'taixiu_table':taixiu_table,\
+                                                       
                                                        'tong_3_table':tong_3_table,\
                                                        'rp_tx_combines':rp_tx_combines,
                                                        'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
                                                        'last_phien_so':last_phien_so,\
-                                                       'taiXiuForm':taiXiuForm,'taixiu_table':taixiu_table,\
-                                                       'importForm':ImportForm()})
+                                                       'autoImportForm':autoImportForm}
+    else:
+        render_dict ={
+                                                       'tong_3_table':tong_3_table,\
+                                                       'rp_tx_combines':rp_tx_combines,
+                                                       'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
+                                                       'last_phien_so':last_phien_so,\
+                                                       }
+        return render_dict
+    
+    return render(request, 'drivingtest/taixiu.html', render_dict)
 
 
  
@@ -233,7 +250,7 @@ def modelmanager(request,modelmanager_name,entry_id):
     is_download_table = True if 'downloadtable' in request.GET else False
     if is_download_table:
         is_form = False
-    
+    is_another_template = False
     dict_render ={}
     form = None
     table2 = None
@@ -275,6 +292,57 @@ def modelmanager(request,modelmanager_name,entry_id):
             form = FormClass(initial= {'text_html_100phien':tb})
             
             dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),tb)}
+            
+            
+           
+                
+                
+                
+                
+        elif form_name =='AutoImportForm':
+            form = FormClass()
+            which_start_or_stop_btn = request.GET['which-start-or-stop-btn']
+            if which_start_or_stop_btn=="Start":
+                
+                #tb = autoimport()
+                
+                try:
+                    luong = autoimportdict["luong autoimport"]
+                    if luong.is_alive():
+                        can_khoi_tao = False
+                    else:
+                        can_khoi_tao = True
+                except:
+                    can_khoi_tao = True
+                
+                if not can_khoi_tao :
+                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">luong da chay roi!! ,%s</h2>'%(datetime.now())}
+                else:
+                    Da_import_xong_global_from_model_module = False
+                    print '@@@@@@@@@Da_import_xong_global_from_model_module',Da_import_xong_global_from_model_module
+                    autoimportdict["luong autoimport"] = AutoImportObject()
+                    autoimportdict["luong autoimport"].login_flag = 1
+                    autoimportdict["luong autoimport"].start()
+                    print '@@@@@@@@@Da_import_xong_global_from_model_module',Da_import_xong_global_from_model_module
+                    if Tb_import.Da_import_xong_global_from_model_module:
+                        is_another_template = True
+                        dict_render  = taixiu(request,for_only_return_dict = True)
+                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),Tb_import.thongbao)})
+            elif which_start_or_stop_btn=="Stop":
+                try:
+                    Da_import_xong_global_from_model_module = False
+                    autoimportdict["luong autoimport"].stop  = True
+                    autoimportdict["luong autoimport"].join()
+                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Stop ,%s</h2>'%(datetime.now())}
+                except Exception as e:
+                    
+                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Chua co luon sao bam Stop!!!%s</h2>'%(datetime.now())}
+            elif which_start_or_stop_btn=="thongbao":   
+                dict_render.update ({'form':form,'form_notification':u'<h2 class="form-notification text-primary">thong bao::: ,%s,%s,luong dang live?%s</h2>'%(datetime.now(),Tb_import.thongbao,autoimportdict["luong autoimport"].is_alive())})
+                
+                
+                
+                
         else:
             
             #print 'request.POST',request.POST
@@ -442,12 +510,16 @@ def modelmanager(request,modelmanager_name,entry_id):
         elif request.GET['downloadtable'] == 'xls':
             return table.as_xls_d4_in_form_py_xls(request)
     else:
-        if form_table_template =='form on modal' and is_form :# and not click order-sort
-            if form:
-                form.verbose_form_name =VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name)
-            pattern = 'drivingtest/form_table_manager_for_modal.html'
+        if is_another_template:
+            if form_name =='AutoImportForm' and which_start_or_stop_btn=="Start":
+                pattern = 'drivingtest/taixiu.html'
         else:
-            pattern ='drivingtest/form_table_manager.html'
+            if form_table_template =='form on modal' and is_form :# and not click order-sort
+                if form:
+                    form.verbose_form_name =VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name)
+                pattern = 'drivingtest/form_table_manager_for_modal.html'
+            else:
+                pattern ='drivingtest/form_table_manager.html'
         return render(request, pattern,dict_render,status=status_code)
             
 def index(request):
