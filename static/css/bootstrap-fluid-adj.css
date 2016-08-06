@@ -7,12 +7,25 @@
 .row1 {
     clear: left;
 }
-span.current-in-td {color: red}
+span.not-current-in-td {color: #993333}
+span.current-in-td {color: #e68a00}
 span.wanting-in-td {color:#009900}
+span.wanting-in-td-level2 {color: #00ff00}
+span.wanting-in-td-level3 {color: #00ffff }
+span.redundant-in-td-level1 {color:#d966ff}
+span.redundant-in-td-level2 {color:#ff1a75}
+span.redundant-in-td-level3 {color:red}
 span.xiu-cau {
 	color:yellow;
 }
-
+thead tr td {
+	text-align: center
+}
+#repeat-table2 tr td {
+	text-align: center
+}
+table.up-margin {position: relative;
+bottom: 20px;}
 span.tai-cau:after {
     content: url('../../media/tai.png');
 }

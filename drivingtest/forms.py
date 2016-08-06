@@ -22,7 +22,7 @@ from crispy_forms.helper import FormHelper
 #import re
 from django_tables2_reports.tables import TableReport
 from django.utils.safestring import mark_safe
-from crispy_forms.layout import Submit
+from crispy_forms.layout import Submit, Layout, Div, HTML
 from datetime import datetime
 
 #from django.template.base import Template
@@ -89,6 +89,12 @@ class RepeatTable(TableReport):
     xiu_repeat_list_count = tables.Column(verbose_name=u"Xỉu Repeat")
     class Meta:
         attrs = {"class": "table-bordered","id": "repeat-table"}
+class RepeatTable2(TableReport):
+    i_repeat = tables.Column(verbose_name=u"Repeat Times")
+    Probability_theory = tables.Column(verbose_name=u"Probability_theory")
+    tai_xiu_repeat_description = tables.Column(verbose_name=u"Tài Repeat")
+    class Meta:
+        attrs = {"class": "table-bordered","id": "repeat-table2"}
 class TaiXiuXiuTaiTable(TableReport):
     mau_thu = tables.Column(verbose_name=u"Số mẫu")
     tai = tables.Column(verbose_name=u"Tài")
@@ -152,6 +158,24 @@ class ImportForm(forms.Form):
         self.helper.form_id = 'model-manager'
         self.helper.form_action = '/omckv2/modelmanager/ImportForm/new/'
         self.helper.add_input(Submit('add-new', 'ADD NEW',css_class="submit-btn"))
+        
+class SoiCauForm(forms.Form):
+    end_phien = forms.IntegerField(widget = forms.TextInput(attrs={'id':'end-phien-input'}))
+    so_cau_can_soi = forms.IntegerField(widget = forms.TextInput(attrs={'id':'end-phien-input'}),initial=100)
+    def __init__(self, *args, **kwargs):
+        soi_cau_html = kwargs.pop('soi_cau_html',None)
+        super(SoiCauForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper(form=self)
+        self.helper.form_id = 'model-manager'
+        self.helper.form_class = 'is_table_not '
+        self.helper.form_action = '/omckv2/modelmanager/SoiCauForm/new/'
+        self.helper.add_input(Submit('soi-cau', 'Soi Cau',css_class="submit-btn"))
+        #css_class='col-sm-4'
+        if soi_cau_html:
+            html = HTML(soi_cau_html)
+        else:
+            html = HTML('<h4>Dành</h4>')
+        self.helper.layout = Layout(Div(html,Div('end_phien','so_cau_can_soi',css_class='col-sm-4'),css_class="row"))
 class AutoImportForm(forms.Form):
     now_phien = forms.IntegerField()
     
@@ -164,6 +188,7 @@ class AutoImportForm(forms.Form):
         self.helper.add_input(Submit('start-auto-import-phien', 'Start',css_class="submit-btn"))
         self.helper.add_input(Submit('stop-auto-import-phien', 'Stop',css_class="submit-btn"))
         self.helper.add_input(Submit('tb-auto-import-phien', 'thongbao',css_class="submit-btn"))
+        self.helper.add_input(Submit('poll-auto-import-phien', 'poll',css_class="submit-btn"))
 class TaiXiuTable(TableReport):
     jquery_url= '/omckv2/modelmanager/TaiXiuForm/new/'
     is_report_download = True

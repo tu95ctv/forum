@@ -30,10 +30,19 @@
       <div class="row">
          <b> TX SOICAU </b>
          <div class="col-sm-12 ">
-            last phien : <b style="font-size:20px;color:green">{{last_phien_so}}</b>
+            last phien : <b id="last-phien" style="font-size:20px;color:green">{{last_phien_so}}</b>
             </br>
-            {{string_tai_xiu_soi_cau_100}}
+            <span >{{string_tai_xiu_soi_cau_100}}</span>
             </br>
+            <button type="button" name="poll-auto-import-phien" value="poll" class="btn btn-primary submit-btn" id="submit-id-poll-auto-import-phien-btn">Click</button>
+         </div>
+      </div>
+      <div class="row">
+         <div class="col-sm-12 ">
+            {% render_table txxt_table_tong_hop %}
+         </div>
+         <div class="col-sm-12 ">
+            {% render_table repeat_table_tong_hop %}
          </div>
       </div>
       <div class="row">
@@ -47,8 +56,7 @@
             {% render_table taiXiuXiuTai_Table %}
             </br>
             {% render_table repeat_table %}
-            <span style="color:#ff80df">Cho xen ke</span>
-            {% render_table x %}
+            <p style="color:#ff80df">Cho xen ke</p>
             <b style = "color: #006600;font-size:24px">{{taiXiuXiuTai_Table.len}}</b></br>
          </div>
          {%endfor%}

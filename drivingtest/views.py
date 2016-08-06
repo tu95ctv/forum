@@ -6,7 +6,8 @@ from models import Ulnew,ForumTable, PostLog, LeechSite, thongbao, postdict,auto
 import forms
 from drivingtest.forms import  ForumChoiceForm, UlnewForm, UlnewTable,\
     RepeatTable, TaiXiuXiuTaiTable, Tong3DiceTable, TaiXiuForm, TaiXiuTable,\
-    ImportForm, Thoi_gian_cho_su_lap_lai_Table, AutoImportForm
+    ImportForm, Thoi_gian_cho_su_lap_lai_Table, AutoImportForm, SoiCauForm,\
+    RepeatTable2
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
@@ -16,16 +17,17 @@ from fetch_website import danhsachforum, PostObject, leech_bai,\
     get_link_from_db, import_ul_txt_to_myul
 from exceptions import Exception
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
-from drivingtest.models import TaiXiu, Notification_global_from_model_module,\
-    Da_import_xong_global_from_model_module, Tb_import
+from drivingtest.models import TaiXiu, Notification_global_from_model_module,TbImport
 from soicau import create_giong_nhau_khac_nhau_lists,\
     test_xac_suat_tong_3_dice_database, phien_100_to_html,\
-    create_how_many_phien_for_same_cau, autoimport, AutoImportObject
+    create_how_many_phien_for_same_cau, autoimport, AutoImportObject,\
+    string_soi_cau, create_repeat_table_data
 from django.db.models.aggregates import Min, Max, Count
 import re
 from django.utils import timezone
 from django.db.models import CharField,DateTimeField,DateField, AutoField
 from datetime import datetime
+from django.utils.safestring import mark_safe
 VERBOSE_CLASSNAME ={'TaiXiu':u'Nguyên Nhân'} 
 from django.db.models import Q
 
@@ -104,40 +106,76 @@ def create_table(tai_xiu_lists,show_description = 'ko xen ke type',is_created_xe
     string_tai_xiu_soi_cau = rt[5]
     repeat_table_2 = RepeatTable(repeat_dict_lists)
     taiXiuXiuTai_Table_2 = TaiXiuXiuTaiTable(txxt_dict_lists)
-    return repeat_table_2,taiXiuXiuTai_Table_2,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists
+    return repeat_table_2,taiXiuXiuTai_Table_2,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists,repeat_dict_lists,txxt_dict_lists
 
+def create_tong_hop_list_of_dict(repeat_dict_lists,repeat_dict_lists_tong_hop,count,len_END_CAN_LAY,SOMAUTHU):
+            for count_row_cau_lap,row_dict in enumerate(repeat_dict_lists):
+                if count==0:
+                    row_dict_1_lan_lap_cua_tong_hop = {}
+                else:
+                    row_dict_1_lan_lap_cua_tong_hop = repeat_dict_lists_tong_hop[count_row_cau_lap]
+                    
+                for column_name,description in row_dict.iteritems():
+                    
+                    if column_name=='so_lan_lap' or column_name=='lythuyet_repeat_xac_suat_i':
+                        row_dict_1_lan_lap_cua_tong_hop[column_name] = description
+                    elif column_name=='mau_thu':
+                        pass
+                    elif count==0:
+                        row_dict_1_lan_lap_cua_tong_hop[column_name] = mark_safe('<li>%s %s</li>'%(SOMAUTHU,description))
+                    elif count ==len_END_CAN_LAY - 1:
+                        row_dict_1_lan_lap_cua_tong_hop[column_name] = mark_safe(u'<ul>%s</ul>'%(mark_safe('<li>%s %s</li>'%(SOMAUTHU,description)) +row_dict_1_lan_lap_cua_tong_hop[column_name]))
+                    else:
+                        row_dict_1_lan_lap_cua_tong_hop[column_name] = mark_safe('<li>%s %s</li>'%(SOMAUTHU,description)) +row_dict_1_lan_lap_cua_tong_hop[column_name]
+                if count ==0:
+                    repeat_dict_lists_tong_hop.append(row_dict_1_lan_lap_cua_tong_hop)
 
+def taixiu2(request):
+    last_phien = TaiXiu.objects.latest('phien_so').phien_so
+    soicauForm = SoiCauForm(initial = {'end_phien':last_phien})
+    data_table  = create_repeat_table_data()
+    repeat_table = RepeatTable2(data_table)
+    render_dict = {'soicauForm':soicauForm,'repeat_table':repeat_table}
+    return render(request, 'drivingtest/taixiu_2.html', render_dict)
 def taixiu(request,for_only_return_dict = False):
     
     IS_display_xen_ke = True
     rp_tx_combines = []
-    END_CAN_LAY = [0,512,256,128,100,68,64,32,16]
-    END_CAN_LAY.reverse()
+    END_CAN_LAY = [0,2048,1536,1024,768,512,384,256,192,128,100,68,64,32,16]
+    #END_CAN_LAY.reverse()
     last_phien_so =  TaiXiu.objects.latest('phien_so').phien_so
     taixiu_table = TaiXiuTable(TaiXiu.objects.all().order_by('-phien_so'))
-    RequestConfig(request, paginate={"per_page": 15}).configure(taixiu_table) 
-    for END in END_CAN_LAY:
+    RequestConfig(request, paginate={"per_page": 15}).configure(taixiu_table)
+    txxt_dict_lists_tonghop = []
+    repeat_dict_lists_tong_hop = []
+    len_END_CAN_LAY = len(END_CAN_LAY)
+    for count,END in enumerate(END_CAN_LAY):
         if END:
             tai_xiu_lists = TaiXiu.objects.all().order_by('-phien_so')[0:END]
         else:
             tai_xiu_lists = TaiXiu.objects.all().order_by('-phien_so')
-        repeat_table,taiXiuXiuTai_Table,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists = create_table(tai_xiu_lists)
+        repeat_table,taiXiuXiuTai_Table,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists,repeat_dict_lists,txxt_dict_lists = create_table(tai_xiu_lists)
         repeat_table.so_mau = END
-        taiXiuXiuTai_Table.len = len(tai_xiu_lists)
+        SOMAUTHU = len(tai_xiu_lists)
+        taiXiuXiuTai_Table.len = SOMAUTHU
         one_tuple = [taiXiuXiuTai_Table,repeat_table]
         taiXiuXiuTai_Table_xk=None
         repeat_table_xk = None
-        
+        create_tong_hop_list_of_dict(repeat_dict_lists,repeat_dict_lists_tong_hop,count,len_END_CAN_LAY,SOMAUTHU)
+        create_tong_hop_list_of_dict(txxt_dict_lists,txxt_dict_lists_tonghop,count,len_END_CAN_LAY,SOMAUTHU)
         if END ==128:
-            tai_xiu_lists_100=tai_xiu_lists
             string_tai_xiu_soi_cau_100 = string_tai_xiu_soi_cau
+        if END ==0:
+            tai_xiu_lists_100=tai_xiu_lists
         if IS_display_xen_ke:
             xen_ke_or_giong_nhau_lists
-            repeat_table_xk,taiXiuXiuTai_Table_xk,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists_xk = create_table(xen_ke_or_giong_nhau_lists,show_description = 'xen ke type',is_created_xenKe_list = False)    
+            repeat_table_xk,taiXiuXiuTai_Table_xk,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists_xk,repeat_dict_lists,txxt_dict_lists = create_table(xen_ke_or_giong_nhau_lists,show_description = 'xen ke type',is_created_xenKe_list = False)    
         
         one_tuple.extend((taiXiuXiuTai_Table_xk,repeat_table_xk))
         rp_tx_combines.append(one_tuple)
-    
+    repeat_table_tong_hop = RepeatTable(repeat_dict_lists_tong_hop)
+    txxt_table_tong_hop = TaiXiuXiuTaiTable(txxt_dict_lists_tonghop)
+    rp_tx_combines.reverse()
     tong_3_dict_lists = test_xac_suat_tong_3_dice_database(tai_xiu_lists_100)
     tong_3_table = Tong3DiceTable(tong_3_dict_lists)
     autoImportForm = AutoImportForm()
@@ -154,13 +192,18 @@ def taixiu(request,for_only_return_dict = False):
                                                        'rp_tx_combines':rp_tx_combines,
                                                        'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
                                                        'last_phien_so':last_phien_so,\
-                                                       'autoImportForm':autoImportForm}
+                                                       'autoImportForm':autoImportForm,\
+                                                       'repeat_table_tong_hop':repeat_table_tong_hop,\
+                                                       'txxt_table_tong_hop':txxt_table_tong_hop,
+                                                       }
     else:
         render_dict ={
                                                        'tong_3_table':tong_3_table,\
                                                        'rp_tx_combines':rp_tx_combines,
                                                        'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
                                                        'last_phien_so':last_phien_so,\
+                                                       'repeat_table_tong_hop':repeat_table_tong_hop,\
+                                                       'txxt_table_tong_hop':txxt_table_tong_hop,
                                                        }
         return render_dict
     
@@ -276,6 +319,7 @@ def modelmanager(request,modelmanager_name,entry_id):
     #if which_form_or_table!="table only" or loc or (is_download_table and loc): #get Form Class
     if is_form : # or loc or (is_download_table and loc)
         form_name= modelmanager_name
+        print '@@@@@@@@@@@@modelmanager_name',modelmanager_name
         FormClass = eval('forms.' + form_name)#repeat same if loc
         ModelOfForm_Class_name = re.sub('Form$','',form_name,1)
         print 'form_name @@@@@@@@@@@@2',form_name
@@ -293,8 +337,18 @@ def modelmanager(request,modelmanager_name,entry_id):
             
             dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),tb)}
             
+        elif form_name =="SoiCauForm":
+            form = FormClass(request.POST)
+            is_form_valid = form.is_valid()
+            if not is_form_valid :
+                form_notification = u'<h2 class="form-notification text-danger">Nhập Form sai, vui lòng check lại </h2>'
+                status_code = 400
+            else:
+                soi_cau_html = string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])
+                form = FormClass(request.POST,soi_cau_html = soi_cau_html)
+                form_notification = u'<h2 class="form-notification text-primary">OK soi cau ,%s</h2>'%(datetime.now())
+            dict_render = {'form':form,'form_notification':form_notification}  
             
-           
                 
                 
                 
@@ -303,9 +357,6 @@ def modelmanager(request,modelmanager_name,entry_id):
             form = FormClass()
             which_start_or_stop_btn = request.GET['which-start-or-stop-btn']
             if which_start_or_stop_btn=="Start":
-                
-                #tb = autoimport()
-                
                 try:
                     luong = autoimportdict["luong autoimport"]
                     if luong.is_alive():
@@ -318,30 +369,34 @@ def modelmanager(request,modelmanager_name,entry_id):
                 if not can_khoi_tao :
                     dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">luong da chay roi!! ,%s</h2>'%(datetime.now())}
                 else:
-                    Da_import_xong_global_from_model_module = False
-                    print '@@@@@@@@@Da_import_xong_global_from_model_module',Da_import_xong_global_from_model_module
                     autoimportdict["luong autoimport"] = AutoImportObject()
-                    autoimportdict["luong autoimport"].login_flag = 1
                     autoimportdict["luong autoimport"].start()
-                    print '@@@@@@@@@Da_import_xong_global_from_model_module',Da_import_xong_global_from_model_module
-                    if Tb_import.Da_import_xong_global_from_model_module:
+                    if 1:#TbImport.Da_import_xong_global_from_model_module:
                         is_another_template = True
                         dict_render  = taixiu(request,for_only_return_dict = True)
-                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),Tb_import.thongbao)})
-            elif which_start_or_stop_btn=="Stop":
+                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+            elif which_start_or_stop_btn=="Stop" :
                 try:
-                    Da_import_xong_global_from_model_module = False
                     autoimportdict["luong autoimport"].stop  = True
-                    autoimportdict["luong autoimport"].join()
                     dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Stop ,%s</h2>'%(datetime.now())}
                 except Exception as e:
                     
                     dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Chua co luon sao bam Stop!!!%s</h2>'%(datetime.now())}
             elif which_start_or_stop_btn=="thongbao":   
-                dict_render.update ({'form':form,'form_notification':u'<h2 class="form-notification text-primary">thong bao::: ,%s,%s,luong dang live?%s</h2>'%(datetime.now(),Tb_import.thongbao,autoimportdict["luong autoimport"].is_alive())})
-                
-                
-                
+                is_another_template = True
+                dict_render  = taixiu(request,for_only_return_dict = True)
+                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">Thong bao::: ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+            elif which_start_or_stop_btn=="poll":
+                just_poll = request.GET['just_poll']
+                print '#@@@@@@@@@@@@@@@@@@@@@@@@just_poll',just_poll
+                if just_poll=="true":
+                    last_phien = TaiXiu.objects.latest('phien_so').phien_so
+                    #return HttpResponse('<span id="last-phien-sample">%s</span>'%last_phien)
+                    return render(request, 'drivingtest/poll.html',{'last_phien':last_phien})
+             
+                is_another_template = True
+                dict_render  = taixiu(request,for_only_return_dict = True)
+                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">Poll::: ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})   
                 
         else:
             
@@ -511,9 +566,9 @@ def modelmanager(request,modelmanager_name,entry_id):
             return table.as_xls_d4_in_form_py_xls(request)
     else:
         if is_another_template:
-            if form_name =='AutoImportForm' and which_start_or_stop_btn=="Start":
+            if form_name =='AutoImportForm':
                 pattern = 'drivingtest/taixiu.html'
-        else:
+        else:   
             if form_table_template =='form on modal' and is_form :# and not click order-sort
                 if form:
                     form.verbose_form_name =VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name)

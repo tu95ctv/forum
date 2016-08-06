@@ -1,0 +1,9 @@
+{% extends 'drivingtest/base.html' %}
+{% block title %}OMCKV2-Home page{% endblock %}
+{% block body_block %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load index %}
+<div id="last-phien-sample" value="{{last_phien}}">{{last_phien}}
+</div>
+{% endblock %}

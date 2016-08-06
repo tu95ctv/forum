@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.utils import timezone
+from datetime import datetime
 print 'in model 2'
 from django.db import models
 from django.template.defaultfilters import default
@@ -12,7 +13,7 @@ postdict ={}
 autoimportdict ={}
 Notification_global_from_model_module = 'this is Notification_global_from_model_module'
 Da_import_xong_global_from_model_module = False
-class Tb_import(object):
+class TbImport(object):
     thongbao = 'chua co thong bao j'
     Da_import_xong_global_from_model_module = False
 class thongbao(object):
@@ -89,7 +90,7 @@ class LeechSite (models.Model):
     ebook= models.CharField(max_length=100,null=True,blank=True)#3
 class TaiXiu (models.Model):
     phien_so= models.IntegerField(unique=True)#3
-    ngay_gio_tao= models.DateTimeField(default = timezone.now(),verbose_name=u"Ngày giờ tạo",blank=True)#3
+    ngay_gio_tao= models.DateTimeField(default=datetime.now,verbose_name=u"Ngày giờ tạo",blank=True)#3
 
     cau_1= models.IntegerField(null=True,blank=True)#3
     cau_2= models.IntegerField(null=True,blank=True)#3
