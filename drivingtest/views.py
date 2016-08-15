@@ -389,6 +389,7 @@ def modelmanager(request,modelmanager_name,entry_id):
             is_form_valid = form.is_valid()
             if not is_form_valid :
                 form_notification = u'<h2 class="form-notification text-danger">Nhập Form sai, vui lòng check lại </h2>'
+                print 'nhap form sai vui long check lai'
                 status_code = 400
             else:
                 #soi_cau_html = string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])

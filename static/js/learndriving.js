@@ -656,7 +656,7 @@ $(document).ready(function() {
             },
             error: function(request, status, error) {
                 console.log('bi loi 400 hoac 403', error)
-                if (error == 'Forbidden') { //403
+                if (error == 'FORBIDDEN') { //403
                     console.log(request.responseText)
                     data = $(request.responseText).find('#info_for_alert_box').html()
                     alert(data);

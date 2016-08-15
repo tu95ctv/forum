@@ -547,7 +547,10 @@ def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or
         
         tb='tong ket\n,'
         #print list_100_phiens
-        last_phien = TaiXiu.objects.latest('phien_so').phien_so
+        try:
+            last_phien = TaiXiu.objects.latest('phien_so').phien_so
+        except:
+            last_phien = 'khong co'
         if last_phien_in_100_user_import:
             phien = last_phien_in_100_user_import-1
         else:#tim 
@@ -619,9 +622,13 @@ def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or
             so_phien_in_100 +=1
         
         #print 'count',count,i_tim,same_100_html_querysets [0].phien_so ,'list_100_phiens',len(list_100_phiens),same_100_html_querysets [0]
-        ly_thuyet_se_co_so_luot_duoc_import = last_phien_in_100_user_import - last_phien
+        if last_phien == "khong co":
+            ly_thuyet_se_co_so_luot_duoc_import = 100
+        else:
+            ly_thuyet_se_co_so_luot_duoc_import = last_phien_in_100_user_import - last_phien
         tb='tong ket</br>'
-        tb += '</br>' + 'last_phien %s'%TaiXiu.objects.latest('phien_so').phien_so
+        tb += '</br>' + 'last_phien truoc khi import %s'%last_phien
+        tb += '</br>' + 'last_phien sau  khi import %s'%TaiXiu.objects.latest('phien_so').phien_so
         tb += '</br>' + 'str_phien_co_gia_tri_khac_truoc %s'%str_phien_co_gia_tri_khac_truoc
         tb +='</br>' +'last_phien_in_100_user_import %s'%last_phien_in_100_user_import
         tb +='</br>' +'ly_thuyet_se_co_so_luot_duoc_import %s'%ly_thuyet_se_co_so_luot_duoc_import

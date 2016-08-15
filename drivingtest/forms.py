@@ -172,7 +172,7 @@ class Import100PhienForm(forms.Form):
         self.helper = FormHelper(form=self)
         self.helper.form_id = 'model-manager'
         self.helper.form_action = '/omckv2/modelmanager/Import100PhienForm/new/'
-        self.helper.add_input(Submit('add-new', 'import 100 phien',css_class="submit-btn"))        
+        self.helper.add_input(Submit('name-add-new', 'import 100 phien',css_class="submit-btn"))        
 class SoiCauForm(forms.Form):
     end_phien = forms.IntegerField(widget = forms.TextInput(attrs={'id':'end-phien-input'}))
     so_cau_can_soi = forms.IntegerField(widget = forms.TextInput(attrs={'id':'end-phien-input'}),initial=100)
