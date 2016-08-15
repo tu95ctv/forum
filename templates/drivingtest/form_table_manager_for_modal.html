@@ -7,14 +7,16 @@
          <div class="modal-content">
             <div class="modal-header">
                <button type="button" class="close" data-dismiss="modal">&times;</button>
-               <h4 class="modal-title add-comment-modal-title" style="{{form.modal_title_style}}">{{form.modal_prefix_title}} {{form.verbose_form_name}}</h4>
+               <h4 class="modal-title add-comment-modal-title" style="{{form.modal_title_style}}">{%if form %}{{form.modal_prefix_title}} {{form.verbose_form_name}}{%endif%}</h4>
             </div>
             <div class="form-table-wrapper" id = "manager-modal">
                <div class="col-sm-12 form-manager" style="padding-top:20px;">
                   {%if form %}
                   {% crispy form %}
                   {%endif%}
+                  {%if form_notification %}
                   {{form_notification |safe}}
+                  {%endif%}
                </div>
                <div class="col-sm-12 table-manager"  style="padding-top:20px;">
                   {%if table_notification %}

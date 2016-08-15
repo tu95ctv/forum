@@ -1,5 +1,5 @@
-def f(x):
+def f():
     return '<td>%s</td>'%x
     
 ls = ['a','b','c']
-print ' '.join(map(f,ls))
+print ' '.join(map(lambda x:'<td>%s</td>'%x,ls))

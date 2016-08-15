@@ -4,18 +4,39 @@
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
 {% load index %}
+<!-- Modal -->
+<div class="modal fade" id="modal-on-mll-table" role="dialog"></div>
 <div class="container-fluid">
    <div class="row">
       <div id="soicau-wrapper" class="form-table-wrapper col-sm-12 ">
+         <p>last phien : <b id="last-phien" style="font-size:20px;color:green">{{last_phien}}</b></p>
+         </p>Soi Phien : <b id="last-phien" style="font-size:20px;color:green">{{soi_phien}}</b></p>
+         <div>{{string_soi_cau_html}}</div>
          <div class="form-manager col-sm-12" >
             {%if soicauForm %}
             {% crispy soicauForm %}
             {%endif%}
          </div>
       </div>
+
+   </div>
+
+   <div class="row">
       <div>
          {% render_table repeat_table %}
       </div>
+      <div>
+         {%if xen_ke_table %}
+         {% render_table xen_ke_table %}
+         {%endif%}
+      </div>
+      <div>
+         {%if repeat_table_list_2_vs_above %}
+         {% render_table repeat_table_list_2_vs_above %}
+         {%endif%}
+      </div>
    </div>
+
+
 </div>
 {% endblock %}

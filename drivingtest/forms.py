@@ -81,6 +81,13 @@ class UlnewForm(forms.ModelForm):
         fields = '__all__' 
 #Table for UL
 #PersonTable(tables.Table)
+class FindCauListTable(TableReport):
+    so_lan_lap = tables.Column(verbose_name=u"Số lần lặp")
+    phien_bat_dau = tables.Column(verbose_name=u"Phiên bắt đầu")
+    phien_ket_thuc = tables.Column(verbose_name=u"Phiên kết thúc")
+    khoang_cach = tables.Column(verbose_name=u"Khoảng cách") 
+    class Meta:
+        attrs = {"class": "table-bordered","id": "FindCauList"}
 class RepeatTable(TableReport):
     so_lan_lap = tables.Column(verbose_name=u"Repeat Times")
     mau_thu = tables.Column(verbose_name=u"Số mẫu")
@@ -174,7 +181,7 @@ class SoiCauForm(forms.Form):
         if soi_cau_html:
             html = HTML(soi_cau_html)
         else:
-            html = HTML('<h4>Dành</h4>')
+            html = HTML('')
         self.helper.layout = Layout(Div(html,Div('end_phien','so_cau_can_soi',css_class='col-sm-4'),css_class="row"))
 class AutoImportForm(forms.Form):
     now_phien = forms.IntegerField()

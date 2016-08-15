@@ -754,13 +754,15 @@ def chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=3):
             list_new.append(x)
     return list_new
 class Caukep():
-    def __init__(self,phien_bat_dau=None,\
+    def __init__(self,phien_ket_thuc=None,\
                  so_luong_cau=None,\
                  same_or_different=None,\
                  bat_dau_la_tai_hay_xiu=None,\
                  ket_thuc_la_tai_hay_xiu = None,\
-                 tai_1_xiu_0 = None,):
-        self.phien_so = phien_bat_dau
+                 tai_1_xiu_0 = None,
+                 phien_bat_dau=None):
+        self.phien_so = phien_ket_thuc
+        self.phien_bat_dau = phien_bat_dau
         self.so_luong_cau = so_luong_cau
         self.same_or_different = same_or_different
         self.bat_dau_la_tai_hay_xiu = bat_dau_la_tai_hay_xiu
@@ -768,13 +770,34 @@ class Caukep():
         self.tai_1_xiu_0 = tai_1_xiu_0
     def __repr__(self):
         return u'(%s, phien bat dau: %s,sluong:%s,tai1xiu0 %s)'%("TAI begin" if self.bat_dau_la_tai_hay_xiu else "XIU begin" ,self.phien_so,self.so_luong_cau,self.tai_1_xiu_0)
-def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,256,512,1024,2048,0],is_print = True):
+def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,256,512,1024,2048,0],end_phien_to_select_phien=0,is_print = True):
+    len_qrs = len(qrs)
+    
+    '''
+    print 'END_LIST@@@@@@@@@@',END_LIST
+    for x in END_LIST:
+        if x ==0:
+            END_LIST.remove(0)
+            END_LIST.append(len(qrs))
+        elif x > len_qrs:
+            END_LIST.remove(x)
+    '''
+    new_end_list = []
+    for x in END_LIST:
+        if x==0:
+            new_end_list.append(len_qrs-end_phien_to_select_phien)
+        elif x <=len_qrs-end_phien_to_select_phien:
+            new_end_list.append(x)
+        
+    END_LIST  =new_end_list      
     TAI  =1
     XIU = 0
     if 0 in END_LIST:
         END_LIST.remove(0)
         END_LIST.append(len(qrs))
-    more_info_get_from_loop = {'max_tai':0,'max_xiu':0,'dict_thong_ke_repeat_TAI_list_of_mau_thu':{}}
+    #END_LIST = new_end_list
+    print 'END_LIST',END_LIST 
+    more_info_get_from_loop = {'max_tai':0,'max_xiu':0,'max_xen_ke_tai':0,'max_xen_ke_xiu':0,'dict_thong_ke_repeat_TAI_list_of_mau_thu':{}}
     END_LIST_index = 0
     END_LIST_index_xen_ke= 0
     dict_thong_ke_repeat_TAI  ={}
@@ -792,8 +815,8 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
     cau_same_gan_nhat =None
     xen_ke_or_giong_nhau_lists = []
     GIONG_NHAU = 0
-    is_chot_XEN_KE=False
-    is_chot_REPEAT  =False
+    ket_thuc_loop_for_XEN_KE=False
+    ket_thuc_loop_for_REPEAT  =False
     dict_thong_ke_repeat_TAI_list_of_mau_thu = {}
     dict_thong_ke_repeat_XIU_list_of_mau_thu = {}
     dict_thong_ke_xen_ke_TAI_list_of_mau_thu = {}
@@ -801,8 +824,8 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
     cho_phep_tach_REPEAT_neu_du_so_luong = False
     cho_phep_tach_XEN_KE_neu_du_so_luong = False
     before_state_same_or_different = "different"
-    for c,cau in enumerate(qrs):
-        if is_chot_XEN_KE and is_chot_REPEAT:
+    for c,cau in enumerate(qrs[end_phien_to_select_phien:]):
+        if ket_thuc_loop_for_XEN_KE and ket_thuc_loop_for_REPEAT:
             break
         if not isinstance(qrs, int):
             current_value = cau.tai_1_xiu_0
@@ -824,7 +847,7 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
             #CAU_LIST_show_xenke.append(current_value)
         else:
             if current_value != before_value:
-                if not is_chot_REPEAT:
+                if not ket_thuc_loop_for_REPEAT:
                     #CAU_LIST_show_repeat.append(current_value)
                     if before_value == TAI: #current_value la tai
                         try:
@@ -837,7 +860,8 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                             so_luong_cau_TAI_trong_nhom = Caukep(before_cau_for_repeat.phien_so,\
                                                                  so_luong_cau_TAI_trong_nhom,\
                                                                  same_or_different=0,\
-                                                                 bat_dau_la_tai_hay_xiu = before_cau_for_repeat.tai_1_xiu_0)
+                                                                 bat_dau_la_tai_hay_xiu = before_cau_for_repeat.tai_1_xiu_0,\
+                                                                 phien_bat_dau=cau.phien_so)
                         repeat_TAI_lists.append(so_luong_cau_TAI_trong_nhom)
                         so_luong_cau_TAI_trong_nhom = 0
                     else:
@@ -851,13 +875,14 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                             so_luong_cau_XIU_trong_nhom = Caukep(before_cau_for_repeat.phien_so,\
                                                                  so_luong_cau_XIU_trong_nhom,\
                                                                  same_or_different=0,\
-                                                                 bat_dau_la_tai_hay_xiu =before_cau_for_repeat.tai_1_xiu_0)
+                                                                 bat_dau_la_tai_hay_xiu =before_cau_for_repeat.tai_1_xiu_0,\
+                                                                 phien_bat_dau=cau.phien_so)
                         repeat_XIU_lists.append(so_luong_cau_XIU_trong_nhom)   
                         so_luong_cau_XIU_trong_nhom = 0
                     before_value = current_value
                     before_cau_for_repeat = cau
                     cho_phep_tach_REPEAT_neu_du_so_luong = True
-                if not is_chot_XEN_KE:        
+                if not ket_thuc_loop_for_XEN_KE:        
                     #CAU_LIST_show_xenke.append(current_value)
                     so_luong_cau_XEN_KE_trong_nhom +=1
                     if before_state_same_or_different == "same":
@@ -865,10 +890,10 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                         before_state_same_or_different = "different"
                     
             else:
-                if not is_chot_REPEAT:
+                if not ket_thuc_loop_for_REPEAT:
                     #CAU_LIST_show_repeat.append(current_value)
                     pass
-                if not is_chot_XEN_KE:
+                if not ket_thuc_loop_for_XEN_KE:
                     before_state_same_or_different = "same"
                     cau_same_gan_nhat = cau
                     #CAU_LIST_show_xenke.append(current_value)
@@ -879,28 +904,35 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                                 dict_thong_ke_XEN_KE_TAI[so_luong_cau_XEN_KE_trong_nhom] +=1
                             except KeyError:
                                 dict_thong_ke_XEN_KE_TAI[so_luong_cau_XEN_KE_trong_nhom] =1
+                            if so_luong_cau_XEN_KE_trong_nhom > more_info_get_from_loop['max_xen_ke_tai']:
+                                more_info_get_from_loop['max_xen_ke_tai'] = so_luong_cau_XEN_KE_trong_nhom
                             if qrs_is_queryset:
                                 so_luong_cau_XEN_KE_trong_nhom = Caukep(before_dice_for_xen_ke.phien_so,\
                                                                         so_luong_cau_XEN_KE_trong_nhom,\
                                                                         same_or_different=1,\
-                                                                        bat_dau_la_tai_hay_xiu =cau.tai_1_xiu_0)
+                                                                        bat_dau_la_tai_hay_xiu =cau.tai_1_xiu_0,
+                                                                        phien_bat_dau=cau.phien_so)
                             XEN_KE_TAI_lists.append(so_luong_cau_XEN_KE_trong_nhom)      
+                            
                             
                         elif current_value ==XIU:
                             try:
                                 dict_thong_ke_XEN_KE_XIU[so_luong_cau_XEN_KE_trong_nhom] +=1
                             except KeyError:
                                 dict_thong_ke_XEN_KE_XIU[so_luong_cau_XEN_KE_trong_nhom] =1
+                            if so_luong_cau_XEN_KE_trong_nhom > more_info_get_from_loop['max_xen_ke_xiu']:
+                                more_info_get_from_loop['max_xen_ke_xiu'] = so_luong_cau_XEN_KE_trong_nhom
                             if qrs_is_queryset:
                                 so_luong_cau_XEN_KE_trong_nhom = Caukep(before_dice_for_xen_ke.phien_so,\
                                                                         so_luong_cau_XEN_KE_trong_nhom,\
                                                                         same_or_different=1,\
-                                                                        bat_dau_la_tai_hay_xiu =cau.tai_1_xiu_0)
+                                                                        bat_dau_la_tai_hay_xiu =cau.tai_1_xiu_0,
+                                                                        phien_bat_dau=cau.phien_so)
                             XEN_KE_XIU_lists.append(so_luong_cau_XEN_KE_trong_nhom)
                         so_luong_cau_XEN_KE_trong_nhom = 0  
                     cho_phep_tach_XEN_KE_neu_du_so_luong = True 
                             
-            if c >= END_LIST[END_LIST_index]-1 and cho_phep_tach_REPEAT_neu_du_so_luong or c==len(qrs):
+            if c >= END_LIST[END_LIST_index]-1 and cho_phep_tach_REPEAT_neu_du_so_luong or c==len_qrs-end_phien_to_select_phien:
                 cho_phep_tach_REPEAT_neu_du_so_luong = False
                 copy_dict  = dict_thong_ke_repeat_TAI.copy()
                 dict_thong_ke_repeat_TAI_list_of_mau_thu [END_LIST[END_LIST_index]] = copy_dict
@@ -908,8 +940,8 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                 dict_thong_ke_repeat_XIU_list_of_mau_thu [END_LIST[END_LIST_index]] = copy_dict
                 END_LIST_index +=1
                 if END_LIST_index ==len(END_LIST):
-                    is_chot_REPEAT  = True                
-            if c >= END_LIST[END_LIST_index_xen_ke]-1 and cho_phep_tach_XEN_KE_neu_du_so_luong or c==len(qrs):
+                    ket_thuc_loop_for_REPEAT  = True                
+            if c >= END_LIST[END_LIST_index_xen_ke]-1 and cho_phep_tach_XEN_KE_neu_du_so_luong or c==len_qrs-end_phien_to_select_phien:
                         cho_phep_tach_XEN_KE_neu_du_so_luong = False
                         copy_dict  = dict_thong_ke_XEN_KE_TAI.copy()
                         dict_thong_ke_xen_ke_TAI_list_of_mau_thu [END_LIST[END_LIST_index_xen_ke]] = copy_dict
@@ -917,10 +949,18 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
                         dict_thong_ke_xen_ke_XIU_list_of_mau_thu[END_LIST[END_LIST_index_xen_ke]] = copy_dict
                         END_LIST_index_xen_ke +=1
                         if END_LIST_index_xen_ke ==len(END_LIST):
-                            is_chot_XEN_KE  = True
+                            ket_thuc_loop_for_XEN_KE  = True
     more_info_get_from_loop['dict_thong_ke_repeat_TAI_list_of_mau_thu']=dict_thong_ke_repeat_TAI_list_of_mau_thu                       
-    more_info_get_from_loop['dict_thong_ke_repeat_XIU_list_of_mau_thu']=dict_thong_ke_repeat_XIU_list_of_mau_thu 
-    more_info_get_from_loop['last_cau_value']=last_cau_value                      
+    more_info_get_from_loop['dict_thong_ke_repeat_XIU_list_of_mau_thu']=dict_thong_ke_repeat_XIU_list_of_mau_thu
+    more_info_get_from_loop['dict_thong_ke_xen_ke_TAI_list_of_mau_thu']=dict_thong_ke_xen_ke_TAI_list_of_mau_thu                       
+    more_info_get_from_loop['dict_thong_ke_xen_ke_XIU_list_of_mau_thu']=dict_thong_ke_xen_ke_XIU_list_of_mau_thu 
+    more_info_get_from_loop['last_cau_value']=last_cau_value
+    
+    max_xen_ke = max([more_info_get_from_loop['max_xen_ke_tai'],more_info_get_from_loop['max_xen_ke_xiu']])
+    max_tai_xiu = max([more_info_get_from_loop['max_tai'],more_info_get_from_loop['max_xiu']])
+    more_info_get_from_loop['max_xen_ke'] = max_xen_ke
+    more_info_get_from_loop['max_tai_xiu'] = max_tai_xiu
+    more_info_get_from_loop['New_END_LIST'] = new_end_list                          
     #print 'CAU_LIST_show_repeat',CAU_LIST_show_repeat
     if is_print:
         #print 'CAU_LIST_show_xenke',CAU_LIST_show_xenke
@@ -990,20 +1030,33 @@ def create_current_html2(last_cau,tai_repeat_list_count,tai_or_xiu = "tai"):
             tai_repeat_list_count = current_html_template%tai_repeat_list_count
         else:
             tai_repeat_list_count = not_current_html_template%tai_repeat_list_count
-        return tai_repeat_list_count   
-def create_repeat_table_data():
-    END_LIST = [32,64,100,256,512,1024,2048,0]
-    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more_info_get_from_loop = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST=END_LIST,is_print = True)
-    print more_info_get_from_loop
+        return tai_repeat_list_count
+def create_modal_link(repeat_n,i_repeat,MAU_THU,type_for_table,tai_or_xiu,repeat_or_xen_ke):
+    link = '/omckv2/modelmanager/FindCauListForm/new/?i_repeat=%s&MAU_THU=%s&type_for_table=%s&tai_or_xiu=%s&repeat_or_xen_ke=%s'%(i_repeat,MAU_THU,type_for_table,tai_or_xiu,repeat_or_xen_ke)
+    link = '<a class="show-modal-table-link" href=%s>%s</a>'%(link,repeat_n)
+    return link
+    return mark_safe(link) 
+def create_repeat_table_data(more_info_get_from_loop=None,END_LIST=None,repeat_or_xen_ke = 'repeat',type_for_table = "cau_tai_xiu"):
+    
+    
+    if repeat_or_xen_ke == 'repeat':
+        tai_xiu_list_or_xen_ke_lists = ['dict_thong_ke_repeat_TAI_list_of_mau_thu','dict_thong_ke_repeat_XIU_list_of_mau_thu']
+        max_tai_xiu = more_info_get_from_loop['max_tai_xiu']
+    else:
+        tai_xiu_list_or_xen_ke_lists = ['dict_thong_ke_xen_ke_TAI_list_of_mau_thu','dict_thong_ke_xen_ke_XIU_list_of_mau_thu']
+        max_tai_xiu = more_info_get_from_loop['max_xen_ke']
     TAI_XIU_SHOW_individual = True
     table_big_data = []
-    max_tai_xiu = max([more_info_get_from_loop['max_tai'],more_info_get_from_loop['max_xiu']])
+    
     last_cau_value = more_info_get_from_loop['last_cau_value']
     for i_repeat in range(1,max_tai_xiu + 1):
         print 'i_repeat',i_repeat
         row_dict_data_for_one_i_repeat = {}
         row_dict_data_for_one_i_repeat['i_repeat'] = i_repeat
-        Probability_theory = float(12.5/pow(2, (i_repeat-1)))
+        if repeat_or_xen_ke == 'repeat':
+            Probability_theory = float(12.5/pow(2, (i_repeat-1)))
+        else:
+            Probability_theory = float(12.5/pow(2, (i_repeat)))
         row_dict_data_for_one_i_repeat['Probability_theory'] = u'%.3f %%'%(Probability_theory)
         
         if TAI_XIU_SHOW_individual:
@@ -1014,18 +1067,21 @@ def create_repeat_table_data():
             table_body_html=''
         #redundant_or_lack_in_middle_before = {0:0,1:0}
         before_dict = {0:{},1:{}}
+        print 'END_LIST2@@@@@@@@@@@@@',END_LIST
         for count,MAU_THU in enumerate(END_LIST):
             #tr_small_table = tr_small_table +'<td>%s</td>'%MAU_THU
             if TAI_XIU_SHOW_individual:
                 tr_tai_and_xiu_1_mauthu_of_i_repeat_list = []
             else:
                 tr_tai_and_xiu_1_mauthu_of_i_repeat ='' 
-            for count_tai_xiu_list,dict_thong_ke_repeat in enumerate(['dict_thong_ke_repeat_TAI_list_of_mau_thu','dict_thong_ke_repeat_XIU_list_of_mau_thu']):
+            for count_tai_xiu_list,dict_thong_ke_repeat in enumerate(tai_xiu_list_or_xen_ke_lists):
                 if count_tai_xiu_list:
                     tai_or_xiu = "xiu"
                 else:
                     tai_or_xiu = "tai"
-                dict_so_luong_of_14_lan_repeat = more_info_get_from_loop[dict_thong_ke_repeat][MAU_THU]
+                a =  more_info_get_from_loop[dict_thong_ke_repeat]
+                #print 'more_info_get_from_loop[dict_thong_ke_repeat]@@@',a
+                dict_so_luong_of_14_lan_repeat =a[MAU_THU]
                 try:
                     repeat_n = dict_so_luong_of_14_lan_repeat[i_repeat]
                 except KeyError:
@@ -1055,7 +1111,7 @@ def create_repeat_table_data():
                     middle_description = '<table class="up-margin">%s</table>'%middle_description
                 else:
                     middle_description =''
-                td_tai_or_xius= ( MAU_THU,create_current_html2(last_cau_value,repeat_n,tai_or_xiu) ,u'%.1f'%repeat_n_theory,wanting_html2(redundant_or_lack_percent,redundant_or_lack),wanting_html2(redundant_or_lack_percent),middle_description)
+                td_tai_or_xius= ( MAU_THU,create_current_html2(last_cau_value,create_modal_link(repeat_n,i_repeat,MAU_THU,type_for_table,tai_or_xiu,repeat_or_xen_ke),tai_or_xiu) ,u'%.1f'%repeat_n_theory,wanting_html2(redundant_or_lack_percent,redundant_or_lack),wanting_html2(redundant_or_lack_percent),middle_description)
                 td_tai_or_xiu = ''.join(map(lambda x:'<td>%s</td>'%x,td_tai_or_xius))
                 if TAI_XIU_SHOW_individual:
                     SHOW_individual_info['tr_tai_and_xiu_1_mauthu_of_i_repeat'][count_tai_xiu_list] = td_tai_or_xiu
@@ -1071,7 +1127,7 @@ def create_repeat_table_data():
             tr_header = ''.join(map(lambda x:u'<td>%s</td>'%x,header_components))
             table_header = '<thead><tr>%s</tr></thead>'%tr_header
             for x in range(0,2):
-                SHOW_individual_info['table_body_html'][x]= u'<table class="table-bordered">%s<tbody>%s</tbody></table>'%(tr_header,SHOW_individual_info['table_body_html'][x])
+                SHOW_individual_info['table_body_html'][x]= u'<table class="last-td-not-table table-bordered">%s<tbody>%s</tbody></table>'%(table_header,SHOW_individual_info['table_body_html'][x])
             new_table_html = u'<table class="table-bordered"><thead><tr><td>TÀI</td><td>XỈU</td><tr></thead><tbody><tr><td>%s</td><td>%s</td></tr></tbody></table>'%(SHOW_individual_info['table_body_html'][0],SHOW_individual_info['table_body_html'][1])
             table_description_html = mark_safe(new_table_html)
             
@@ -1093,12 +1149,9 @@ def create_repeat_table_data():
         table_big_data.append(row_dict_data_for_one_i_repeat)
     return table_big_data
 if __name__ == '__main__':
-    #autoimport(last_phien_in_100_user_import = 807649,ALOWED_change= True,save_or_test = True)
+    autoimport(last_phien_in_100_user_import = 818397,ALOWED_change= True,save_or_test = True)
     '''
-
-    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [0],is_print = True)
-    print 'repeat_TAI_lists',repeat_TAI_lists[0:10]
-    print 'repeat_XIU_lists',repeat_XIU_lists[0:10]
+    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [0],is_print = True)
     filter_con_11xenkeTAI= filter(lambda x: x.so_luong_cau==11, XEN_KE_TAI_lists)
     print 'filter_con_11xenkeTAI',filter_con_11xenkeTAI
     
@@ -1107,7 +1160,7 @@ if __name__ == '__main__':
     list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=2)
     print 'chon_tren_hoac_duoi_cau_kep',list_2_vs_above[0:10]
     print 'len(list_2_vs_above)',len(list_2_vs_above)
-    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists = soicau_2(list_2_vs_above,END_LIST = [0],is_print = True)
+    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more = soicau_2(list_2_vs_above,END_LIST = [64,128,256,512,1024,2048,0],is_print = True)
     print 'repeat_2xiurepeat_lists',repeat_2xiurepeat_lists[0:3]
     print 'len(repeat_2xiurepeat_lists)',len(repeat_2xiurepeat_lists)
     filter_con_12repeat_2conxiu = filter(lambda x: x.so_luong_cau==12, repeat_2xiurepeat_lists)
@@ -1120,7 +1173,6 @@ if __name__ == '__main__':
     print 'len(list_3_vs_above)',len(list_3_vs_above)
     repeat_TAI_lists,repeat_XIU_lists = soicau_2(list_3_vs_above,END_LIST = [0],is_print = True)
     '''
-    
     ''''<%(cls)s bound=%(bound)s, valid=%(valid)s, fields=(%(fields)s)>' % {
             'cls': self.__class__.__name__,
             'bound': self.is_bound,
@@ -1129,6 +1181,7 @@ if __name__ == '__main__':
         }
     '''
     #autoimport(last_phien_in_100_user_import = 809903,ALOWED_change= False,save_or_test = True)
-    print create_repeat_table_data()
+    #print create_repeat_table_data()
     pass
 
+    

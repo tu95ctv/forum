@@ -7,8 +7,8 @@
 .row1 {
     clear: left;
 }
-span.not-current-in-td {color: #993333}
-span.current-in-td {color: #e68a00}
+span.not-current-in-td a {color: #993333}
+span.current-in-td a {color: #e68a00}
 span.wanting-in-td {color:#009900}
 span.wanting-in-td-level2 {color: #00ff00}
 span.wanting-in-td-level3 {color: #00ffff }
@@ -21,6 +21,10 @@ span.xiu-cau {
 thead tr td {
 	text-align: center
 }
+table.last-td-not-table tbody tr td:last-child {
+    border: none;
+}
+
 #repeat-table2 tr td {
 	text-align: center
 }

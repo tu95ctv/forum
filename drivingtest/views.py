@@ -21,13 +21,15 @@ from drivingtest.models import TaiXiu, Notification_global_from_model_module,TbI
 from soicau import create_giong_nhau_khac_nhau_lists,\
     test_xac_suat_tong_3_dice_database, phien_100_to_html,\
     create_how_many_phien_for_same_cau, autoimport, AutoImportObject,\
-    string_soi_cau, create_repeat_table_data
+    string_soi_cau, create_repeat_table_data, soicau_2,\
+    chon_tren_hoac_duoi_cau_kep
 from django.db.models.aggregates import Min, Max, Count
 import re
 from django.utils import timezone
 from django.db.models import CharField,DateTimeField,DateField, AutoField
 from datetime import datetime
 from django.utils.safestring import mark_safe
+from django.utils.datastructures import MultiValueDictKeyError
 VERBOSE_CLASSNAME ={'TaiXiu':u'Nguyên Nhân'} 
 from django.db.models import Q
 
@@ -131,11 +133,40 @@ def create_tong_hop_list_of_dict(repeat_dict_lists,repeat_dict_lists_tong_hop,co
                     repeat_dict_lists_tong_hop.append(row_dict_1_lan_lap_cua_tong_hop)
 
 def taixiu2(request):
-    last_phien = TaiXiu.objects.latest('phien_so').phien_so
+    last_cau = TaiXiu.objects.latest('phien_so')
+    last_phien = last_cau.phien_so
+    try:
+        end_phien = int(request.GET['end'])
+        filter = TaiXiu.objects.filter(phien_so__gt=end_phien)
+        end_phien_to_select_phien = len(filter)
+        select_cau = TaiXiu.objects.get(phien_so=end_phien)
+        print 'end_phien_to_select_phien@@@@@@@@@@@',end_phien_to_select_phien
+    except  :#MultiValueDictKeyError
+        end_phien_to_select_phien = 0
+        end_phien = last_phien
+        select_cau = last_cau  
     soicauForm = SoiCauForm(initial = {'end_phien':last_phien})
-    data_table  = create_repeat_table_data()
+    END_LIST = [32,64,100,256,512,1024,2048,3423434,0]
+    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
+    more_info_get_from_loop = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST=END_LIST,end_phien_to_select_phien = end_phien_to_select_phien,is_print = False)
+    
+    data_table  = create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'repeat')
     repeat_table = RepeatTable2(data_table)
-    render_dict = {'soicauForm':soicauForm,'repeat_table':repeat_table}
+    xen_ke_table = RepeatTable2(create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'xenke'))
+    
+    list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=2)
+    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more_info_get_from_loop = soicau_2(qrs = list_2_vs_above,END_LIST =END_LIST)
+    data_table  = create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'repeat',type_for_table = "fighter")
+    repeat_table_list_2_vs_above = RepeatTable2(data_table)
+    
+    string_soi_cau_html = string_soi_cau(end_phien,100)
+    end_phien_html = u'%s,%s'%(end_phien,select_cau.ngay_gio_tao.strftime("%Y-%m-%d %H:%M:%S"))
+    last_phien_html = u'%s,%s'%(last_phien,last_cau.ngay_gio_tao.strftime("%Y-%m-%d %H:%M:%S"))
+    render_dict = {'last_phien':last_phien_html,
+                   'soi_phien':end_phien_html,
+                   'string_soi_cau_html':string_soi_cau_html,\
+                   'soicauForm':soicauForm,'repeat_table':repeat_table,'xen_ke_table':xen_ke_table,
+                   'repeat_table_list_2_vs_above':repeat_table_list_2_vs_above}
     return render(request, 'drivingtest/taixiu_2.html', render_dict)
 def taixiu(request,for_only_return_dict = False):
     
@@ -285,6 +316,7 @@ def modelmanager(request,modelmanager_name,entry_id):
     #khi co tramid thi khong co loc
     #khi co tram id thi khong co query_main_search_by_button
     #form_name = modelmanager
+    print 'okkkkkkkkkkkkkkkkkkkkkkkkkk@@@@@@@@@@@@@@@ begining'
     status_code = 200
     url = '/omckv2/modelmanager/'+ modelmanager_name +'/'+entry_id+'/'
     form_table_template =request.GET.get('form-table-template')
@@ -485,6 +517,16 @@ def modelmanager(request,modelmanager_name,entry_id):
             ModelofTable_Class = TableClass.Meta.model
             ModelofTable_Class_name = re.sub('Table','',request.GET['table_name'],1)
         else:
+            if modelmanager_name =='FindCauListForm':
+                no_model = True
+            else:
+                no_model = False
+                
+            '''
+            if modelmanager_name =='FindCauListForm':
+                table_name = re.sub('Form$','Table',modelmanager_name)
+                TableClass = eval('forms.' + table_name)
+            '''   
             if modelmanager_name =='BCNOSSForm':
                 is_groups = []
                 
@@ -507,12 +549,13 @@ def modelmanager(request,modelmanager_name,entry_id):
                 table_name = re.sub('Form$','Table',modelmanager_name)
                 TableClass = eval('forms.' + table_name)
             # find modelClass and name
-            if not is_form:#table only
-                ModelofTable_Class_name = re.sub('Form$','',modelmanager_name,1)
-                ModelofTable_Class = TableClass.Meta.model
-            else:
-                ModelofTable_Class_name = ModelOfForm_Class_name
-                ModelofTable_Class = ModelOfForm_Class
+            if not no_model:
+                if not is_form:#table only
+                    ModelofTable_Class_name = re.sub('Form$','',modelmanager_name,1)
+                    ModelofTable_Class = TableClass.Meta.model
+                else:
+                    ModelofTable_Class_name = ModelOfForm_Class_name
+                    ModelofTable_Class = ModelOfForm_Class
                 
         #print 'table_nametable_nametable_nametable_name',table_name
         if loc:
@@ -552,11 +595,49 @@ def modelmanager(request,modelmanager_name,entry_id):
         
         else: # if !loc and ...
             
-            querysets = ModelofTable_Class.objects.all().order_by('-id')
-            table_notification = u'<h2 class="table_notification">Tất cả  đối tượng <span class="soluong-notif">(%s)</span> trong database <span class="name-class-notification">%s</span> được hiển thị ở table bên dưới</h2>'%(len(querysets),VERBOSE_CLASSNAME[ModelofTable_Class_name])
+            if modelmanager_name =='FindCauListForm':
+                i_repeat = request.GET['i_repeat']
+                type_for_table = request.GET['type_for_table']
+                MAU_THU = request.GET['MAU_THU']
+                tai_or_xiu = request.GET['tai_or_xiu']
+                repeat_or_xen_ke = request.GET['repeat_or_xen_ke']
+                print i_repeat,type_for_table,MAU_THU
+                if type_for_table=="cau_tai_xiu" and repeat_or_xen_ke=='repeat':
+                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [int(MAU_THU)],is_print = False)
+                if type_for_table=="fighter" and repeat_or_xen_ke=='repeat':
+                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
+                    more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [0],is_print = False)
+                    list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=2)
+                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
+                    more_info_get_from_loop = soicau_2(qrs = list_2_vs_above,END_LIST =[0])
+                if tai_or_xiu =='tai' :
+                    input_list = repeat_TAI_lists
+                elif tai_or_xiu =='xiu' :
+                    input_list = repeat_XIU_lists
+                filter_con_11xenkeTAI= filter(lambda x: x.so_luong_cau==int(i_repeat), input_list)
+                filter_con_11xenkeTAI = filter_con_11xenkeTAI[0:10]
+                
+                querysets =[]
+                print 'filter_con_11xenkeTAI',filter_con_11xenkeTAI
+                for x in filter_con_11xenkeTAI:
+                    one_row_dict = {}
+                    one_row_dict['so_lan_lap'] = x.so_luong_cau
+                    one_row_dict['phien_bat_dau'] = mark_safe(u'<a href="http://localhost:8000/taixiu2/?end=%s">%s</a>'%(x.phien_bat_dau,x.phien_bat_dau))
+                    one_row_dict['phien_ket_thuc'] = mark_safe(u'<a href="http://localhost:8000/taixiu2/?end=%s">%s</a>'%(x.phien_so ,x.phien_so ))
+                    khoang_cach_bat_dau_ket_thuc = len(TaiXiu.objects.filter(phien_so__gt=x.phien_bat_dau,phien_so__lt=x.phien_so))
+                    one_row_dict['khoang_cach'] = khoang_cach_bat_dau_ket_thuc
+                    
+                    querysets.append(one_row_dict)
+                #querysets =[{'so_lan_lap':1,'phien_bat_dau':2,'phien_ket_thuc':3}]
+                table_notification = u'<h2 class="table_notification">ok</h2>'
+            else:
+                querysets = ModelofTable_Class.objects.all().order_by('-id')
+                table_notification = u'<h2 class="table_notification">Tất cả  đối tượng <span class="soluong-notif">(%s)</span> trong database <span class="name-class-notification">%s</span> được hiển thị ở table bên dưới</h2>'%(len(querysets),VERBOSE_CLASSNAME[ModelofTable_Class_name])
+        
+        
         if status_code != 400:
             table = TableClass(querysets)
-            RequestConfig(request, paginate={"per_page": per_page}).configure(table)
+            RequestConfig(request, paginate={"per_page": 15}).configure(table)
             dict_render.update({'table':table,'table_notification':table_notification})
     if is_download_table:
         is_dl_bcn = request.GET.get('download-bcn',None)
@@ -569,7 +650,9 @@ def modelmanager(request,modelmanager_name,entry_id):
             if form_name =='AutoImportForm':
                 pattern = 'drivingtest/taixiu.html'
         else:   
-            if form_table_template =='form on modal' and is_form :# and not click order-sort
+            print 'form_table_template@@@',form_table_template
+            if form_table_template =='form on modal' :# and not click order-sort
+                print 'form_table_template@@@',form_table_template
                 if form:
                     form.verbose_form_name =VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name)
                 pattern = 'drivingtest/form_table_manager_for_modal.html'

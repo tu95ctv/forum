@@ -26,6 +26,7 @@ $(document).ready(function() {
         }
         */
         is_form = true
+        is_table = true 
         type = "GET"
         data = {}
         form_table_template = "normal form template" //'form on modal'
@@ -221,6 +222,16 @@ $(document).ready(function() {
             type = "GET"
             data = {}
             hieu_ung_sau_load_form_va_table = "show search box 2"
+
+
+        } else if (class_value.indexOf('show-modal-table-link') > -1) {
+            is_form = false
+            url = $(this).attr("href") ///omckv2/show-modal-form-link/ThietBiForm/1/
+            form_table_template = 'form on modal'
+            console.log('@@@@@@@@@@ndt', url)
+            type = "GET"
+            data = {}
+
 
         } else if (class_value.indexOf('show-modal-form-link') > -1) {
             is_table = false
@@ -444,6 +455,9 @@ $(document).ready(function() {
         } else {
             update_icon_info = false
         }
+
+
+        
         $.ajax({
             type: type,
             url: url,
@@ -564,9 +578,13 @@ $(document).ready(function() {
 
                         break;
                     case 'form on modal': // chi xay ra trong truong hop click vao link show-modal
+                        console.log('vao form on modal okkkkkkkkkkkk')
+
                         {
+                            console.log('ndt data',data)
                             formdata = $(data).find('.wrapper-modal').html()
-                            formdata = update_icon_info_function(update_icon_info, formdata)
+                            console.log('ndt formdata',formdata)
+                            //formdata = update_icon_info_function(update_icon_info, formdata)
                             $("#modal-on-mll-table").html(formdata)
                             $("#modal-on-mll-table").modal()
                         }
@@ -656,7 +674,7 @@ $(document).ready(function() {
         return false; //ajax thi phai co cai nay. khong thi , gia su click link thi 
     }
 
-    $(this).on('click', '#mll-form-table-wrapper span.input-group-addon,#modal-on-mll-tables span.input-group-addon,a.manager-a-form-select-link,select#id_chon_loai_de_quan_ly,.edit-entry-btn-on-table,form#model-manager input[type=submit],.show-modal-form-link,a.show-modal-form-link_allow_edit,a.searchtable_header_sort,.search-botton,.search-manager-botton',
+    $(this).on('click', '#mll-form-table-wrapper span.input-group-addon,#modal-on-mll-tables span.input-group-addon,a.manager-a-form-select-link,select#id_chon_loai_de_quan_ly,.edit-entry-btn-on-table,form#model-manager input[type=submit],.show-modal-form-link,a.show-modal-table-link,a.show-modal-form-link_allow_edit,a.searchtable_header_sort,.search-botton,.search-manager-botton',
         form_table_handle)
 
 
