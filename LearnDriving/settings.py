@@ -1,19 +1,13 @@
 # Django settings for LearnDriving project.
 import os
-print 'in setting 1'
 SETTINGS_DIR = os.path.dirname(__file__)
+print 'SETTINGS_DIR',SETTINGS_DIR
+PROJECT_ROOT1 = os.path.join(SETTINGS_DIR, os.pardir)
+print 'PROJECT_ROOT1',PROJECT_ROOT1
+PROJECT_ROOT = os.path.abspath(PROJECT_ROOT1)
+print 'PROJECT_ROOT',PROJECT_ROOT
+TEMPLATE_PATH = os.path.join(PROJECT_ROOT, 'templates')
 
-
-PROJECT_PATH1 = os.path.join(SETTINGS_DIR, os.pardir)
-print 'PROJECT_PATH1',PROJECT_PATH1
-
-PROJECT_PATH = os.path.abspath(PROJECT_PATH1)
-
-
-TEMPLATE_PATH = os.path.join(PROJECT_PATH, 'templates')
-print TEMPLATE_PATH
-STATIC_PATH = os.path.join(PROJECT_PATH,'static')
-#print TEMPLATE_PATH
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -78,7 +72,7 @@ USE_TZ = True
 TIME_ZONE = 'Asia/Bangkok'
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_PATH, 'media') # Absolute path to the media directory
+MEDIA_ROOT = os.path.join(PROJECT_ROOT, 'media') # Absolute path to the media directory
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -89,7 +83,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -100,7 +94,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    STATIC_PATH,
+    os.path.join(PROJECT_ROOT,'static')
 )
 
 # List of finder classes that know how to find static files in
@@ -210,3 +204,5 @@ SHORT_DATETIME_FORMAT = "Y-m-d H:i"
 FORMAT_TIME = '%H:%M %d-%m-%Y'
 
 AUTH_PROFILE_MODULE = "drivingtest.UserProfile"
+
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage'
