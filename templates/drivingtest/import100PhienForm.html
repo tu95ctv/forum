@@ -1,0 +1,24 @@
+{% extends 'drivingtest/base.html' %}
+{% block title %}OMCKV2-Home page{% endblock %}
+{% block body_block %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% load index %}
+<!-- Modal -->
+<div class="modal fade" id="modal-on-mll-table" role="dialog"></div>
+<div class="container-fluid">
+   <div class="row">
+      <div id="soicau-wrapper" class="form-table-wrapper col-sm-12 ">
+         <div class="form-manager col-sm-12" >
+            {%if import100PhienForm %}
+            {% crispy import100PhienForm %}
+            {%endif%}
+         </div>
+      </div>
+
+   </div>
+
+   
+
+</div>
+{% endblock %}

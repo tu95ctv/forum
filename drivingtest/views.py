@@ -7,7 +7,7 @@ import forms
 from drivingtest.forms import  ForumChoiceForm, UlnewForm, UlnewTable,\
     RepeatTable, TaiXiuXiuTaiTable, Tong3DiceTable, TaiXiuForm, TaiXiuTable,\
     ImportForm, Thoi_gian_cho_su_lap_lai_Table, AutoImportForm, SoiCauForm,\
-    RepeatTable2
+    RepeatTable2, Import100PhienForm
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
@@ -168,6 +168,9 @@ def taixiu2(request):
                    'soicauForm':soicauForm,'repeat_table':repeat_table,'xen_ke_table':xen_ke_table,
                    'repeat_table_list_2_vs_above':repeat_table_list_2_vs_above}
     return render(request, 'drivingtest/taixiu_2.html', render_dict)
+def import100phien(request):
+    import100PhienForm = Import100PhienForm()
+    return render(request, 'drivingtest/import100PhienForm.html', {'import100PhienForm':import100PhienForm})
 def taixiu(request,for_only_return_dict = False):
     
     IS_display_xen_ke = True
@@ -381,7 +384,19 @@ def modelmanager(request,modelmanager_name,entry_id):
                 form_notification = u'<h2 class="form-notification text-primary">OK soi cau ,%s</h2>'%(datetime.now())
             dict_render = {'form':form,'form_notification':form_notification}  
             
+        elif form_name =="Import100PhienForm":
+            form = FormClass(request.POST)
+            is_form_valid = form.is_valid()
+            if not is_form_valid :
+                form_notification = u'<h2 class="form-notification text-danger">Nhập Form sai, vui lòng check lại </h2>'
+                status_code = 400
+            else:
+                #soi_cau_html = string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])
+                tb = autoimport(last_phien_in_100_user_import = form.cleaned_data['current_phien_plus_one'],ALOWED_change= True,save_or_test = True)
+                form = FormClass(request.POST)
                 
+                form_notification = u'<h2 class="form-notification text-primary">%s,OK auto import with manual current phien ,%s</br>%s</h2>'%(datetime.now(),tb,TaiXiu.objects.latest('phien_so').phien_so)
+            dict_render = {'form':form,'form_notification':form_notification}          
                 
                 
                 
