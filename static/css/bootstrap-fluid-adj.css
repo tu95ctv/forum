@@ -31,10 +31,10 @@ table.last-td-not-table tbody tr td:last-child {
 table.up-margin {position: relative;
 bottom: 20px;}
 span.tai-cau:after {
-    content: url('../../media/tai.png');
+    content: url('../tai.png');
 }
 span.xiu-cau:after {
-    content: url('../../media/xiu.png');
+    content: url('../xiu.png');
 }
 label[for="id_RNC"] {
     color: green;
