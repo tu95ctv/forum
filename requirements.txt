@@ -9,3 +9,4 @@ requests==2.10.0
 six==1.10.0
 gunicorn==19.4.5
 html2bbcode 
+whitenoise==2.0.6
