@@ -777,7 +777,7 @@ class Caukep():
         self.tai_1_xiu_0 = tai_1_xiu_0
     def __repr__(self):
         return u'(%s, phien bat dau: %s,sluong:%s,tai1xiu0 %s)'%("TAI begin" if self.bat_dau_la_tai_hay_xiu else "XIU begin" ,self.phien_so,self.so_luong_cau,self.tai_1_xiu_0)
-def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,256,512,1024,2048,0],end_phien_to_select_phien=0,is_print = True):
+def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [32,64,100,256,512,1024,2048,3423434,0],end_phien_to_select_phien=0,is_print = True):
     len_qrs = len(qrs)
     
     '''
@@ -792,10 +792,12 @@ def soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [100,25
     new_end_list = []
     for x in END_LIST:
         if x==0:
-            new_end_list.append(len_qrs-end_phien_to_select_phien)
+            x = len_qrs-end_phien_to_select_phien
+            if x not in new_end_list:
+                new_end_list.append(x)
         elif x <=len_qrs-end_phien_to_select_phien:
-            new_end_list.append(x)
-        
+            if x not in new_end_list:
+                new_end_list.append(x)
     END_LIST  =new_end_list      
     TAI  =1
     XIU = 0

@@ -638,8 +638,8 @@ def modelmanager(request,modelmanager_name,entry_id):
                 for x in filter_con_11xenkeTAI:
                     one_row_dict = {}
                     one_row_dict['so_lan_lap'] = x.so_luong_cau
-                    one_row_dict['phien_bat_dau'] = mark_safe(u'<a href="http://localhost:8000/taixiu2/?end=%s">%s</a>'%(x.phien_bat_dau,x.phien_bat_dau))
-                    one_row_dict['phien_ket_thuc'] = mark_safe(u'<a href="http://localhost:8000/taixiu2/?end=%s">%s</a>'%(x.phien_so ,x.phien_so ))
+                    one_row_dict['phien_bat_dau'] = mark_safe(u'<a href="/taixiu2/?end=%s">%s</a>'%(x.phien_bat_dau,x.phien_bat_dau))
+                    one_row_dict['phien_ket_thuc'] = mark_safe(u'<a href="/taixiu2/?end=%s">%s</a>'%(x.phien_so ,x.phien_so ))
                     khoang_cach_bat_dau_ket_thuc = len(TaiXiu.objects.filter(phien_so__gt=x.phien_bat_dau,phien_so__lt=x.phien_so))
                     one_row_dict['khoang_cach'] = khoang_cach_bat_dau_ket_thuc
                     

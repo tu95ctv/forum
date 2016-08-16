@@ -18,8 +18,16 @@ span.redundant-in-td-level3 {color:red}
 span.xiu-cau {
 	color:yellow;
 }
+
+
+thead tr th {
+	text-align: center
+}
 thead tr td {
 	text-align: center
+}
+thead tr th a {
+	display: inline-block;
 }
 table.last-td-not-table tbody tr td:last-child {
     border: none;
