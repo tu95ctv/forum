@@ -361,8 +361,7 @@ $(document).ready(function() {
                     id_closest_wrapper == 'autoImportForm-wrapper'||id_closest_wrapper == 'soicau-wrapper') {
                     which_start_or_stop_btn = $(this).val()
                     if (which_start_or_stop_btn == "poll") {
-                        console.log('giai thoat thoi')
-                        return false;
+                        just_poll_local = false
                     }
                     is_table = false
                     is_form = true
@@ -690,7 +689,7 @@ $(document).ready(function() {
 
     $(this).on('click', '#submit-id-poll-auto-import-phien-btn', function(event) {
         console.log('just_poll',just_poll)
-        var interval = 1000 * 10; // where X is your every X giay
+        var interval = 1000 * 2; // where X is your every X giay
         refreshIntervalId = setInterval(function() {
             form_table_handle(event, "poll tai xiu")
         }, interval);

@@ -10,7 +10,7 @@
    <div class="row">
       <div id="soicau-wrapper" class="form-table-wrapper col-sm-12 ">
          <p>last phien : <b id="last-phien" style="font-size:20px;color:green">{{last_phien}}</b></p>
-         </p>Soi Phien : <b id="last-phien" style="font-size:20px;color:green">{{soi_phien}}</b></p>
+         </p>Soi Phien : <b id="last-phien" style="font-size:20px;color:red">{{soi_phien}}</b></p>
          <div>{{string_soi_cau_html}}</div>
          <div class="form-manager col-sm-12" >
             {%if soicauForm %}
@@ -22,14 +22,17 @@
    </div>
 
    <div class="row">
+      <H2 style="color:green;text-align:center">repeat_table</H2>
       <div>
          {% render_table repeat_table %}
       </div>
+      <H2 style="color:red;text-align:center">xen_ke_table</H2>
       <div>
          {%if xen_ke_table %}
          {% render_table xen_ke_table %}
          {%endif%}
       </div>
+      <H2 style="color:yellow;text-align:center">repeat_table_list_2_vs_above</H2>
       <div>
          {%if repeat_table_list_2_vs_above %}
          {% render_table repeat_table_list_2_vs_above %}

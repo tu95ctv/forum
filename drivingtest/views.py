@@ -415,14 +415,14 @@ def modelmanager(request,modelmanager_name,entry_id):
                     can_khoi_tao = True
                 
                 if not can_khoi_tao :
-                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">luong da chay roi!! ,%s</h2>'%(datetime.now())}
+                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">STARTED!,luong da chay roi!! ,%s</h2>'%(datetime.now())}
                 else:
                     autoimportdict["luong autoimport"] = AutoImportObject()
                     autoimportdict["luong autoimport"].start()
                     if 1:#TbImport.Da_import_xong_global_from_model_module:
                         is_another_template = True
                         dict_render  = taixiu(request,for_only_return_dict = True)
-                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
             elif which_start_or_stop_btn=="Stop" :
                 try:
                     autoimportdict["luong autoimport"].stop  = True
@@ -435,16 +435,22 @@ def modelmanager(request,modelmanager_name,entry_id):
                 dict_render  = taixiu(request,for_only_return_dict = True)
                 dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">Thong bao::: ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
             elif which_start_or_stop_btn=="poll":
-                just_poll = request.GET['just_poll']
+                try:
+                    just_poll = request.GET['just_poll']
+                except:
+                    just_poll = 'nhan nut poll'
                 print '#@@@@@@@@@@@@@@@@@@@@@@@@just_poll',just_poll
                 if just_poll=="true":
                     last_phien = TaiXiu.objects.latest('phien_so').phien_so
                     #return HttpResponse('<span id="last-phien-sample">%s</span>'%last_phien)
                     return render(request, 'drivingtest/poll.html',{'last_phien':last_phien})
-             
+                elif just_poll=="false":
+                    tudong_hay_nhan_nut_poll = 'tu dong'
+                else:
+                    tudong_hay_nhan_nut_poll = 'nhan nut poll'
                 is_another_template = True
                 dict_render  = taixiu(request,for_only_return_dict = True)
-                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">Poll::: ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})   
+                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">%s:,%s,%s</h2>'%(tudong_hay_nhan_nut_poll,datetime.now(),TbImport.thongbao)})   
                 
         else:
             
