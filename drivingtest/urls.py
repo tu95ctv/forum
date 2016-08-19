@@ -17,6 +17,7 @@ urlpatterns = patterns('',
         
         
         
+        
         url(r'^$', views.index, name='index'),
         url(r'^omckv2/modelmanager/(?P<modelmanager_name>\w+)/(?P<entry_id>.*?)/$', views.modelmanager, name='suggestion'),
         url(r'^taixiu/$', views.taixiu, name='index'),
