@@ -420,9 +420,11 @@ def modelmanager(request,modelmanager_name,entry_id):
                     autoimportdict["luong autoimport"] = AutoImportObject()
                     autoimportdict["luong autoimport"].start()
                     if 1:#TbImport.Da_import_xong_global_from_model_module:
-                        is_another_template = True
-                        dict_render  = taixiu(request,for_only_return_dict = True)
-                        dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+                        #is_another_template = True
+                        dict_render = {}
+                        #dict_render  = taixiu(request,for_only_return_dict = True)\
+                        #dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+                        dict_render.update ({'form':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
             elif which_start_or_stop_btn=="Stop" :
                 try:
                     autoimportdict["luong autoimport"].stop  = True

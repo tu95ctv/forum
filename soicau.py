@@ -10,6 +10,7 @@ from django.db.models import Q
 import operator
 import threading
 from time import sleep
+import datetime
 SETTINGS_DIR = os.path.dirname(__file__)
 MEDIA_ROOT = os.path.join(SETTINGS_DIR, 'media')
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'LearnDriving.settings')
@@ -518,12 +519,16 @@ def phien_100_to_html():
         return tb
 def tim_phien_cua_100(dict_100_phien):
     return 0000    
-def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or_test = True):
-        html = get_html('http://vuachoibai.com/miniluckydice/MiniGameLuckyDice/LuckyDiceSoiCau')
+def autoimport(html = None,last_phien_in_100_user_import = None,ALOWED_change= False,save_or_test = True):
+        print 'dang get html...'
+        if html ==None:
+            html = get_html('http://vuachoibai.com/miniluckydice/MiniGameLuckyDice/LuckyDiceSoiCau')
+            print 'ok get html...'
         soup = BeautifulSoup(html)
         class_entry_name = '.tx_ketqua_soicau'
         entries = soup.select(class_entry_name)
         list_100_phiens = []
+        print 'len(entries)',len(entries)
         for c,entry in enumerate(entries):
             lis = entry.select('li')
             if c==2 or c==6:
@@ -544,7 +549,7 @@ def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or
                 instance_dict['tai_1_xiu_0'] =tai_or_xiu
                 #instance_dict['phien_so'] =phien
                 list_100_phiens.append(instance_dict)
-        
+        print 'len(list_100_phiens)',len(list_100_phiens)
         tb='tong ket\n,'
         #print list_100_phiens
         try:
@@ -558,7 +563,7 @@ def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or
             same_100_html_querysets =[]
             qgroup=Q()
             
-            for count,i_tim in enumerate(range(98,90,-1)):
+            for count,i_tim in enumerate(range(98,94,-1)):
                 instance_dict = list_100_phiens[i_tim]
                 qgroup = reduce(operator.and_, (Q(**{key :value}) for key,value in instance_dict.items()))
                 if count ==0:
@@ -567,16 +572,15 @@ def autoimport(last_phien_in_100_user_import = None,ALOWED_change= False,save_or
                     instance_dict['phien_so'] = same_100_html_querysets[0].phien_so + 1
                     qgroup_FRNAME = reduce(operator.or_, (Q(**{"phien_so" : (obj.phien_so + 1)}) for obj in same_100_html_querysets ))    
                     qgroup = qgroup & qgroup_FRNAME       
-                
                 same_100_html_querysets  = lastest_100_cau_in_dbs.filter(qgroup)
-                    
-                if len(same_100_html_querysets ) == 1:
-                    last_phien_in_100_user_import = same_100_html_querysets [0].phien_so  + i_tim
-                    #print 'same_100_html_querysets [0] %s,instance_dict %s'%(same_100_html_querysets [0],instance_dict)
-                    break
-                elif len(same_100_html_querysets) ==0:
-                    raise ValueError ('databse chua co cau nao trong 100 cau')
-            phien = last_phien_in_100_user_import
+                if len(same_100_html_querysets) ==0:
+                    tb ='database khong co cau nao trong 100 cau'
+                    print tb
+                    return tb
+                    #raise ValueError ('databse chua co cau nao trong 100 cau')
+            if len(same_100_html_querysets ) == 1:
+                last_phien_in_100_user_import = same_100_html_querysets [0].phien_so  + i_tim
+                phien = last_phien_in_100_user_import
         str_phien_co_gia_tri_khac_truoc = ''
         so_phien_bi_khac=0
         thuc_te_so_import = 0
@@ -699,6 +703,7 @@ def get_html(url):
             break
         except:
             print 'Get html.. again for timeout'
+            sleep(0,3)
     return html   
 def check_dice_in_script():
     for i in read_html_dice():
@@ -714,7 +719,9 @@ def check_dice_in_script():
         else:
             print 'sorry'
             
-            
+def insert_item_end_list_delete_begin(ls,end_item):    
+    ls.insert(len(ls),end_item)
+    ls.remove(ls[0])            
 class AutoImportObject(Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -727,19 +734,32 @@ class AutoImportObject(Thread):
         return self._stop.isSet()
     def run(self):
         so_lan_quet = 0
+        thoi_diem_bao_duongs = []
         while (not self.stop) :
-            try:
-                print 'begin '
-                TbImport.thongbao = autoimport() + '\n so lan quet %s',so_lan_quet
-                TbImport.Da_import_xong_global_from_model_module = True
-                i = 5
-                while i:
-                    print i
-                    i =i-1
-                    sleep(0,2)
-                so_lan_quet += 1
-            except:
-                sleep(4)
+            html = None
+            thoi_gian_bao_duong = 0
+            while html==None:
+                html = get_html('http://vuachoibai.com/miniluckydice/MiniGameLuckyDice/LuckyDiceSoiCau')
+                if html==None:#baoduong
+                    print 'server vuachoibai dang bao duong, sleep 10s'
+                    sleep_time_bao_duong =10 
+                    thoi_gian_bao_duong +=sleep_time_bao_duong
+                    if thoi_gian_bao_duong==sleep_time_bao_duong:
+                        if len(thoi_diem_bao_duongs)<10:
+                            thoi_diem_bao_duongs.append([datetime.datetime.now(),sleep_time_bao_duong])
+                        else:
+                            insert_item_end_list_delete_begin(thoi_diem_bao_duongs,[datetime.datetime.now(),sleep_time_bao_duong])
+                    else:
+                        thoi_diem_bao_duongs[-1][1] = thoi_gian_bao_duong
+                    sleep(sleep_time_bao_duong)
+            
+            tb=autoimport(html=html)
+            #if tb =='database khong co cau nao trong 100 cau':
+                #self.stop = True
+            TbImport.thongbao =  tb + u'\n so lan quet %s thoi diem bao duong %s'%(so_lan_quet,u' '.join(u'%s %s'%(x,y) for (x,y) in thoi_diem_bao_duongs) )
+            sleep(2)
+            so_lan_quet += 1
+
 def chon_tren_hoac_duoi(repeat_XIU_lists,so_be = 0, so_lon =2):
     list_new = []
     for i in repeat_XIU_lists:
@@ -1158,7 +1178,7 @@ def create_repeat_table_data(more_info_get_from_loop=None,END_LIST=None,repeat_o
         table_big_data.append(row_dict_data_for_one_i_repeat)
     return table_big_data
 if __name__ == '__main__':
-    autoimport(last_phien_in_100_user_import = 818397,ALOWED_change= True,save_or_test = True)
+    autoimport(last_phien_in_100_user_import = 820562,ALOWED_change= True,save_or_test = True)
     '''
     repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [0],is_print = True)
     filter_con_11xenkeTAI= filter(lambda x: x.so_luong_cau==11, XEN_KE_TAI_lists)
