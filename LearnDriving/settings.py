@@ -18,7 +18,7 @@ ADMINS = (
 MANAGERS = ADMINS
 
 
-#12345
+#123456
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
