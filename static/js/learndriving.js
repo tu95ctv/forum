@@ -1,56 +1,117 @@
+ 
+ function openNav() {
+    document.getElementById("mySidenav").style.width = "150px";
+    document.getElementById("main-taixiu").style.marginLeft= "150px";
+}
+
+function closeNav() {
+    document.getElementById("mySidenav").style.width = "0";
+    document.getElementById("main-taixiu").style.marginLeft= "0";
+}
+
+function openTopNav() {
+    document.getElementById("mySidenav-top").style.height = "250px";
+    document.getElementById("main-taixiu").style.marginBottom = "250px";
+}
+
+function closeTopNav() {
+    document.getElementById("mySidenav-top").style.height = "0";
+    document.getElementById("main-taixiu").style.marginBottom= "0";
+}
+
+
+var switchs = false;
+function switchfunction_left(){
+    switchs = !switchs
+    if (switchs) {
+        openTopNav() 
+    }else {
+        closeTopNav()
+    }
+
+}
+
+var switchs_left = false;
+function switchfunction(){
+    switchs_left = !switchs_left
+    if (switchs_left) {
+        openNav() 
+    }else {
+        closeNav()
+    }
+
+}
+
+
 $(document).ready(function() {
-
     var just_poll = true
-
-    function form_table_handle(e, intended_for, abitrary_url, sort_field) {
-        console.log("okkkkkkkkkkkkkkkkk first form_table_handle")
-
+    var so_lan_quet_poll = 0
+    var so_lan_quet_poll_just_poll = 0
+    var so_lan_quet_poll_get_data = 0
+    var is_poll_previous_complete = true
+    $('.cau-for-tooltip').tooltip();
+    function form_table_handle(event, intended_for, abitrary_url, sort_field) {
+        console.log('e.target',event.target)
         class_value = $(this).attr("class")
         loai_ajax = "normal"
         is_no_show_return_form = false
-            //is_both_table = "both form and table"
-        //is_table_not
         closest_wrapper = $(this).closest('div.form-table-wrapper')
         closest_form = $(this).closest('form')
         id_closest_wrapper = closest_wrapper.attr('id')
-        /*
-        try { 
-        class_closest_form = closest_form.attr('class')
-        if (class_closest_form.indexOf('is_table_not')>-1){
-            is_table = false}
-        else{
-            is_table = true }
-        }
-        catch {
-            
-        }
-        */
         is_form = true
-        is_table = true 
+        is_table = true
         type = "GET"
         data = {}
         form_table_template = "normal form template" //'form on modal'
         hieu_ung_sau_load_form_va_table = "khong hieu ung"
-        // no importaince
-        console.log('id_closest_wrapper', id_closest_wrapper)
+            // no importaince
         var table_object
         is_get_table_request_get_parameter = false
-        is_special_template = false
+        is_special_template_for_poll_tai_xiu_repeat = false
             //table_name = '' // table_name dung de xac dinh table , sau khi submit form o modal se hien thi o day, trong truong hop force_allow_edit thi table_name attr se bi xoa 
         if (intended_for == "poll tai xiu") {
             console.log("poll tai xiu")
+            console.log("checked",$('input#dont-reload').prop('checked'))
+            if ($('input#dont-reload').prop('checked')) {
+                console.log('dont reload')
+                return false
+            }
             is_table = false
             is_form = true
             abitrary_url = '/omckv2/modelmanager/AutoImportForm/new/'
             url = updateURLParameter(abitrary_url, 'which-start-or-stop-btn', "poll")
-            is_special_template = true
+            is_special_template_for_poll_tai_xiu_repeat = true
             which_start_or_stop_btn = "poll"
             just_poll_local = just_poll
             url = updateURLParameter(url, 'just_poll', just_poll_local)
-
-
-        } else if (intended_for == 'intended_for_autocomplete') {
-            //is_both_table = "both form and table"
+            is_show_line =  ($('input#show-line').prop('checked'))
+            url = updateURLParameter(url, 'is_show_line', is_show_line)
+            so_lan_quet_poll += 1
+            if (just_poll) {
+                so_lan_quet_poll_just_poll += 1
+            } else {
+                so_lan_quet_poll_get_data += 1
+            }
+            console.log('so_lan_quet_poll,so_lan_quet_poll_just_poll,so_lan_quet_poll_get_data url', so_lan_quet_poll, so_lan_quet_poll_just_poll, so_lan_quet_poll_get_data, url)
+        } else if (intended_for == "poll tai xiu sau khi dat cua") {
+            console.log("poll tai xiu sau khi datcua ")
+            is_table = false
+            is_form = true
+            abitrary_url = '/omckv2/modelmanager/AutoImportForm/new/'
+            url = updateURLParameter(abitrary_url, 'which-start-or-stop-btn', "poll")
+            is_special_template_for_poll_tai_xiu_repeat = true
+            which_start_or_stop_btn = "poll"
+            just_poll_local = false
+            url = updateURLParameter(url, 'just_poll', just_poll_local)
+            so_lan_quet_poll += 1
+            if (just_poll) {
+                so_lan_quet_poll_just_poll += 1
+            } else {
+                so_lan_quet_poll_get_data += 1
+            }
+            console.log('so_lan_quet_poll,so_lan_quet_poll_just_poll,so_lan_quet_poll_get_data url', so_lan_quet_poll, so_lan_quet_poll_just_poll, so_lan_quet_poll_get_data, url)
+        }
+        else if (intended_for == 'intended_for_autocomplete') {
             is_table = true
             is_form = true
             closest_wrapper = $('#form-table-of-tram-info')
@@ -58,16 +119,13 @@ $(document).ready(function() {
             url = abitrary_url
             type = "GET"
             data = {}
-
             console.log("$('input#id_khong_search_tu_dong').prop('checked')", $('input#id_khong_search_tu_dong').prop('checked'))
             if ($('input#id_khong_search_tu_dong').prop('checked')) {
                 url = updateURLParameter(url, 'search_tu_dong_table_mll', 'no')
             } else {
                 url = updateURLParameter(url, 'search_tu_dong_table_mll', 'yes')
             }
-
             if (name_attr_global != 'object') {
-
                 hieu_ung_sau_load_form_va_table = 'active tram-form-toogle-li'
             }
             console.log('sort_field', sort_field)
@@ -145,10 +203,8 @@ $(document).ready(function() {
             var query;
             wrapper_attr_global = $(e.target).closest('.form-table-wrapper')
             query = wrapper_attr_global.find('#text-search-manager-input').val().split('3G_');
-            //query = $(this).closest('.search-w').find('input[type="text"]:eq(1)').val().split('3G_');
             url = wrapper_attr_global.find('form').attr('action')
             url = updateURLParameter(url, 'query_main_search_by_button', query)
-
             is_both_table = 'table only'
             type = "GET"
             data = {}
@@ -158,17 +214,12 @@ $(document).ready(function() {
             is_both_table = 'table only'
             url = $(this).attr('href')
             if (id_closest_wrapper == 'edit-history-wrapper-div') {
-                console.log('$(this)', $(this).attr('class'))
                 closest_i_want = $(this).closest('div#form-table-of-tram-info')
-                console.log('closest_i_want', closest_i_want)
-                console.log('0closest_i_want', closest_i_want.attr('id'))
                 if (closest_i_want.attr('id') != 'form-table-of-tram-info') {
                     closest_i_want = $(this).closest('div#mll-form-table-wrapper')
-                    console.log('2closest_i_want', closest_i_want)
                     if (closest_i_want.attr('id') != 'mll-form-table-wrapper') {
                         return false
                     } else {
-                        console.log('3closest_i_want', closest_i_want.attr('id'))
                         url = updateURLParameter(url, 'model_name', 'Mll')
                         tram_id = closest_i_want.find('#id_id').val()
                         console.log('tram_id', tram_id)
@@ -176,12 +227,9 @@ $(document).ready(function() {
                 } else {
                     url = updateURLParameter(url, 'model_name', 'Tram')
                     tram_id = $('#form-table-of-tram-info').find('#id_id').val()
-                    console.log('tram_id', tram_id)
                 }
                 url = updateURLParameter(url, 'edited_object_id', tram_id)
                 url = removeParam('tramid', url)
-                    //url = url.replace(/&?tramid=([^&]$|[^&]*?&)/i, "")
-                console.log('###########url new', url)
             }
             type = "GET"
             data = {}
@@ -192,7 +240,6 @@ $(document).ready(function() {
             url = closest_wrapper.find('form#model-manager').attr('action')
             entry_id = $(this).attr('id')
             url = url.replace(/\/\w+\/$/g, '/' + entry_id + '/')
-            console.log('url', url)
 
             if (id_closest_wrapper == 'form-table-of-tram-info') {
                 hieu_ung_sau_load_form_va_table = 'active tram-form-toogle-li'
@@ -202,50 +249,42 @@ $(document).ready(function() {
             }
             type = "GET"
             data = {}
-
-
         } else if (class_value.indexOf('manager-form-select') > -1) {
             is_table = true
             is_form = true
-                //url = $('#id_chon_loai_de_quan_ly option:selected').val()
             url = $(this).val() //url = new va method = get
             type = "GET"
             data = {}
             hieu_ung_sau_load_form_va_table = "show search box"
 
-
         } else if (class_value.indexOf('manager-a-form-select-link') > -1) {
             is_table = true
             is_form = true
             url = $(this).attr('href')
-            console.log('@@@@@@@@@@ndt', url)
             type = "GET"
             data = {}
             hieu_ung_sau_load_form_va_table = "show search box 2"
 
-
         } else if (class_value.indexOf('show-modal-table-link') > -1) {
             is_form = false
-            url = $(this).attr("href") ///omckv2/show-modal-form-link/ThietBiForm/1/
+            url = $(this).attr("href")
             form_table_template = 'form on modal'
-            console.log('@@@@@@@@@@ndt', url)
             type = "GET"
             data = {}
-
-
         } else if (class_value.indexOf('show-modal-form-link') > -1) {
             is_table = false
-            url = $(this).attr("href") ///omckv2/show-modal-form-link/ThietBiForm/1/
+            url = $(this).attr("href") 
             form_table_template = 'form on modal'
             table_name = $(this).closest('table').attr('name')
+            console.log('table_name',table_name)
             if (table_name) {
                 $('#modal-on-mll-table').attr('table_name', table_name)
             } else {
+                console.log('not table_name')
                 $('#modal-on-mll-table').removeAttr('table_name')
             }
             type = "GET"
             data = {}
-
             if (class_value.indexOf('add-comment') > -1 || class_value.indexOf('Nhan-Tin-UngCuu') > -1) {
                 mll_id = $(this).closest("tr").find('td.id').html()
                 url = updateURLParameter(url, 'selected_instance_mll', mll_id)
@@ -258,7 +297,12 @@ $(document).ready(function() {
                 console.log('tram_id', tram_id)
                 url = updateURLParameter(url, 'tram_id_for_same_ntp', tram_id)
                 hieu_ung_sau_load_form_va_table = 'add class overflow for table'
-                console.log('!@#$!@#$1')
+            }
+            if ($(this).hasClass('chon-type-cua')) {
+
+                hieu_ung_sau_load_form_va_table = 'chon-type-cua'
+                type_cua_name = $(this).find('span').attr('id')
+                console.log('type_cua_name',type_cua_name)
             }
         } else if (class_value.indexOf('cancel-btn') > -1) { //cancle buton duoc nhan.
             is_table = true
@@ -266,7 +310,6 @@ $(document).ready(function() {
             url = $(this).closest('form').attr("action").replace(/\/\d+\//g, '/new/')
             type = "GET"
             data = {}
-
         } else if (class_value.indexOf('loc-btn') > -1) {
             is_table = true
             is_form = true
@@ -277,28 +320,24 @@ $(document).ready(function() {
                 hieu_ung_sau_load_form_va_table = 'active tram-table-toogle-li'
             }
 
-
-
-
             //Nhan nut submit  
-
         } else if (class_value.indexOf('submit-btn') > -1) { // ca truong hop add and edit
-
             url = $(this).closest('form').attr("action")
-
             if ($(this).val() == 'EDIT' || $(this).val() == 'Update to db') {
                 var edit_reason_value = ''
                 while (edit_reason_value == '') {
                     edit_reason_value = prompt("please give the reason", "");
-
                 }
                 if (edit_reason_value == null) {
                     return false
                 }
             }
-
             if (id_closest_wrapper == "manager-modal") {
-                console.log('sdsdsdsdsdsds')
+                form_class_name  =$(this).closest('form').attr('class')
+                if(form_class_name=='dat-cua-form') {
+                    hieu_ung_sau_load_form_va_table = 'poll tai xiu sau khi dat cua hieu ung'
+                }
+                console.log('form_class_name',form_class_name)
                 table_name = $('#modal-on-mll-table').attr('table_name')
                 if (table_name) { // mac du add new commnent hay la edit trang_thai, hay thiet bi thi cung phai is_get_table_request_get_parameter = true
                     is_get_table_request_get_parameter = true
@@ -312,7 +351,6 @@ $(document).ready(function() {
                     }
                 } else {
                     console.log('khong co table object, nhugn nut duoc bam van o trong modal')
-
                     if (class_value.indexOf('edit-ntp') > -1) {
                         is_get_table_request_get_parameter = true
                         is_table = true
@@ -326,39 +364,26 @@ $(document).ready(function() {
                         is_form = true
 
                     } else { // truong hop config ca, hoac la truong hop add new foreinkey
-
                         is_table = false
                         is_form = true
                         is_get_table_request_get_parameter = false
-
                         patt = /([^/]*?)Form\/(.*?)\//
                         res = patt.exec(url)
                         form_name = res[1]
                         if (form_name == 'UserProfile') {
                             hieu_ung_sau_load_form_va_table = "update ca truc info"
                         } else if (form_name == 'ThaoTacLienQuan') {
-                            //dtuong_before_submit.attr
-                            //near_input = dtuong_before_submit.closest('.input-group').find('input[type=text]')
                             near_input = dtuong_before_submit.closest('.input-group').find('input[type=text]')
                             console.log("serach lai", near_input.val())
-                                //near_input.trigger('focus')
                             near_input.focus()
                             near_input.autocomplete("search", near_input.val())
-                                //near_input = $('#mll-form-table-wrapper #id_thao_tac_lien_quan')
-
-                            //near_input.val('dfasdfdfdfd')
                         }
 
                     }
                 }
-
-
             } else { // submit trong normal form
-
-
-
                 if (id_closest_wrapper == 'profile-loc-ca' || id_closest_wrapper == 'taixiu-wrapper' || id_closest_wrapper == 'import100phienForm-wrapper' ||
-                    id_closest_wrapper == 'autoImportForm-wrapper'||id_closest_wrapper == 'soicau-wrapper') {
+                    id_closest_wrapper == 'autoImportForm-wrapper' || id_closest_wrapper == 'soicau-wrapper') {
                     which_start_or_stop_btn = $(this).val()
                     if (which_start_or_stop_btn == "poll") {
                         just_poll_local = false
@@ -366,9 +391,12 @@ $(document).ready(function() {
                     is_table = false
                     is_form = true
                     url = updateURLParameter(url, 'which-start-or-stop-btn', which_start_or_stop_btn)
+                is_show_line =  ($('input#show-line').prop('checked'))
+                url = updateURLParameter(url, 'is_show_line', is_show_line)
+                } else if (id_closest_wrapper =='select-chart'){
+                    is_table = false
+                }else {
 
-                } else {
-                    
                     is_form = true
 
                     if ($(this).val() == 'EDIT') {
@@ -379,10 +407,7 @@ $(document).ready(function() {
                 }
             }
 
-
-            //get context cua table 
             if (is_get_table_request_get_parameter && is_table) {
-
                 get_parameter_toggle = ''
                 var table_contain_div
                 if (table_object) {
@@ -390,38 +415,19 @@ $(document).ready(function() {
                 } else {
                     if (id_closest_wrapper == 'form-table-of-tram-info') {
                         table_contain_div = $('#tram-table')
-
                     } else {
                         table_contain_div = closest_wrapper
                     }
-
-
                 }
-                //console.log('table_contain_div', table_contain_div.attr('class'))
-
                 url = update_parameter_from_table_parameter(table_contain_div, url)
-
-
-
-
                 if (!table_object) {
                     url = removeParam('table_name', url)
-                        //url = url.replace(/&?table_name=([^&]$|[^&]*)/i, "")
-                    console.log('url new', url)
-
-                    //url2 = url.replace(/&khong_show_2_nut_cancel_va_loc=([^&]$|[^&]*)/i, "")
-                    //console.log('url 2',url2)
                 }
-
             }
-
             if (edit_reason_value) {
                 url = updateURLParameter(url, 'edit_reason', edit_reason_value)
             }
-
-            console.log('##after add edit_reason', url)
             type = "POST"
-
             data = $(this).closest('form').serialize()
 
         } else {
@@ -432,10 +438,8 @@ $(document).ready(function() {
         url = updateURLParameter(url, 'form-table-template', form_table_template)
         url = updateURLParameter(url, 'is_form', is_form)
         url = updateURLParameter(url, 'is_table', is_table)
-            //url = updateURLParameter(url, 'which-form-or-table', is_both_table)
         if (id_closest_wrapper == 'mll-form-table-wrapper' && is_table) {
             loc_cas = $('select[name="loc_ca"]').val()
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', loc_cas)
             if (loc_cas) {
                 newpara = loc_cas.join("d4");
 
@@ -445,7 +449,6 @@ $(document).ready(function() {
             }
             url = updateURLParameter(url, 'loc_ca', newpara)
         }
-
         patt = /Form\/(.*?)\//
         res = patt.exec(url)
         new_or_id = res[1]
@@ -456,80 +459,78 @@ $(document).ready(function() {
         }
 
 
-        
         $.ajax({
             type: type,
             url: url,
             data: data, // serializes the form's elements.
             success: function(data) {
-                if (is_special_template || id_closest_wrapper == 'autoImportForm-wrapper' && (which_start_or_stop_btn != "Stop")) {
-
-                    comback_normal_template = $(data).find('.form-manager_r').length
-                    if (comback_normal_template != 1) {
+                if (is_special_template_for_poll_tai_xiu_repeat || (id_closest_wrapper == 'autoImportForm-wrapper' && (which_start_or_stop_btn != "Stop"))) {
+                    comback_normal_template_sign = $(data).find('.form-manager_r').length
+                    if (comback_normal_template_sign != 1) {
                         form_table_template = "autoImportForm-wrapper-form_table_template"
+                        hieu_ung_sau_load_form_va_table = 'openNav_hieu_ung'
                     }
-                    //show_map_from_longlat()
                 }
 
                 switch (form_table_template) {
-
                     case "autoImportForm-wrapper-form_table_template":
+                        console.log('url sau khi ajax', url)
                         if (which_start_or_stop_btn == "poll") {
-                            console.log('url', url)
                             if (just_poll_local) {
-                                last_phien_hien_tai = $('#last-phien').html()
-                                
-                                
-                                console.log('type of last_phien_hien_tai document',typeof(last_phien_hien_tai))
-                                console.log('last_phien_hien_tai', last_phien_hien_tai)
-                                //console.log('data', data)
-                                last_phien_in_data_form = $(data).find('div#last-phien-sample')
-                                console.log('type of last_phien_in_data_form',typeof(last_phien_in_data_form))
-                                if (last_phien_in_data_form!=last_phien_in_data_form){
-                                    console.log('why 2 cai nay khong bang nhau',last_phien_hien_tai,last_phien_in_data_form)
-
-                                }
-                                last_phien_hien_tai = parseInt(last_phien_hien_tai)
-                                last_phien_in_data_form = parseInt(last_phien_in_data_form.html())
-                                console.log('last_phien_in_data_form', last_phien_in_data_form)
-                                console.log('neu toi day thi khogn co return')
-                                if (last_phien_in_data_form == last_phien_hien_tai) {
-                                }
-                                else {  console.log('do data formv', last_phien_in_data_form,'different', last_phien_hien_tai, 'nen justpoll bang false')
+                                last_phien_in_document = $('#last-phien').html()
+                                last_phien_in_data_form = $(data).find('#last-phien-sample').html()
+                                last_phien_in_document_int = parseInt(last_phien_in_document)
+                                last_phien_in_data_form_int = parseInt(last_phien_in_data_form)
+                                if (last_phien_in_document_int == last_phien_in_data_form_int) {
+                                    console.log('last_phien_in_document == last_phien_in_data_form --> just_poll van bang True')
+                                    just_poll = true
+                                    is_poll_previous_complete = true
+                                } else {
+                                    console.log('last_phien_in_data_form_int', last_phien_in_data_form_int, 'different last_phien_in_document_int', last_phien_in_document_int, 'nen justpoll bang false')
                                     just_poll = false
+                                    is_poll_previous_complete = true
                                 }
-                            } else if (!just_poll_local ) {
-                                just_poll = true
-                                formdata = $(data).find('#special-for-auto-import').html()
-                                obj = $("#special-for-auto-import")
+                            } else if (!just_poll_local) {
+                                formdata = $(data).find('#main-taixiu').html()
+                                obj = $('#main-taixiu')
                                 assign_and_fadeoutfadein(obj, formdata)
-                                data_receive_poll = true
+                                just_poll = true
+                                is_poll_previous_complete = true
+                                if (!$('input#dont-load-chart').prop('checked')) {
+                                load_chart();}
                             }
-
+                            
                         } else {
-                            formdata = $(data).find('#special-for-auto-import').html()
-                            obj = $("#special-for-auto-import")
+                            formdata = $(data).find('#main-taixiu').html()
+                            obj = $("#main-taixiu")
                             obj.html(formdata)
-                                //assign_and_fadeoutfadein(obj, formdata)
+                            if (!$('input#dont-load-chart').prop('checked')) {
+                                load_chart();}
                         }
                         break;
-
                     case "normal form template":
-
                         if (is_form & !is_no_show_return_form) {
                             formdata = $(data).find('.form-manager_r').html()
                             if (id_closest_wrapper == 'form-table-of-tram-info') {
                                 obj = $('#tram-form')
-
                             } else {
                                 obj = closest_wrapper.children('.form-manager')
                             }
-
+                            form_div_obj = obj.find('.form-div')
+                            if (form_div_obj.attr('class')) {
+                                form_div_obj.html($(data).find('.form-div').html())
+                                notification_form_div_obj = obj.find('.notification-form-div')
+                                console.log('dfasdfasdfdsadsfalskdfjlka ldkfj')
+                                if(notification_form_div_obj.attr('class')) {
+                                    console.log('abcddfa')
+                                    notification_form_div_obj.html($(data).find('.notification-form-div').html())
+                                }
+                            }
+                            else{
                             assign_and_fadeoutfadein(obj, formdata)
-                                //show_map_from_longlat()
+                            }
                         }
-
-                        if (is_table) { //||table_name la truong hop submit modal form chi load lai phai table(gui di yeu cau xu ly form va table, nhung chi muon hien thi table thoi) 
+                        if (is_table) { //||table_name la truong hop submit modal form c2hi load lai phai table(gui di yeu cau xu ly form va table, nhung chi muon hien thi table thoi) 
                             tabledata = $(data).find('.table-manager_r').html()
                             if (table_object) {
                                 obj = table_object //table_object = table-manager-object
@@ -538,12 +539,9 @@ $(document).ready(function() {
                             } else {
                                 obj = closest_wrapper.children('.table-manager')
                             }
-
-
                             must_shown_tab_ok = false
                             if (obj.attr('id') == 'tram-table' & hieu_ung_sau_load_form_va_table == 'active tram-table-toogle-li') {
                                 console.log('i click it...............')
-                                    //$('#tram-table-toogle-li a').trigger('click')
                                 $('.nav-tabs a[href="#tram-table-toogle"]').tab('show')
                                 must_shown_tab_ok = true
 
@@ -552,14 +550,11 @@ $(document).ready(function() {
 
                                 $('#tram-manager-lenh-nav-tab-wrapper-div .nav-tabs a').on('shown.bs.tab', function() {
                                     assign_and_fadeoutfadein(obj, tabledata)
-                                    scrolify(obj.find('table.table-bordered'), 580); // 160 is height 
                                     $('#tram-manager-lenh-nav-tab-wrapper-div .nav-tabs a').unbind('shown.bs.tab');
                                 });
-
                                 return false
                             } else {
                                 assign_and_fadeoutfadein(obj, tabledata)
-                                scrolify(obj.find('table.table-bordered'), 580); // 160 is height   
                             }
 
 
@@ -567,23 +562,12 @@ $(document).ready(function() {
                                 table2data = $(data).find('.table-manager_r2').html()
                                 obj = $('div#mll-form-table-wrapper > div.table-manager')
                                 assign_and_fadeoutfadein(obj, table2data)
-                                scrolify(obj.find('table.table-bordered'), 580); // 160 is height    
-
                             }
-
-
                         }
-
-
                         break;
                     case 'form on modal': // chi xay ra trong truong hop click vao link show-modal
-                        console.log('vao form on modal okkkkkkkkkkkk')
-
                         {
-                            console.log('ndt data',data)
                             formdata = $(data).find('.wrapper-modal').html()
-                            console.log('ndt formdata',formdata)
-                            //formdata = update_icon_info_function(update_icon_info, formdata)
                             $("#modal-on-mll-table").html(formdata)
                             $("#modal-on-mll-table").modal()
                         }
@@ -605,7 +589,6 @@ $(document).ready(function() {
                 } else if (hieu_ung_sau_load_form_va_table == "hide modal") {
                     $("#modal-on-mll-table").modal("hide")
                 } else if (hieu_ung_sau_load_form_va_table == 'add class overflow for table') {
-                    console.log('!@#$!@#$2')
                     new_attr = $('#manager-modal').find('.table-manager').attr('class') + ' overflow'
                     $('#manager-modal').find('.table-manager').attr('class', new_attr)
                 } else if (hieu_ung_sau_load_form_va_table == "show search box") {
@@ -614,15 +597,8 @@ $(document).ready(function() {
                     $('#manager #search-manager-group').show()
                     $("#dropdown-toggle-manager").dropdown("toggle");
                 } else if (hieu_ung_sau_load_form_va_table == 'active tram-form-toogle-li') {
-
                     $('#tram-form-toogle-li a').trigger('click')
-
-                }
-                /*else if (hieu_ung_sau_load_form_va_table == 'active tram-table-toogle-li') {
-
-                                   $('#tram-table-toogle-li a').trigger('click')
-                               } */
-                else if (hieu_ung_sau_load_form_va_table == 'active thong-tin-tram toogle') {
+                }else if (hieu_ung_sau_load_form_va_table == 'active thong-tin-tram toogle') {
                     $('#tram-form-toogle-li a').trigger('click')
                     $('a[href="#thong-tin-tram"]').trigger('click')
                 } else if (hieu_ung_sau_load_form_va_table == 'active thong-tin-3g toogle') {
@@ -634,28 +610,29 @@ $(document).ready(function() {
                 } else if (hieu_ung_sau_load_form_va_table == 'active thong-tin-4g toogle') {
                     $('#tram-form-toogle-li a').trigger('click')
                     $('a[href="#thong-tin-4g"]').trigger('click')
-
                 } else if (hieu_ung_sau_load_form_va_table == "update ca truc info") {
                     ca_moi_chon = closest_wrapper.find('select#id_ca_truc option:selected').html()
-                    console.log('@@@@ca_moi_chon', ca_moi_chon)
                     $('span#ca-dang-truc').html('Ca ' + ca_moi_chon)
                 } else if (hieu_ung_sau_load_form_va_table == "change style for add comment to edit comment") {
                     dtuong = $('#modal-on-mll-table h4.add-comment-modal-title')
-                    console.log('@@@@@@@@@@@', dtuong.attr('class'))
                     dtuong.css("background-color", "#ec971f")
-                        //dtuong.attr('style',"background-color:#ec971f")
                 } else if (hieu_ung_sau_load_form_va_table == 'input text to Name field') {
                     $('div#manager-modal input#id_Name').val(input_text_to_Name_field)
-
-                    //console.log('odfadsfasdfds',$(this).closest('.input-group').find('input[type=text]').val())
-
+                } else if (hieu_ung_sau_load_form_va_table == 'openNav_hieu_ung'){
+                    //openTopNav()
+                }else if (hieu_ung_sau_load_form_va_table == 'chon-type-cua') {
+                    o_o = $('select#id_tenTable')
+                    $('select#id_tenTable').find("option:contains('" + type_cua_name + "')").attr('selected', 'selected');
+                }else if (hieu_ung_sau_load_form_va_table == 'poll tai xiu sau khi dat cua hieu ung') {
+                    console.log('trong hieu ung',event.target)
+                    form_table_handle(event,'poll tai xiu sau khi dat cua')
                 }
 
 
             },
             error: function(request, status, error) {
                 console.log('bi loi 400 hoac 403', error)
-                if (error == 'FORBIDDEN') { //403
+                if (error == 'FORBIDDEN') { //400
                     console.log(request.responseText)
                     data = $(request.responseText).find('#info_for_alert_box').html()
                     alert(data);
@@ -686,10 +663,16 @@ $(document).ready(function() {
     var refreshIntervalId
     var is_stop_auto_import = false
 
+    var da_nhan_nut_poll = false
+    $(this).on('click', '#submit-id-poll-auto-import-phien', function(event) {
+        if (da_nhan_nut_poll) {
+            alert('da nhan nut poll')
+            return false
+        }else {
+            da_nhan_nut_poll = true
+        }
 
-    $(this).on('click', '#submit-id-poll-auto-import-phien-btn', function(event) {
-        console.log('just_poll',just_poll)
-        var interval = 1000 * 2; // where X is your every X giay
+        var interval = 1000 * 3; // where X is your every X giay
         refreshIntervalId = setInterval(function() {
             form_table_handle(event, "poll tai xiu")
         }, interval);
@@ -697,19 +680,8 @@ $(document).ready(function() {
 
     $(this).on('click', '#submit-id-stop-auto-import-phien', function() {
         clearInterval(refreshIntervalId);
+        da_nhan_nut_poll = false
     });
-
-    /*
-    $(this).on('click', '#submit-id-poll-auto-import-phien-btn',function(event) {
-
-    while(1) {
-    var delay=10000; //1 second
-    setTimeout(abcd('abc'), delay)
-    }
-
-    })
-    */
-
 
 
 
@@ -857,87 +829,6 @@ $(document).ready(function() {
 
     });
 
-
-
-
-    /*
-    $(this).on("submit", "#amll-form", function() {
-        var clicked_button = $("input[type=submit][clicked=true]").attr("value");
-        if (clicked_button == "Filter") {
-            console.log(' trong ham Filter')
-            var url = "/omckv2/mll_filter/"; // the script where you handle the form input.
-            var type = 'GET';
-        } else {
-            var url = "/omckv2/luu_mll_form/"; // the script where you handle the form input.
-            var type = 'POST'
-        }
-        var data = $(this).serialize()
-        if (clicked_button == "Cancle") {
-            data = {}
-            type = 'GET'
-        }
-        url = url + '?which-button=' + clicked_button
-        $.ajax({
-            type: type,
-            url: url,
-            data: data, // serializes the form's elements.
-            error: function(request, status, error) {
-                if (error == 'FORBIDDEN') { //403
-                    alert('ban ko co quyen tao mll, chi co truc ca moi duoc,', request.responseText)
-                } else if (error == 'BAD REQUEST') {
-                    $('.filter-mll-div').html(request.responseText);
-                } else {
-                    new PNotify({
-                        title: 'Oh No!',
-                        text: request.responseText,
-                        type: 'error'
-                    });
-                }
-            },
-            success: function(data) {
-                //     
-                formhtml = $(data).find('div#form-area').html()
-                $('.filter-mll-div').html(formhtml); // show response from the php script.
-                tabelhtml = $(data).find('div#table-area').html()
-                $('#danh-sach-mll').html(tabelhtml);
-                assign_and_fadeoutfadein($('#danh-sach-mll'), tabelhtml)
-
-            }
-
-        }); //ajax curly close
-        return false; // avoid to execute the actual submit of the form.
-    });
-
-
-
-    $(this).on('click', '.edit-mll-bnt', function() {
-        mll_id = $(this).attr("id");
-        if (!mll_id) {
-            mll_id = 'Cancel'
-        }
-        $.get('/omckv2/mll_form/', {
-            mll_id: mll_id
-        }, function(data) {
-            $('.filter-mll-div').html(data);
-
-            if (mll_id != 'submit-id-cancel') {
-
-            }
-        });
-        var navigationFn = {
-            goToSection: function(id) {
-                $('html, body').animate({
-                    scrollTop: $(id).offset().top
-                }, 0);
-            }
-        }
-        navigationFn.goToSection('#amll-form');
-        return false
-
-    });
-
-*/
-    //command................
 
     $('.search-botton').click(function(e) {
 
@@ -1099,15 +990,16 @@ $(document).ready(function() {
         content = doituong.prop('outerHTML')
         $("#modal-on-mll-table").find('div.table-div').html(content)
     }
-    function gup( name, url ) {
-      if (!url) url = location.href;
-      name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
-      var regexS = "[\\?&]"+name+"=([^&#]*)";
-      var regex = new RegExp( regexS );
-      var results = regex.exec( url );
-      return results == null ? null : results[1];
+
+    function gup(name, url) {
+        if (!url) url = location.href;
+        name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+        var regexS = "[\\?&]" + name + "=([^&#]*)";
+        var regex = new RegExp(regexS);
+        var results = regex.exec(url);
+        return results == null ? null : results[1];
     }
-    
+
     function updateURLParameter(url, param, paramVal) {
         var newAdditionalURL = "";
         var tempArray = url.split("?");
@@ -1153,78 +1045,7 @@ $(document).ready(function() {
 
 
 
-    //IMPORTANCE
-    //GET FORM
-    /*
-
-            $(this).on('click', 'ul.dropdown-menu > li#add-comment,ul.comment-ul > li > a.edit-commnent', function() {
-            class_atag = $(this).attr("class")
-            that = this
-            mll_id = $(this).closest("tr").find('td.id').html()
-            url = '/omckv2/handelCommentForMLLForm/'
-            comment_id = $(this).attr("comment_id")
-            if (!comment_id) {
-            comment_id = 'new'
-                }
-            data = {}
-            url = url + comment_id + '/'
-            action = url
-            url = action + '?selected_instance_mll=' + mll_id //add
-
-
-
-            $.get(url, data, function(data) {
-                $("#modal-on-mll-table").html(data)
-                $("#modal-on-mll-table").find('form#add-comment-form-id').attr('action', action)
-                copy_row(that)
-                $("#modal-on-mll-table").modal();
-            })
-
-            return false;
-        })
-
-
-
-     // chi con dung cho form commenformllform
-        $(this).on('submit', '#add-comment-form-id', function() {
-            var clicked_button = $("input[type=submit][clicked=true]").attr("value")
-            console.log('clicked_button', clicked_button)
-            var url = $(this).attr('action')
-            var classname = $(this).attr("class")
-            
-            if (clicked_button == "ADD NEW") {
-                url = url.replace(/\/\d+\//g, '/new/')
-                console.log(url)
-            }
-
-            console.log('url in form submit', url)
-            var data = $(this).serialize()
-                //data += "&selected_instance_mll=" + encodeURIComponent(selected_instance_mll)
-            $.ajax({
-                type: "POST",
-                url: url,
-                data: data, // serializes the form's elements.
-                success: function(data) {
-                        $("#modal-on-mll-table").modal("hide");
-                        $('#danh-sach-mll').html(data); // show response from the php script.
-                
-                },
-                error: function(request, status, error) {
-                    console.log('status', error)
-                    if (error == 'FORBIDDEN') { //403
-                        alert(request.responseText);
-                    } else if (error == 'BAD REQUEST') { //400 required form, validation form
-                        $("#modal-on-mll-table").html(request.responseText)
-                        $("#modal-on-mll-table").find('form#add-comment-form-id').attr('action', url)
-                    }
-                }
-
-            });
-            //}
-            return false;
-        })
-    */
-
+    
 
     $(this).on("click", ".btnEdit", function() {
         var array_td_need_edit = [] //array la chua nhung index cua td can edit
@@ -1330,7 +1151,17 @@ $(document).ready(function() {
         format: DT_FORMAT,
     });
 
+    $(this).on('click', ".autocomplete,.autocomplete_search_tram,.autocomplete_search_manager", function() {
+        value = $(this).val()
+        if (value.length === 0) {
+            value = 'tatca'
+            if ($(this).hasClass('autocomplete')){
+               
+            }
+        }
+        $(this).autocomplete("search", value)
 
+    });
     $(this).on("focus", ".autocomplete", function() {
         $(this).autocomplete({
                 create: function() {
@@ -1357,12 +1188,7 @@ $(document).ready(function() {
                     })
                 },
                 select: function(event, ui) {
-                    if (ui.item['desc'] == "chưa có sdt" || !ui.item['desc']) {
-                        this.value = ui.item['label']
-                    } else {
-                        this.value = ui.item['label'] + "-" + ui.item['desc'];
-                    }
-
+                    this.value = ui.item['label'];
                     return false
                 }
 
@@ -1431,20 +1257,6 @@ $(document).ready(function() {
 
                     form_table_handle('intended_for_autocomplete', '/omckv2/modelmanager/Table3gForm/' + ui.item.id + '/?table3gid=' + ui.item.id)
 
-                    /*
-                    $.get('/omckv2/detail_tram_compact_with_search_table/', {
-                        id: ui.item.id,
-                        query: ui.item.label
-                    }, function(data) {
-                        formhtml = $(data).find('div#form-area').html()
-                        tabelhtml = $(data).find('div#table-area').html()
-                        $('.thong-tin-tram').fadeOut(300);
-                        $('.thong-tin-tram').html(formhtml).fadeIn(300);
-                        $('.thong-tin-tram').attr('site_id', ui.item.id)
-                        assign_and_fadeoutfadein($('.danh-sach-tram-tim-kiem'), tabelhtml)
-                            //$('.danh-sach-tram-tim-kiem').html(tabelhtml);
-                    });
-                        */
                     return false // return thuoc ve select :
                 }
 
@@ -1523,14 +1335,20 @@ $(document).ready(function() {
             }
         });
     //consume_alert();
-    $('.selectmultiple').select2()
+    
+    $('.selectmultiple').select2({
+        width: '100%'
+    });
+ 
         //$(".tablemll").colResizable();
 
     $('.mySelect2').select2({
-        width: '100%'
+        width: '80%'
     });
 
-
+$('#showmenu').click(function() {
+                $('.menu').slideToggle("fast");
+        });
 
 }); //END READY DOCUMENT
 
@@ -1547,14 +1365,14 @@ $(document).ajaxComplete(function(event, xhr, settings) {
     $('.datetimepicker-comment').datetimepicker({
         format: DT_FORMAT
     });
-
-    $('.comboboxd4').combobox()
-        /*
-            $('.comboboxd4').select2({
-  placeholder: "Select a state",
-  allowClear: true
-});
-*/
+    /*
+        $('.comboboxd4').combobox()
+            
+                $('.comboboxd4').select2({
+      placeholder: "Select a state",
+      allowClear: true
+    });
+    */
     $('.datetimepicker').datetimepicker({
         format: DT_FORMAT,
     });
@@ -1570,10 +1388,7 @@ $(document).ajaxComplete(function(event, xhr, settings) {
     })
 
 });
-$(function() {
-    $(".comboboxd4").combobox();
 
-});
 var ajax_is_complete
 $(document).on("ajaxStart", function() {
     ajax_is_complete = false
@@ -1590,159 +1405,8 @@ $('#submit-id-command-cancel').hide()
 
 var name_attr_global
 var DT_FORMAT = 'HH:mm DD/MM/YYYY'
-    /*
-    function consume_alert() {
-        if (_alert) return;
-        _alert = window.alert;
-        window.alert = function(message) {
-            new PNotify({
-                title: 'Alert',
-                text: message
-            });
-        };
-    }
-    */
-PNotify.prototype.options.delay ? (function() {
-    PNotify.prototype.options.delay = 1500;
+   
 
-}()) : (alert('Timer is already at zero.'))
-
-
-function test() {
-    console.log('toi dang test')
-}
-
-test(1);
-
-(function($) {
-    $.widget("custom.combobox", {
-        _create: function() {
-            this.wrapper = $("<span>")
-                .addClass("custom-combobox")
-                .insertAfter(this.element);
-
-            this.element.hide();
-            this._createAutocomplete();
-            this._createShowAllButton();
-        },
-
-        _createAutocomplete: function() {
-            var selected = this.element.children(":selected"),
-                value = selected.val() ? selected.text() : "";
-
-            this.input = $("<input>")
-                .appendTo(this.wrapper)
-                .val(value)
-                .attr("title", "")
-                .addClass("custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left")
-                .autocomplete({
-                    delay: 0,
-                    minLength: 0,
-                    source: $.proxy(this, "_source")
-                })
-                .tooltip({
-                    tooltipClass: "ui-state-highlight"
-                });
-
-            this._on(this.input, {
-                autocompleteselect: function(event, ui) {
-                    ui.item.option.selected = true;
-                    this._trigger("select", event, {
-                        item: ui.item.option
-                    });
-                },
-
-                autocompletechange: "_removeIfInvalid"
-            });
-        },
-
-        _createShowAllButton: function() {
-            var input = this.input,
-                wasOpen = false;
-
-            $("<a>")
-                .attr("tabIndex", -1)
-                .attr("title", "Show All Items")
-                .tooltip()
-                .appendTo(this.wrapper)
-                .button({
-                    icons: {
-                        primary: "ui-icon-triangle-1-s"
-                    },
-                    text: false
-                })
-                .removeClass("ui-corner-all")
-                .addClass("custom-combobox-toggle ui-corner-right")
-                .mousedown(function() {
-                    wasOpen = input.autocomplete("widget").is(":visible");
-                })
-                .click(function() {
-                    input.focus();
-
-                    // Close if already visible
-                    if (wasOpen) {
-                        return;
-                    }
-
-                    // Pass empty string as value to search for, displaying all results
-                    input.autocomplete("search", "");
-                });
-        },
-
-        _source: function(request, response) {
-            var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
-            response(this.element.children("option").map(function() {
-                var text = $(this).text();
-                if (this.value && (!request.term || matcher.test(text)))
-                    return {
-                        label: text,
-                        value: text,
-                        option: this
-                    };
-            }));
-        },
-
-        _removeIfInvalid: function(event, ui) {
-
-            // Selected an item, nothing to do
-            if (ui.item) {
-                return;
-            }
-
-            // Search for a match (case-insensitive)
-            var value = this.input.val(),
-                valueLowerCase = value.toLowerCase(),
-                valid = false;
-            this.element.children("option").each(function() {
-                if ($(this).text().toLowerCase() === valueLowerCase) {
-                    this.selected = valid = true;
-                    return false;
-                }
-            });
-
-            // Found a match, nothing to do
-            if (valid) {
-                return;
-            }
-
-            // Remove invalid value
-            this.input
-                .val("")
-                .attr("title", value + " didn't match any item")
-                .tooltip("open");
-            this.element.val("");
-            this._delay(function() {
-                this.input.tooltip("close").attr("title", "");
-            }, 2500);
-            this.input.autocomplete("instance").term = "";
-        },
-
-        _destroy: function() {
-            this.wrapper.remove();
-            this.element.show();
-        }
-    });
-})(jQuery);
 
 
 // D4 fadeIn fadeOut
@@ -1761,11 +1425,158 @@ function assign_and_fadeoutfadein(jqueryobject, datahtml) {
     }
 };
 
+/*
+window.onload = function () {
+    var chart = new CanvasJS.Chart("chartContainer",
+    {
+        animationEnabled: true,
+        title:{
+            text: "Multi Series Spline Chart - Hide / Unhide via Legend"
+        },
+        data: [
+        {
+            type: "spline", //change type to bar, line, area, pie, etc
+            showInLegend: true,        
+            dataPoints: [
+                { x: 10, y: 51 },
+                { x: 20, y: 45},
+                { x: 30, y: 50 },
+                { x: 40, y: 62 },
+                { x: 50, y: 95 },
+                { x: 60, y: 66 },
+                { x: 70, y: 24 },
+                { x: 80, y: 32 },
+                { x: 90, y: 16}
+            ]
+            },
+            {
+            type: "spline", //change type to bar, line, area, pie, etc
+            showInLegend: true,        
+            dataPoints: [
+                { x: 10, y: 510 },
+                { x: 20, y: 450},
+                { x: 30, y: 500 },
+                { x: 40, y: 620 },
+                { x: 50, y: 950 },
+                { x: 60, y: 660 },
+                { x: 70, y: 240 },
+                { x: 80, y: 320 },
+                { x: 90, y: 160}
+            ]
+            },
+            {
+            type: "spline",
+            showInLegend: true,        
+            dataPoints: [
+                { x: 10, y: 21 },
+                { x: 20, y: 44},
+                { x: 30, y: 35 },
+                { x: 40, y: 45 },
+                { x: 50, y: 75 },
+                { x: 60, y: 58 },
+                { x: 70, y: 18 },
+                { x: 80, y: 30 },
+                { x: 90, y: 11}
+            ]
+            }
+        ],
+        legend: {
+            cursor: "pointer",
+            itemclick: function (e) {
+                if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+            }
+            chart.render();
+            }
+        }
+    });
 
-//$(function() {
-//PNotify.prototype.options.styling = "bootstrap3";
-//new PNotify({
-//title: 'Regular Notice',
-//text: 'Hello! Have a good day!'
-//});
-//
+    chart.render();
+}
+*/
+//series_from_div = JSON.parse($("#json > #series").attr('data').replace(/'/g,'"'))
+function create_highcharts_object(series,repeat_tai_or_xiu,sample) {
+    highcharts_object = {
+        chart: {
+                zoomType: 'xy'
+            },
+        title: {
+            text: 'SPACE AGGREGATE' + repeat_tai_or_xiu,
+            x: -20 //center
+        },
+        subtitle: {
+            text: 'Source: WorldClimate.com',
+            x: -20
+        },
+        xAxis: {
+            categories: categories[sample]
+        },
+        yAxis: {
+            title: {
+                text: 'Số lần xuất hiện của repeat (lần)'
+            },
+            plotLines: [{
+                value: 0,
+                width: 10,
+                color: '#808080'
+            }]
+        },
+        tooltip: {
+            valueSuffix: 'Lần'
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle',
+            borderWidth: 0
+        },
+        series: series,
+    }
+
+
+    return highcharts_object
+}
+
+/*
+function load_chart(){
+    DTUONG_ARRAY = ['repeat-tai','repeat-xiu','xenke-tai','xenke-xiu','tai_xiu_ttxx']
+    Samples = [100,512]
+    for (i=0;i<DTUONG_ARRAY.length;i++ ){
+        for (j=0;j<Samples.length;j++){
+        sample = Samples[j]
+        type_name = DTUONG_ARRAY[i]
+        class_name = '.container-'+ type_name
+        sample_for_find = 'div[simple='+ sample.toString()+']'
+        chart_container_div_obj = $(class_name).filter('div[sample='+sample.toString()+']'
+            )
+        one_type_series = series[type_name][sample]
+        hc_data= create_highcharts_object(one_type_series,' ' + type_name + '-' + sample.toString(),sample )
+        chart_container_div_obj.highcharts(hc_data);
+        }
+    }
+}
+*/
+
+function load_chart(){
+    DTUONG_ARRAY = ['repeat-tai','repeat-xiu','xenke-tai','xenke-xiu','tai_xiu_ttxx']
+    Samples = [25,50,100,200,512]
+    for (i=0;i<DTUONG_ARRAY.length;i++ ){
+        for (j=0;j<Samples.length;j++){
+        sample = Samples[j]
+        type_name = DTUONG_ARRAY[i]
+        parent = $('#chart-for-margin-top')
+        new_obj_id= 'container-' + type_name + '-' + sample.toString()
+        new_div = document.createElement("div");
+        new_div = $(new_div).attr('id',new_obj_id).attr('style','min-width: 310px; height: 400px; margin: 0 auto')
+        parent.append(new_div)
+        chart_container_div_obj = new_div
+            
+        one_type_series = series[type_name][sample]
+        hc_data= create_highcharts_object(one_type_series,' ' + type_name + '-' + sample.toString(),sample )
+        chart_container_div_obj.highcharts(hc_data);
+        }
+    }
+}
+//load_chart();

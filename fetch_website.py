@@ -258,7 +258,6 @@ class PostObject(Thread):
         self.login_flag = 1
         thongbao.thongbao = 'Start post'
         self.stop = False
-        print thongbao.thongbao
         if self.is_reply and not self.replyWithEnry:
             so_bai_se_post =100
         elif self.entry_id_lists ==['all']:
@@ -886,11 +885,78 @@ def Postfunction(site_obj):
         count +=1
         print sitename ,count ,'\n'
         sleep(0.1) 
+        
+def read_file_from_disk (path):
+    with open(path) as f:
+        a = f.read().decode('utf-8')
+    '''               
+    f =  open(path, "rb") 
+    a = f.read().decode('utf-8')
+    f.close()
+    '''
+    return a
 if __name__ == '__main__':
 
     #init_d4()
     #leech_bai('http://lastestmovie.com/category/movie/', 5, 6)
     #leech_bai('http://lastestmovie.com/category/music/', 1, 5)
 
-    newpost = PostObject(ForumTable.objects.get(url = "http://amaderforum.com/"),['all'])
-    newpost.start()
+    #newpost = PostObject(ForumTable.objects.get(url = "http://amaderforum.com/"),['all'])
+    #newpost.start()
+    '''
+    self_session = requests.session()
+    
+    self_session.headers = {'Accept' :   'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+'Accept-Encoding':    'gzip, deflate',
+'Accept-Language'  :  'en-US,en;q=0.5',
+'Cache-Control'  :  'no-cache',
+'Connection'  :  'keep-alive',
+'Content-Type'  :  'application/x-www-form-urlencoded; charset=UTF-8',
+'Pragma'   : 'no-cache',
+'User-Agent'    :'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:35.0) Gecko/20100101 Firefox/35.0',
+'X-Requested-With'    :'XMLHttpRequest',}
+    
+    
+    login_data = {
+            'username': 'tund',
+            'password': '2Vxe!mgst',
+            }
+    loginurl = 'http://el.vnptnet.vn/net/login/index.php'
+    r = self_session.post(loginurl, data=login_data)
+    login_ct = r.content 
+    #print login_ct
+    
+    #view de thi
+    r = self_session.post ('http://el.vnptnet.vn/net/mod/quiz/view.php?id=1') 
+    html_de_lay_session_key = r.content 
+    
+    #with open(MEDIA_ROOT +'/thi_list.html', 'wb') as f:
+                    #f.write(html_de_lay_session_key)
+                  
+    
+    soup = BeautifulSoup(html_de_lay_session_key)
+    class_entry_name = '.quizstartbuttondiv input[name=cmid]'
+    soup2 = soup.select('.quizstartbuttondiv')[0]
+    
+    cmid = soup2.select('input[name=cmid]')
+    cmid = cmid[0]['value']
+    sesskey = soup2.select('input[name=sesskey]')
+    sesskey = sesskey[0]['value']
+    
+    data = {'cmid':cmid,'sesskey':sesskey}
+    print data
+    thuc_hien_lai_de_thi = 'http://el.vnptnet.vn/net/mod/quiz/startattempt.php'
+    r = self_session.post (thuc_hien_lai_de_thi,data=data) 
+    #print r.content 
+    print(r.url)
+    with open(MEDIA_ROOT +'/thi_1_bai.html', 'wb') as f:
+                    f.write(r.content)
+                    
+    '''
+    html =  read_file_from_disk (MEDIA_ROOT +'/thi_1_bai.html')
+    soup = BeautifulSoup(html)
+    #myselect = soup.select('form input[type=radio]')
+    cauhoi_div = soup.select('.deferredfeedback ')
+    #for cau hoi in cauhoi_div:
+        #cauhoi.select('.qtext').get
+    print len(cauhoi_div)

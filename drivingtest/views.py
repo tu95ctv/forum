@@ -4,10 +4,12 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, render
 from models import Ulnew,ForumTable, PostLog, LeechSite, thongbao, postdict,autoimportdict
 import forms
-from drivingtest.forms import  ForumChoiceForm, UlnewForm, UlnewTable,\
-    RepeatTable, TaiXiuXiuTaiTable, Tong3DiceTable, TaiXiuForm, TaiXiuTable,\
+from drivingtest.forms import  ForumChoiceForm, UlnewForm, UlnewTable, TaiXiuXiuTaiTable, Tong3DiceTable, TaiXiuForm, TaiXiuTable,\
     ImportForm, Thoi_gian_cho_su_lap_lai_Table, AutoImportForm, SoiCauForm,\
-    RepeatTable2, Import100PhienForm
+    RepeatTable, Import100PhienForm, Tai_Xiu_Thong_Ke_Table2, TtxxTable2,\
+    LinkTable, GLOBAL_BRIEF_ID_LINK_LIST, MySelectChartOptionForm,\
+    ChartOptionSelectTrueOrFalseForm
+
 from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect
@@ -17,12 +19,14 @@ from fetch_website import danhsachforum, PostObject, leech_bai,\
     get_link_from_db, import_ul_txt_to_myul
 from exceptions import Exception
 from django_tables2_reports.config import RequestConfigReport as RequestConfig
-from drivingtest.models import TaiXiu, Notification_global_from_model_module,TbImport
+from drivingtest.models import TaiXiu, Notification_global_from_model_module,TbImport,\
+    MySelectChartOption
 from soicau import create_giong_nhau_khac_nhau_lists,\
     test_xac_suat_tong_3_dice_database, phien_100_to_html,\
     create_how_many_phien_for_same_cau, autoimport, AutoImportObject,\
-    string_soi_cau, create_repeat_table_data, soicau_2,\
-    chon_tren_hoac_duoi_cau_kep
+    string_soi_cau, soicau_2,\
+    chon_tren_hoac_duoi_cau_kep, create_repeat_table_data2, check_cau,\
+    autoimport1
 from django.db.models.aggregates import Min, Max, Count
 import re
 from django.utils import timezone
@@ -34,57 +38,6 @@ VERBOSE_CLASSNAME ={'TaiXiu':u'Nguyên Nhân'}
 from django.db.models import Q
 
 ################CHUNG######################
-stop_auto_import = True
-run_auto_import = False
-def user_login(request):
-    print request
-    
-    # Like before, obtain the context for the user's request.
-    context = RequestContext(request)
-
-    # If the request is a HTTP POST, try to pull out the relevant information.
-    if request.method == 'POST':
-        # Gather the username and password provided by the user.
-        # This information is obtained from the login form.
-        username = request.POST['username']
-        password = request.POST['password']
-
-        # Use Django's machinery to attempt to see if the username/password
-        # combination is valid - a User object is returned if it is.
-        user = authenticate(username=username, password=password)
-
-        # If we have a User object, the details are correct.
-        # If None (Python's way of representing the absence of a value), no user
-        # with matching credentials was found.
-        if user:
-            # Is the account active? It could have been disabled.
-            if user.is_active:
-                # If the account is valid and active, we can log the user in.
-                # We'll send the user back to the homepage.
-                login(request, user)
-                return HttpResponseRedirect('/omckv2/')
-            else:
-                # An inactive account was used - no logging in!
-                return HttpResponse("Your Rango account is disabled.")
-        else:
-            # Bad login details were provided. So we can't log the user in.
-            print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Invalid login details supplied.")
-
-    # The request is not a HTTP POST, so display the login form.
-    # This scenario would most likely be a HTTP GET.
-    else:
-        # No context variables to pass to the template system, hence the
-        # blank dictionary object...
-        return render_to_response('drivingtest/login.html', {}, context) 
-@login_required
-def user_logout(request):
-    # Since we know the user is logged in, we can now just log them out.
-    logout(request)
-
-    # Take the user back to the homepage.
-    return HttpResponseRedirect('/omckv2/')
-
 
 
 
@@ -96,7 +49,6 @@ def user_logout(request):
 
 
 #############################################################################
-
 
 def create_table(tai_xiu_lists,show_description = 'ko xen ke type',is_created_xenKe_list = True):
     #aggregate_tx2  = tai_xiu_lists.aggregate(Max('phien_so'), Min('phien_so'),Count('phien_so'))
@@ -131,120 +83,186 @@ def create_tong_hop_list_of_dict(repeat_dict_lists,repeat_dict_lists_tong_hop,co
                         row_dict_1_lan_lap_cua_tong_hop[column_name] = mark_safe('<li>%s %s</li>'%(SOMAUTHU,description)) +row_dict_1_lan_lap_cua_tong_hop[column_name]
                 if count ==0:
                     repeat_dict_lists_tong_hop.append(row_dict_1_lan_lap_cua_tong_hop)
-
-def taixiu2(request):
+from django.utils.timezone import localtime
+def taixiuview(request):
+    return render('sss')
+def tai_xiu_3(request,for_only_return_dict = False):
+    is_show_line = request.GET.get('is_show_line',True)
+    if is_show_line =='true':
+        is_show_line = True
+    else:
+        is_show_line = False
+    taixiuform = TaiXiuForm()
+    taixiutable = TaiXiuTable(TaiXiu.objects.all().order_by('-phien_so'))
+    RequestConfig(request, paginate={"per_page": 15}).configure(taixiutable)
+    class TbImport(object):
+        thongbao = 'chua co thong bao j'
+        Da_import_xong_global_from_model_module = False
+        GLOBAL_BRIEF_ID_LINK_LIST = []
+        GLOBAL_BRIEF_ACTIVE_LIST = []
+        GLOBAL_EXACTLY_ACTIVE_LIST = []
+        GLOBAL_DUBAO_ACTIVE_LIST = {'du bao tai':[],'du bao xiu': []}
+        for_make_fighter_dubao_link = {'du bao tai':('',''),'du bao xiu':('','')}
+    TbImport.GLOBAL_BRIEF_ID_LINK_LIST = []
+    TbImport.GLOBAL_BRIEF_ACTIVE_LIST = []
+    TbImport.GLOBAL_EXACTLY_ACTIVE_LIST = []
+    TbImport.GLOBAL_DUBAO_ACTIVE_LIST =  {'du bao tai':[],'du bao xiu': []}
+    #TbImport.for_fighter_extactly_active_list_current = ('','')
     last_cau = TaiXiu.objects.latest('phien_so')
-    last_phien = last_cau.phien_so
     try:
         end_phien = int(request.GET['end'])
-        filter = TaiXiu.objects.filter(phien_so__gt=end_phien)
-        end_phien_to_select_phien = len(filter)
+        filter_tx = TaiXiu.objects.filter(phien_so__gt=end_phien)
+        end_phien_to_select_phien = len(filter_tx)
         select_cau = TaiXiu.objects.get(phien_so=end_phien)
-        print 'end_phien_to_select_phien@@@@@@@@@@@',end_phien_to_select_phien
     except  :#MultiValueDictKeyError
         end_phien_to_select_phien = 0
-        end_phien = last_phien
-        select_cau = last_cau  
-    soicauForm = SoiCauForm(initial = {'end_phien':last_phien})
-    END_LIST = [32,64,100,256,512,1024,2048,3423434,0]
+        select_cau = last_cau
+    rt = string_soi_cau(select_cau.phien_so,100)
+    string_soi_cau_html = rt[0] 
+    soicauForm = SoiCauForm(initial = {'end_phien':select_cau.phien_so},soi_cau_html=string_soi_cau_html)
+    
+    END_LIST = [32,64,100,128,256,512,1024,2048,3072,4096,8192,16384,0]
     repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
-    more_info_get_from_loop = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST=END_LIST,end_phien_to_select_phien = end_phien_to_select_phien,is_print = False)
+    more_info_get_from_loop = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),\
+                                       END_LIST=END_LIST,end_phien_to_select_phien = end_phien_to_select_phien,
+                                       is_show_line = is_show_line,is_in = False,
+                                       TbImport = TbImport)
+    data_taixiuthongke_table  = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop,
+                                            END_LIST=more_info_get_from_loop['New_END_LIST'],
+                                            repeatxenke_table_or_tai_xiu_tttxx_table = "create taixiu table",
+                                            TbImport = TbImport)
+    taixiuthongke_table = Tai_Xiu_Thong_Ke_Table2(data_taixiuthongke_table)
     
-    data_table  = create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'repeat')
-    repeat_table = RepeatTable2(data_table)
-    xen_ke_table = RepeatTable2(create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'xenke'))
+    data_ttxx_table  = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop,
+                                            END_LIST=more_info_get_from_loop['New_END_LIST'],
+                                            repeatxenke_table_or_tai_xiu_tttxx_table = "create ttxx table",
+                                            TbImport = TbImport)
+    ttxx_table = TtxxTable2(data_ttxx_table)
     
-    list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=2)
-    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more_info_get_from_loop = soicau_2(qrs = list_2_vs_above,END_LIST =END_LIST)
-    data_table  = create_repeat_table_data(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],repeat_or_xen_ke = 'repeat',type_for_table = "fighter")
-    repeat_table_list_2_vs_above = RepeatTable2(data_table)
     
-    string_soi_cau_html = string_soi_cau(end_phien,100)
-    end_phien_html = u'%s,%s'%(end_phien,select_cau.ngay_gio_tao.strftime("%Y-%m-%d %H:%M:%S"))
-    last_phien_html = u'%s,%s'%(last_phien,last_cau.ngay_gio_tao.strftime("%Y-%m-%d %H:%M:%S"))
-    render_dict = {'last_phien':last_phien_html,
-                   'soi_phien':end_phien_html,
-                   'string_soi_cau_html':string_soi_cau_html,\
-                   'soicauForm':soicauForm,'repeat_table':repeat_table,'xen_ke_table':xen_ke_table,
-                   'repeat_table_list_2_vs_above':repeat_table_list_2_vs_above}
-    return render(request, 'drivingtest/taixiu_2.html', render_dict)
-def import100phien(request):
-    import100PhienForm = Import100PhienForm()
-    return render(request, 'drivingtest/import100PhienForm.html', {'import100PhienForm':import100PhienForm})
-def taixiu(request,for_only_return_dict = False):
     
-    IS_display_xen_ke = True
-    rp_tx_combines = []
-    END_CAN_LAY = [0,2048,1536,1024,768,512,384,256,192,128,100,68,64,32,16]
-    #END_CAN_LAY.reverse()
-    last_phien_so =  TaiXiu.objects.latest('phien_so').phien_so
-    taixiu_table = TaiXiuTable(TaiXiu.objects.all().order_by('-phien_so'))
-    RequestConfig(request, paginate={"per_page": 15}).configure(taixiu_table)
-    txxt_dict_lists_tonghop = []
-    repeat_dict_lists_tong_hop = []
-    len_END_CAN_LAY = len(END_CAN_LAY)
-    for count,END in enumerate(END_CAN_LAY):
-        if END:
-            tai_xiu_lists = TaiXiu.objects.all().order_by('-phien_so')[0:END]
-        else:
-            tai_xiu_lists = TaiXiu.objects.all().order_by('-phien_so')
-        repeat_table,taiXiuXiuTai_Table,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists,repeat_dict_lists,txxt_dict_lists = create_table(tai_xiu_lists)
-        repeat_table.so_mau = END
-        SOMAUTHU = len(tai_xiu_lists)
-        taiXiuXiuTai_Table.len = SOMAUTHU
-        one_tuple = [taiXiuXiuTai_Table,repeat_table]
-        taiXiuXiuTai_Table_xk=None
-        repeat_table_xk = None
-        create_tong_hop_list_of_dict(repeat_dict_lists,repeat_dict_lists_tong_hop,count,len_END_CAN_LAY,SOMAUTHU)
-        create_tong_hop_list_of_dict(txxt_dict_lists,txxt_dict_lists_tonghop,count,len_END_CAN_LAY,SOMAUTHU)
-        if END ==128:
-            string_tai_xiu_soi_cau_100 = string_tai_xiu_soi_cau
-        if END ==0:
-            tai_xiu_lists_100=tai_xiu_lists
-        if IS_display_xen_ke:
-            xen_ke_or_giong_nhau_lists
-            repeat_table_xk,taiXiuXiuTai_Table_xk,string_tai_xiu_soi_cau,xen_ke_or_giong_nhau_lists_xk,repeat_dict_lists,txxt_dict_lists = create_table(xen_ke_or_giong_nhau_lists,show_description = 'xen ke type',is_created_xenKe_list = False)    
+    data_table  = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop,\
+                                            END_LIST=more_info_get_from_loop['New_END_LIST'],\
+                                            repeat_or_xen_ke = 'repeat',TbImport = TbImport)
+    repeat_table = RepeatTable(data_table)
+    repeat_table.title = 'repeat_table'
+    repeat_table.html_id = 'repeat_table'
+    xenke_data_table = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop,END_LIST=more_info_get_from_loop['New_END_LIST'],
+                                                         repeat_or_xen_ke = 'xenke',TbImport = TbImport)
+    xen_ke_table = RepeatTable(xenke_data_table)
+    xen_ke_table.title = 'xen_ke_table'
+    xen_ke_table.html_id = 'xen_ke_table'
+    above_3_tai_xius = []
+    for so_cau_moc in range(1,11):
+        tupple_tai_xiu_above_table = []
+        for tai_or_xiu in ['tai','xiu']:
+            repeat_TAI_or_XIU_lists = eval('repeat_%s_lists'%tai_or_xiu.upper())
+            list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_TAI_or_XIU_lists,so_cau_moc=so_cau_moc)
+            if list_2_vs_above:
+                for xen_ke_or_repeat in ['repeat','xenke']:
+                    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more_info_get_from_loop_above \
+                    = soicau_2(qrs = list_2_vs_above,END_LIST =END_LIST,TbImport = TbImport)
+                    data_table  = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop_above,
+                                                            END_LIST=more_info_get_from_loop_above['New_END_LIST'],
+                                                            fighter_or_single = "fighter_%s"%tai_or_xiu,
+                                                            repeat_or_xen_ke = xen_ke_or_repeat,
+                                                            so_cau_moc_if_fighter_for_find_cau_list_link = so_cau_moc,
+                                                            TbImport = TbImport)
+                    repeat_table_list_2_vs_above_cua_tai = RepeatTable(data_table)
+                    title = mark_safe( u'<h4 class="above-fighter-title">Above <span style="color:green">%s %s</span> cua <span style="color:yellow">%s</span> </h4>'%(so_cau_moc,xen_ke_or_repeat,'TAI' if  tai_or_xiu== 'tai' else 'XIU'))
+                    repeat_table_list_2_vs_above_cua_tai.title = title
+                    tupple_tai_xiu_above_table.append(repeat_table_list_2_vs_above_cua_tai)
+                    if so_cau_moc==2 and tai_or_xiu=='tai':
+                        repeat_equal_tams = repeat_2xiurepeat_lists
+                print 'in above ',so_cau_moc
+        above_3_tai_xius.append(tupple_tai_xiu_above_table)
         
-        one_tuple.extend((taiXiuXiuTai_Table_xk,repeat_table_xk))
-        rp_tx_combines.append(one_tuple)
-    repeat_table_tong_hop = RepeatTable(repeat_dict_lists_tong_hop)
-    txxt_table_tong_hop = TaiXiuXiuTaiTable(txxt_dict_lists_tonghop)
-    rp_tx_combines.reverse()
-    tong_3_dict_lists = test_xac_suat_tong_3_dice_database(tai_xiu_lists_100)
-    tong_3_table = Tong3DiceTable(tong_3_dict_lists)
+    list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_equal_tams,so_cau_moc=2)
+    repeat_2xiurepeat_lists,repeat_above2_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more_info_get_from_loop_above \
+                = soicau_2(qrs = list_2_vs_above,END_LIST =END_LIST,TbImport = TbImport)
+    data_table  = create_repeat_table_data2(more_info_get_from_loop=more_info_get_from_loop_above,
+                                                            END_LIST=more_info_get_from_loop_above['New_END_LIST'],
+                                                            fighter_or_single = "fighter_%s"%'tai',
+                                                            repeat_or_xen_ke = 'repeat',
+                                                            so_cau_moc_if_fighter_for_find_cau_list_link = 2,
+                                                            TbImport = TbImport)
+    
+    table_2qualvsmore2 = RepeatTable(data_table)
+    linkTable = LinkTable(TbImport.GLOBAL_BRIEF_ID_LINK_LIST)
+    linkTable_active = LinkTable(TbImport.GLOBAL_BRIEF_ACTIVE_LIST)
+    exactly_act_tive_link_Table = LinkTable(TbImport.GLOBAL_EXACTLY_ACTIVE_LIST)
+    dubaotai_Table = LinkTable( TbImport.GLOBAL_DUBAO_ACTIVE_LIST['du bao tai'])
+    dubaoxiu_Table = LinkTable( TbImport.GLOBAL_DUBAO_ACTIVE_LIST['du bao xiu'])
+    soi_cau_form_notification = form_notification_soi_cau_create(last_cau,rt)
+    
+    rt = string_soi_cau(last_cau.phien_so,10) 
+    brief_soi_cau = u'%s <span id = "last-phien-sample">%s</span>,%s</br>%s'%(rt[0],last_cau.phien_so,localtime(last_cau.ngay_gio_tao).strftime("%d-%m-%Y %H:%M:%S"),rt[3])
+    
     autoImportForm = AutoImportForm()
     
-    if not for_only_return_dict:
-        thoi_gian_cho_su_lap_lai_Table = Thoi_gian_cho_su_lap_lai_Table(create_how_many_phien_for_same_cau())
-        taiXiuForm = TaiXiuForm ()
-        importForm = ImportForm()
-        render_dict = {'thoi_gian_cho_su_lap_lai_Table':thoi_gian_cho_su_lap_lai_Table,\
-                                                       'importForm':importForm,\
-                                                       'taiXiuForm':taiXiuForm,'taixiu_table':taixiu_table,\
-                                                       
-                                                       'tong_3_table':tong_3_table,\
-                                                       'rp_tx_combines':rp_tx_combines,
-                                                       'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
-                                                       'last_phien_so':last_phien_so,\
-                                                       'autoImportForm':autoImportForm,\
-                                                       'repeat_table_tong_hop':repeat_table_tong_hop,\
-                                                       'txxt_table_tong_hop':txxt_table_tong_hop,
-                                                       }
-    else:
-        render_dict ={
-                                                       'tong_3_table':tong_3_table,\
-                                                       'rp_tx_combines':rp_tx_combines,
-                                                       'string_tai_xiu_soi_cau_100':string_tai_xiu_soi_cau_100,\
-                                                       'last_phien_so':last_phien_so,\
-                                                       'repeat_table_tong_hop':repeat_table_tong_hop,\
-                                                       'txxt_table_tong_hop':txxt_table_tong_hop,
-                                                       }
-        return render_dict
+    series =  more_info_get_from_loop['series_DICT']
+    categories =  more_info_get_from_loop['categories_dict']
     
-    return render(request, 'drivingtest/taixiu.html', render_dict)
+    mySelectChartOptionForm = MySelectChartOptionForm(instance = MySelectChartOption.objects.get(Name = 'my select'))
+    
+    
+    render_dict = {#'last_phien':last_phien_html,
+                   #'soi_phien':end_phien_html,
+                   #'string_soi_cau_html':string_soi_cau_html,\
+                   'table_2qualvsmore2':table_2qualvsmore2,
+                   'taixiuform':taixiuform,
+                   'taixiutable':taixiutable,
+                   'brief_soi_cau':brief_soi_cau,
+                   'series':series,
+                   'categories':categories,
+                   'dubaoxiu_Table':dubaoxiu_Table,
+                   "dubaotai_Table":dubaotai_Table,
+                   'exactly_act_tive_link_Table':exactly_act_tive_link_Table,
+                   'linkTable':linkTable,
+                   'linkTable_active':linkTable_active,
+                   'autoImportForm':autoImportForm,
+                   'soicauForm':soicauForm,
+                   'soi_cau_form_notification':mark_safe(soi_cau_form_notification),
+                   'taixiuthongke_table':taixiuthongke_table,
+                   'ttxx_table':ttxx_table,
+                   'repeat_table':repeat_table,
+                   'xen_ke_table':xen_ke_table,
+                   #'repeat_table_list_2_vs_above_cua_tai':repeat_table_list_2_vs_above_cua_tai,
+                   #'repeat_table_list_2_vs_above_cua_xiu':repeat_table_list_2_vs_above_cua_xiu
+                   'above_3_tai_xius':above_3_tai_xius,
+                   'mySelectChartOptionForm':mySelectChartOptionForm,
+                   }
+    if for_only_return_dict:
+        return render_dict
+    return render(request, 'drivingtest/taixiu_2.html', render_dict)
+so_luong_truy_suat = 0
+def import100phien(request):
+    global so_luong_truy_suat
+    import100PhienForm = Import100PhienForm()
+    so_luong_truy_suat +=1
+    print 'import 100 phien',so_luong_truy_suat
+    return render(request, 'drivingtest/import100PhienForm.html', {'import100PhienForm':import100PhienForm})
+def selectchart(request):
+    mySelectChartOptionForm = MySelectChartOptionForm(instance = MySelectChartOption.objects.get(Name = 'my select'))
+    return render(request, 'drivingtest/selectchart.html', {'mySelectChartOptionForm':mySelectChartOptionForm})
+def chartoption(request):
+    #mySelectChartOptionForm = MySelectChartOptionForm(instance = MySelectChartOption.objects.get(Name = 'my select'))
+    form = ChartOptionSelectTrueOrFalseForm()
+    return render(request, 'drivingtest/chartoption.html', {'form':form})
 
-
- 
+import json as simplejson
+def autocomplete(request):
+    results=[]
+    for doitac in [1,2,3,4,5,6,7,8,9,10,15,20,25,30,40,50,60,70,80,90,100,200,300,400]:
+            doitac_dict = {}
+            doitac_dict['label'] = doitac
+            doitac_dict['desc'] = ''
+            doitac_dict['id'] = doitac
+            results.append(doitac_dict)
+    to_json = {
+                "key_for_list_of_item_dict": results,
+            }
+    return HttpResponse(simplejson.dumps(to_json), content_type='application/json')
 class FilterToGenerateQ():
     No_AUTO_FILTER_FIELDS=[]
     def __init__(self,request,FormClass,ModelClass,form_cleaned_data):
@@ -310,7 +328,18 @@ def loc_query_for_table_notification(form_for_loc,request):
                 loc_query = label + '=' + v
             else:
                 loc_query = loc_query + '&'+label + '=' + v
-    return  loc_query     
+    return  loc_query  
+def form_notification_soi_cau_create(last_cau,rt):
+                    check_cau_string = check_cau()
+                    select_cau,begin_cau = rt[1],rt[2]
+                    last_phien_html =u'<span style="color:blue" id ="last-phien">%s</span>,%s'%(last_cau.phien_so,localtime(last_cau.ngay_gio_tao).strftime("%d-%m-%Y %H:%M:%S"))
+                    end_phien_muon_soi_html =u'<span class="end-phien-muon-soi">%s</span>,%s'%(select_cau.phien_so,localtime(select_cau.ngay_gio_tao).strftime("%d-%m-%Y %H:%M:%S"))
+                    khoang_cach_2_phien = u'%s'%(last_cau.phien_so - select_cau.phien_so)
+                    khoang_cach_id = (last_cau.id - select_cau.id)
+                    form_notification = u'last_phien_in_database:%s</br>end_phien_muon_soi:%s</span></br>Khoảng cách 2 phiên: %s</br>Khoảng cách 2 id: %s'\
+                    %(last_phien_html,end_phien_muon_soi_html,khoang_cach_2_phien,khoang_cach_id)
+                    khoang_cach_soi_cau = u'</br>khoang cach 2 phien can soi: %s, </br>khoang cach 2 id can soi %s'%(select_cau.phien_so -begin_cau.phien_so,select_cau.id -begin_cau.id )
+                    return check_cau_string + '<br>' + rt[3]+ '</br>' +  form_notification   + khoang_cach_soi_cau
 def modelmanager(request,modelmanager_name,entry_id):
     #tham so loc nam trong GET, ngoai tham so loc ra thi con tham so which_table_or _form tham so modal hay normal form, neu co nhung tham so nhu tramid
     #hay query_main_search_by_button thi chac chan khong co tham so loc
@@ -319,7 +348,6 @@ def modelmanager(request,modelmanager_name,entry_id):
     #khi co tramid thi khong co loc
     #khi co tram id thi khong co query_main_search_by_button
     #form_name = modelmanager
-    print 'okkkkkkkkkkkkkkkkkkkkkkkkkk@@@@@@@@@@@@@@@ begining'
     status_code = 200
     url = '/omckv2/modelmanager/'+ modelmanager_name +'/'+entry_id+'/'
     form_table_template =request.GET.get('form-table-template')
@@ -357,21 +385,13 @@ def modelmanager(request,modelmanager_name,entry_id):
         print '@@@@@@@@@@@@modelmanager_name',modelmanager_name
         FormClass = eval('forms.' + form_name)#repeat same if loc
         ModelOfForm_Class_name = re.sub('Form$','',form_name,1)
-        print 'form_name @@@@@@@@@@@@2',form_name
         if form_name =='NhanTinUngCuuForm':# only form not model form
             form = FormClass(initial = {'noi_dung_tin_nhan':'abc'})
             form.modal_title_style = 'background-color:#337ab7'
             form.modal_prefix_title  = 'Nội Dung Nhắn Tin'
             form_notification= u'<h2 class="form-notification text-primary">Nhấn nút copy, sẽ copy nội dung tn vào clipboard</h2>'
             dict_render = {'form':form,'form_notification':form_notification}
-        elif form_name =='ImportForm':
-            print 'ok','import100phienForm'
-            #len_x = request.POST['text_html_100phien']
-            tb = phien_100_to_html()
-            form = FormClass(initial= {'text_html_100phien':tb})
-            
-            dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">OK ,%s,%s</h2>'%(datetime.now(),tb)}
-            
+        
         elif form_name =="SoiCauForm":
             form = FormClass(request.POST)
             is_form_valid = form.is_valid()
@@ -379,11 +399,12 @@ def modelmanager(request,modelmanager_name,entry_id):
                 form_notification = u'<h2 class="form-notification text-danger">Nhập Form sai, vui lòng check lại </h2>'
                 status_code = 400
             else:
-                soi_cau_html = string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])
+                rt= string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])
+                soi_cau_html = rt[0]
+                last_cau = TaiXiu.objects.latest('phien_so')
+                form_notification = form_notification_soi_cau_create(last_cau,rt)
                 form = FormClass(request.POST,soi_cau_html = soi_cau_html)
-                form_notification = u'<h2 class="form-notification text-primary">OK soi cau ,%s</h2>'%(datetime.now())
             dict_render = {'form':form,'form_notification':form_notification}  
-            
         elif form_name =="Import100PhienForm":
             form = FormClass(request.POST)
             is_form_valid = form.is_valid()
@@ -392,15 +413,10 @@ def modelmanager(request,modelmanager_name,entry_id):
                 print 'nhap form sai vui long check lai'
                 status_code = 400
             else:
-                #soi_cau_html = string_soi_cau(form.cleaned_data['end_phien'],form.cleaned_data['so_cau_can_soi'])
-                tb = autoimport(last_phien_in_100_user_import = form.cleaned_data['current_phien_plus_one'],ALOWED_change= True,save_or_test = True)
+                tb = autoimport1(last_phien_in_100_user_import = form.cleaned_data['current_phien_plus_one'],ALOWED_change= True,save_or_test = True)
                 form = FormClass(request.POST)
-                
                 form_notification = u'<h2 class="form-notification text-primary">%s,OK auto import with manual current phien ,%s</br>%s</h2>'%(datetime.now(),tb,TaiXiu.objects.latest('phien_so').phien_so)
             dict_render = {'form':form,'form_notification':form_notification}          
-                
-                
-                
         elif form_name =='AutoImportForm':
             form = FormClass()
             which_start_or_stop_btn = request.GET['which-start-or-stop-btn']
@@ -415,45 +431,55 @@ def modelmanager(request,modelmanager_name,entry_id):
                     can_khoi_tao = True
                 
                 if not can_khoi_tao :
-                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">STARTED!,luong da chay roi!! ,%s</h2>'%(datetime.now())}
+                    dict_render = {'form':form,'form_notification':u'<span class="form-notification text-primary">STARTED!,luong da chay roi!! ,%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"))}
                 else:
                     autoimportdict["luong autoimport"] = AutoImportObject()
                     autoimportdict["luong autoimport"].start()
                     if 1:#TbImport.Da_import_xong_global_from_model_module:
-                        #is_another_template = True
                         dict_render = {}
-                        #dict_render  = taixiu(request,for_only_return_dict = True)\
-                        #dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
-                        dict_render.update ({'form':form,'form_notification':u'<h2 class="form-notification text-primary">START ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+                        dict_render.update ({'form':form,'form_notification':u'<span class="form-notification text-primary">START ,%s,%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"),TbImport.thongbao)})
             elif which_start_or_stop_btn=="Stop" :
                 try:
                     autoimportdict["luong autoimport"].stop  = True
-                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Stop ,%s</h2>'%(datetime.now())}
+                    dict_render = {'form':form,'form_notification':u'<span class="form-notification text-primary">Stop ,%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"))}
                 except Exception as e:
-                    
-                    dict_render = {'form':form,'form_notification':u'<h2 class="form-notification text-primary">Chua co luon sao bam Stop!!!%s</h2>'%(datetime.now())}
+                    dict_render = {'form':form,'form_notification':u'<span class="form-notification text-primary">Chua co luon sao bam Stop!!!%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"))}
             elif which_start_or_stop_btn=="thongbao":   
                 is_another_template = True
-                dict_render  = taixiu(request,for_only_return_dict = True)
-                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">Thong bao::: ,%s,%s</h2>'%(datetime.now(),TbImport.thongbao)})
+                dict_render  = tai_xiu_3(request,for_only_return_dict = True)
+                #dict_render = {}
+                #dict_render.update ({'form':form,'form_notification':u'<span class="form-notification text-primary">Thong bao::: ,%s,%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"),TbImport.thongbao)})
+                dict_render.update ({'autoImportForm':form,'form_notification':u'<span class="form-notification text-primary">Thong bao::: ,%s,%s</span>'%(datetime.now().strftime("%d-%m-%Y %H:%M:%S"),TbImport.thongbao)})
             elif which_start_or_stop_btn=="poll":
                 try:
                     just_poll = request.GET['just_poll']
                 except:
                     just_poll = 'nhan nut poll'
-                print '#@@@@@@@@@@@@@@@@@@@@@@@@just_poll',just_poll
                 if just_poll=="true":
                     last_phien = TaiXiu.objects.latest('phien_so').phien_so
-                    #return HttpResponse('<span id="last-phien-sample">%s</span>'%last_phien)
                     return render(request, 'drivingtest/poll.html',{'last_phien':last_phien})
                 elif just_poll=="false":
                     tudong_hay_nhan_nut_poll = 'tu dong'
                 else:
                     tudong_hay_nhan_nut_poll = 'nhan nut poll'
                 is_another_template = True
-                dict_render  = taixiu(request,for_only_return_dict = True)
-                dict_render.update ({'autoImportForm':form,'form_notification':u'<h2 class="form-notification text-primary">%s:,%s,%s</h2>'%(tudong_hay_nhan_nut_poll,datetime.now(),TbImport.thongbao)})   
-                
+                dict_render  = tai_xiu_3(request,for_only_return_dict = True)
+                dict_render.update ({'autoImportForm':form,'form_notification':u'<span class="form-notification text-primary">%s:,%s,%s</span>'%(tudong_hay_nhan_nut_poll,datetime.now(),TbImport.thongbao)})   
+        elif form_name =='ChartOptionSelectTrueOrFalseForm':
+            print 'okkkkkkkkkkkkk...'
+            print request.body
+            form = ChartOptionSelectTrueOrFalseForm()
+            
+            mySelectChartOption =  MySelectChartOption.objects.get(Name = 'my select')
+            for option in mySelectChartOption.myselect.all():
+                is_select = request.POST.get(option.Name,False)
+                if is_select:
+                    is_select = True
+                option.is_select_or_not = is_select
+                option.save()
+                print '***is_select',option.Name,is_select
+            
+            dict_render =   {'form':form,'form_notification':'ban ok'}   
         else:
             
             #print 'request.POST',request.POST
@@ -469,9 +495,9 @@ def modelmanager(request,modelmanager_name,entry_id):
                     loc_pass_agrument = True #tham so nay de loai bo loi required khi valid form
                 else:
                     if entry_id=='new':
-                        form_notification = u'<h2 class="form-notification text-primary">Form trống để tạo instance <span class="name-class-notification">%s</span> mới </h2>'%(VERBOSE_CLASSNAME[ModelOfForm_Class_name])
+                        form_notification = u'<h2 class="form-notification text-primary">Form trống để tạo instance <span class="name-class-notification">%s</span> mới </h2>'%(VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name))
                     else:
-                        form_notification = u'<h2 class="form-notification text-warning"> Đang hiển thị form của Đối tượng <span class="name-class-notification">%s</span> có ID là %s</h2>'%(VERBOSE_CLASSNAME[ModelOfForm_Class_name],entry_id)
+                        form_notification = u'<h2 class="form-notification text-warning"> Đang hiển thị form của Đối tượng <span class="name-class-notification">%s</span> có ID là %s</h2>'%(VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name),entry_id)
                         if 'force_allow_edit' in request.GET:
                             force_allow_edit=True # chuc nang cua is_allow_edit la de display nut edit hay khong
             ModelOfForm_Class = FormClass.Meta.model # repeat same if loc
@@ -487,7 +513,6 @@ def modelmanager(request,modelmanager_name,entry_id):
                     status_code = 200
                     next_continue_handle_form = False
                 if request.method=="POST":# hoac la need_save_form
-                    print '@@@@@@@@@@@@@@@@@@@@@@@i wnat see'
                     print instance.id
                     if 'is_delete' in request.POST and instance.nguoi_tao != request.user :
                         dict_render.update({'info_for_alert_box':u'Bạn không có quyền xóa instance MLL or Comment của người khác'})
@@ -524,9 +549,9 @@ def modelmanager(request,modelmanager_name,entry_id):
                     instance = form.save(commit=True)
                     id_string =  str(instance.id)
                     if entry_id =="new":
-                        form_notification = u'<h2 class="form-notification text-success">Bạn vừa tạo thành công 1 Đối tượng <span class="name-class-notification">%s</span> có ID là %s,bạn có thế tiếp tục edit nó</h2>'%(VERBOSE_CLASSNAME[ModelOfForm_Class_name],id_string)
+                        form_notification = u'<h2 class="form-notification text-success">Bạn vừa tạo thành công 1 Đối tượng <span class="name-class-notification">%s</span> có ID là %s,bạn có thế tiếp tục edit nó</h2>'%(VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name),id_string)
                     else:
-                        form_notification = u'<h2 class="form-notification text-success">Bạn vừa Edit thành công 1 Đối tượng <span class="name-class-notification">%s</span>  có ID là %s,bạn có thế tiếp tục edit nó</h2>'%(VERBOSE_CLASSNAME[ModelOfForm_Class_name],id_string)
+                        form_notification = u'<h2 class="form-notification text-success">Bạn vừa Edit thành công 1 Đối tượng <span class="name-class-notification">%s</span>  có ID là %s,bạn có thế tiếp tục edit nó</h2>'%(VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name),id_string)
                     #reload form with newinstance
                     form = FormClass(instance = instance,request=request,khong_show_2_nut_cancel_va_loc=khong_show_2_nut_cancel_va_loc)###############3
                 #if not is_download_table:
@@ -545,15 +570,8 @@ def modelmanager(request,modelmanager_name,entry_id):
                 no_model = True
             else:
                 no_model = False
-                
-            '''
-            if modelmanager_name =='FindCauListForm':
-                table_name = re.sub('Form$','Table',modelmanager_name)
-                TableClass = eval('forms.' + table_name)
-            '''   
             if modelmanager_name =='BCNOSSForm':
                 is_groups = []
-                
                 groups_fields=['group_ngay','is_group_tinh','is_group_BSC_or_RNC','is_group_BTS_Type','is_group_BTS_thiet_bi','is_group_object']
                 for x in groups_fields:
                     is_group_1_item = request.GET.get(x,None)
@@ -621,39 +639,44 @@ def modelmanager(request,modelmanager_name,entry_id):
             
             if modelmanager_name =='FindCauListForm':
                 i_repeat = request.GET['i_repeat']
-                type_for_table = request.GET['type_for_table']
+                fighter_or_single = request.GET['fighter_or_single']
                 MAU_THU = request.GET['MAU_THU']
                 tai_or_xiu = request.GET['tai_or_xiu']
                 repeat_or_xen_ke = request.GET['repeat_or_xen_ke']
-                print i_repeat,type_for_table,MAU_THU
-                if type_for_table=="cau_tai_xiu" and repeat_or_xen_ke=='repeat':
-                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [int(MAU_THU)],is_print = False)
-                if type_for_table=="fighter" and repeat_or_xen_ke=='repeat':
-                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
-                    more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [0],is_print = False)
-                    list_2_vs_above = chon_tren_hoac_duoi_cau_kep(repeat_XIU_lists,so_cau_moc=2)
-                    repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
-                    more_info_get_from_loop = soicau_2(qrs = list_2_vs_above,END_LIST =[0])
-                if tai_or_xiu =='tai' :
-                    input_list = repeat_TAI_lists
-                elif tai_or_xiu =='xiu' :
-                    input_list = repeat_XIU_lists
-                filter_con_11xenkeTAI= filter(lambda x: x.so_luong_cau==int(i_repeat), input_list)
-                filter_con_11xenkeTAI = filter_con_11xenkeTAI[0:10]
-                
+                print 'fighter_or_single@@@@',fighter_or_single
+                if fighter_or_single=="single":
+                    repeat_TAI_lists,repeat_XIU_lists,xenke_TAI_lists,xenke_XIU_lists,more = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),END_LIST = [int(MAU_THU)],is_in = False)
+                else:
+                    rs = re.findall('fighter_(.+?)$', fighter_or_single)
+                    if rs and repeat_or_xen_ke=='repeat':
+                        so_cau_moc_if_fighter_for_find_cau_list_link = int(request.GET['so_cau_moc_if_fighter_for_find_cau_list_link'])
+                        repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,more \
+                        = soicau_2(qrs = TaiXiu.objects.all().order_by('-phien_so'),
+                                   END_LIST = [0],
+                                   is_in = False)
+                        for_fighter_tai_or_xiu_list = eval('repeat_%s_lists'%rs[0].upper())
+                        list_2_vs_above = chon_tren_hoac_duoi_cau_kep(for_fighter_tai_or_xiu_list,so_cau_moc=so_cau_moc_if_fighter_for_find_cau_list_link)
+                        repeat_TAI_lists,repeat_XIU_lists,XEN_KE_TAI_lists,XEN_KE_XIU_lists,\
+                        more_info_get_from_loop = soicau_2(qrs = list_2_vs_above,END_LIST =[0],is_in = False)
+                eval_str = '%s_%s_lists'%(repeat_or_xen_ke,tai_or_xiu.upper())
+                print eval_str
+                input_list = eval(eval_str)
+                filter_so_luong_cau= filter(lambda x: x.so_luong_cau==int(i_repeat), input_list)
+                so_luong_cau_tim_duoc =  len(filter_so_luong_cau)
+                filter_so_luong_cau = filter_so_luong_cau[0:10]
                 querysets =[]
-                print 'filter_con_11xenkeTAI',filter_con_11xenkeTAI
-                for x in filter_con_11xenkeTAI:
+                for x in filter_so_luong_cau:
                     one_row_dict = {}
                     one_row_dict['so_lan_lap'] = x.so_luong_cau
-                    one_row_dict['phien_bat_dau'] = mark_safe(u'<a href="/taixiu2/?end=%s">%s</a>'%(x.phien_bat_dau,x.phien_bat_dau))
-                    one_row_dict['phien_ket_thuc'] = mark_safe(u'<a href="/taixiu2/?end=%s">%s</a>'%(x.phien_so ,x.phien_so ))
+                    one_row_dict['phien_bat_dau'] = mark_safe(u'<a href="/tai_xiu_3/?end=%s">%s</a>'%(x.phien_bat_dau,x.phien_bat_dau))
+                    one_row_dict['phien_ket_thuc'] = mark_safe(u'<a href="/tai_xiu_3/?end=%s">%s</a>'%(x.phien_so ,x.phien_so ))
                     khoang_cach_bat_dau_ket_thuc = len(TaiXiu.objects.filter(phien_so__gt=x.phien_bat_dau,phien_so__lt=x.phien_so))
                     one_row_dict['khoang_cach'] = khoang_cach_bat_dau_ket_thuc
-                    
+                    one_row_dict['khoang_cach_den_last_phien'] = TaiXiu.objects.latest('phien_so').phien_so - x.phien_so
                     querysets.append(one_row_dict)
                 #querysets =[{'so_lan_lap':1,'phien_bat_dau':2,'phien_ket_thuc':3}]
-                table_notification = u'<h2 class="table_notification">ok</h2>'
+                table_notification = u'<h2 class="table_notification">Số lượng cầu tìm được : %s </br>group cầu %s (cầu)</br>,mẫu thử %s,Type: %s,%s,%s</h2>'\
+                %(so_luong_cau_tim_duoc,i_repeat,MAU_THU,fighter_or_single,repeat_or_xen_ke,tai_or_xiu)
             else:
                 querysets = ModelofTable_Class.objects.all().order_by('-id')
                 table_notification = u'<h2 class="table_notification">Tất cả  đối tượng <span class="soluong-notif">(%s)</span> trong database <span class="name-class-notification">%s</span> được hiển thị ở table bên dưới</h2>'%(len(querysets),VERBOSE_CLASSNAME[ModelofTable_Class_name])
@@ -672,16 +695,18 @@ def modelmanager(request,modelmanager_name,entry_id):
     else:
         if is_another_template:
             if form_name =='AutoImportForm':
-                pattern = 'drivingtest/taixiu.html'
+                pattern = 'drivingtest/taixiu_2.html'
         else:   
-            print 'form_table_template@@@',form_table_template
             if form_table_template =='form on modal' :# and not click order-sort
-                print 'form_table_template@@@',form_table_template
                 if form:
                     form.verbose_form_name =VERBOSE_CLASSNAME.get(ModelOfForm_Class_name,ModelOfForm_Class_name)
                 pattern = 'drivingtest/form_table_manager_for_modal.html'
             else:
-                pattern ='drivingtest/form_table_manager.html'
+                if form_name =='AutoImportForm':
+                    #pattern ='drivingtest/form_table_manager_cho_fixed_header.html'
+                    pattern ='drivingtest/form_table_manager.html'
+                else:
+                    pattern ='drivingtest/form_table_manager.html'
         return render(request, pattern,dict_render,status=status_code)
             
 def index(request):
@@ -827,6 +852,57 @@ def get_description(request):
     return render(request, 'drivingtest/load_entry.html', {'notification':notification,'form':entry_form,'entry_id':entry_id})
 
 
+
+stop_auto_import = True
+run_auto_import = False
+def user_login(request):
+    print request
+    
+    # Like before, obtain the context for the user's request.
+    context = RequestContext(request)
+
+    # If the request is a HTTP POST, try to pull out the relevant information.
+    if request.method == 'POST':
+        # Gather the username and password provided by the user.
+        # This information is obtained from the login form.
+        username = request.POST['username']
+        password = request.POST['password']
+
+        # Use Django's machinery to attempt to see if the username/password
+        # combination is valid - a User object is returned if it is.
+        user = authenticate(username=username, password=password)
+
+        # If we have a User object, the details are correct.
+        # If None (Python's way of representing the absence of a value), no user
+        # with matching credentials was found.
+        if user:
+            # Is the account active? It could have been disabled.
+            if user.is_active:
+                # If the account is valid and active, we can log the user in.
+                # We'll send the user back to the homepage.
+                login(request, user)
+                return HttpResponseRedirect('/omckv2/')
+            else:
+                # An inactive account was used - no logging in!
+                return HttpResponse("Your Rango account is disabled.")
+        else:
+            # Bad login details were provided. So we can't log the user in.
+            print "Invalid login details: {0}, {1}".format(username, password)
+            return HttpResponse("Invalid login details supplied.")
+
+    # The request is not a HTTP POST, so display the login form.
+    # This scenario would most likely be a HTTP GET.
+    else:
+        # No context variables to pass to the template system, hence the
+        # blank dictionary object...
+        return render_to_response('drivingtest/login.html', {}, context) 
+@login_required
+def user_logout(request):
+    # Since we know the user is logged in, we can now just log them out.
+    logout(request)
+
+    # Take the user back to the homepage.
+    return HttpResponseRedirect('/omckv2/')
 
 
 

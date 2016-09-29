@@ -24,3 +24,11 @@ class Table3gAdmin(admin.ModelAdmin):
 #admin.site.register(Ulnew,Table3gAdmin)
 admin.site.register(Ulnew)
 admin.site.register(ForumTable)
+from django.apps import apps
+from django.contrib.admin.sites import AlreadyRegistered
+app_models = apps.get_app_config('drivingtest').get_models()
+for model in app_models:
+    try:
+        admin.site.register(model)
+    except AlreadyRegistered:
+        pass

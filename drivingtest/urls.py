@@ -20,9 +20,13 @@ urlpatterns = patterns('',
         
         url(r'^$', views.index, name='index'),
         url(r'^omckv2/modelmanager/(?P<modelmanager_name>\w+)/(?P<entry_id>.*?)/$', views.modelmanager, name='suggestion'),
-        url(r'^taixiu/$', views.taixiu, name='index'),
-        url(r'^taixiu2/$', views.taixiu2, name='index'),
+        #url(r'^taixiu/$', views.taixiu, name='index'),
+        #url(r'^taixiu2/$', views.taixiu2, name='index'),
+        url(r'^tai_xiu_3/$', views.tai_xiu_3, name='index'),
+        url(r'^taixiuview/$', views.taixiuview, name='index'),
         url(r'^import100phien/$', views.import100phien, name='index'),
+        url(r'^selectchart/$', views.selectchart, name='index'),
+        url(r'^chartoption/$', views.chartoption, name='index'),
         url(r'^select_forum/$',  views.select_forum, name='select_forum'),
         url(r'^get-thongbao/$',  views.get_thongbao, name='get-thongbao'),
         url(r'^leech/$',  views.leech, name='leech'),
@@ -30,7 +34,8 @@ urlpatterns = patterns('',
         url(r'^stop-post/$',  views.stop_post, name='stop-post'),
         url(r'^get_description/$',  views.get_description, name='tao-object'),
         url(r'^edit_entry/(?P<entry_id>\d+)/$',  views.edit_entry, name='edit_entry'),
-        
+        url(r'^omckv2/autocomplete/$',  views.autocomplete, name='tram_table'),
+
         
         ##########CHUNG
         #url(r'^$', views.index, name='index'),

@@ -1,0 +1,18 @@
+{% extends 'drivingtest/base.html' %}
+{% load render_table from django_tables2 %}
+{% load crispy_forms_tags %}
+{% block title %}OMCKV2-Home page{% endblock %}
+{% block body_block %}
+<div id="select-chart" class="form-table-wrapper col-sm-12 ">
+               <div class="form-manager col-sm-12" >
+                  <div class="col-sm-12 notification-form-div" >
+                     {% crispy form %}
+                  </div>
+                  <div class="col-sm-12 form-div">
+                  </div>
+               </div>
+            </div>
+
+
+
+{% endblock %}

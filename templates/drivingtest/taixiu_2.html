@@ -3,43 +3,232 @@
 {% block body_block %}
 {% load render_table from django_tables2 %}
 {% load crispy_forms_tags %}
-{% load index %}
+
 <!-- Modal -->
 <div class="modal fade" id="modal-on-mll-table" role="dialog"></div>
-<div class="container-fluid">
-   <div class="row">
-      <div id="soicau-wrapper" class="form-table-wrapper col-sm-12 ">
-         <p>last phien : <b id="last-phien" style="font-size:20px;color:green">{{last_phien}}</b></p>
-         </p>Soi Phien : <b id="last-phien" style="font-size:20px;color:red">{{soi_phien}}</b></p>
-         <div>{{string_soi_cau_html}}</div>
-         <div class="form-manager col-sm-12" >
-            {%if soicauForm %}
-            {% crispy soicauForm %}
-            {%endif%}
+<div class="righ-bottom">
+   
+ <div class="dropup">
+    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Dropup Example
+    <span class="caret"></span></button>
+    <ul class="dropdown-menu">
+      <input type="checkbox" name="vehicle" value="Bike" id = "dont-reload">Don't reload<br>
+    <input type="checkbox" name="vehicle" value="Bike" id = "dont-load-chart"  >Don't load chart<br>
+    <input type="checkbox" name="vehicle" value="Bike" id = "show-line"  >show line<br>
+    </ul>
+  </div>
+   <div onclick="switchfunction()" style="color:blue;cursor:pointer">&#9776; Left</div>
+   <div onclick="switchfunction_left()"style="color:blue;cursor:pointer">&#9776; Top </div>
+
+</div>
+ 
+
+<div id="main-taixiu" class="container-fluid">
+   <div id="mySidenav" class="sidenav" >
+      <div class="fix-top-in-mySidenav" style = "position:absolute;top:0px;right:0px;width:100%">
+         <div>
+         
+         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+         
+
+         {{brief_soi_cau|safe}}
          </div>
       </div>
 
+      <div class="below-div-in-mySidenav" style="position:relative;overflow-x: hidden; width:100%;height:100%;top:50px;">
+         <h3> Sơ đồ Site</h3>
+         <table class="chart-location-table">
+            <thead>
+               <tr>
+                  <td>location link1</td>
+                  <td>location link2</td>
+               </tr>
+            </thead>
+            <tbody>
+               <tr>
+                  <td><a href="#container-tai_xiu_ttxx-100">tai_xiu_ttxx-100</a></td>
+                  <td><a href="#container-tai_xiu_ttxx-512">tai_xiu_ttxx-512</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#container-repeat-tai-100">repeat-tai-100</a></td>
+                  <td><a href="#container-repeat-xiu-100">repeat-xiu-100</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#container-repeat-tai-512">repeat-tai-512</a></td>
+                  <td><a href="#container-repeat-xiu-512">repeat-xiu-512</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#container-xenke-tai-100">xenke-tai-100</a></td>
+                  <td><a href="#container-xenke-xiu-100">xenke-xiu-100</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#container-xenke-tai-512">xenke-tai-512</a></td>
+                  <td><a href="#container-xenke-xiu-512">xenke-xiu-512</a></td>
+               </tr>
+               <tr>
+                  <td><a href="#tai-xiu-thong-ke-table">tai xiu thong ke table</a></td>
+                  <td><a href="#tai-tai-xiu-xiu-thong-ke-table">tai-tai-xiu-xiu-thong-ke-table</a></td>
+               </tr>
+            </tbody>
+         </table>
+         <p style="color:blue;font-weigh:bold;font-size:16px">Current active</p>
+         {% render_table exactly_act_tive_link_Table %}
+         <p style="color:green;font-weigh:bold;font-size:16px;text-decoration: underline;">If Next Tài</p>
+         {% render_table dubaotai_Table %}
+         <p style="color:pink;font-weigh:bold;font-size:16px;text-decoration: underline;">If Next Xỉu</p>
+         {% render_table dubaoxiu_Table %}
+         <p style="color:blue;font-weigh:bold;font-size:16px">all active</p>
+         
+      {%if linkTable_active %}
+         {% render_table linkTable_active %}
+         {% endif %}
+         <p style="font-weigh:bold;font-size:16px;text-decoration: underline;">all table</p>
+         {%if linkTable %}
+         {% render_table linkTable %}
+         {% endif %}
+      </div>
    </div>
-
+   <div id="mySidenav-top" class="sidenav-top" style="width:90%">
+      <div  style = "padding-top: 50px;">
+         <a href="javascript:void(0)" class="closebtn" onclick="closeTopNav()">&times;</a>
+         <div class="col-sm-1" >
+            <span style="font-size:30px;cursor:pointer" onclick="openNav()">&#9776; open</span>
+         </div>
+         {% if autoImportForm %}
+         <div id="autoImportForm-wrapper" class="form-table-wrapper col-sm-5 " >
+            <div class="form-manager col-sm-12" >
+               <div class="col-sm-8 form-div">
+                  {% crispy autoImportForm %}
+               </div>
+               <div class="col-sm-4 notification-form-div">
+                  {{form_notification |safe}}
+               </div>
+            </div>
+         </div>
+         {% endif %}
+         <div class="col-sm-6">
+            <div id="soicau-wrapper" class="form-table-wrapper col-sm-12 ">
+               <div class="form-manager col-sm-12" >
+                  <div class="col-sm-4 notification-form-div" >
+                     {{soi_cau_form_notification}}
+                  </div>
+                  <div class="col-sm-8 form-div">
+                     {% crispy soicauForm %}
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
    <div class="row">
-      <H2 style="color:green;text-align:center">repeat_table</H2>
+      <div class="fixed-class1">
+      </div>
+   </div>
+   <div id="chart-for-margin-top">
+   </div>
+   <div class="row tai-xiu-50" >
+      <H2 style="color:green;text-align:center" id="tai-xiu-thong-ke-table">TÀI XỈU TK TABLE</H2>
+      <div>
+         {% render_table taixiuthongke_table %}
+      </div>
+      <div class="scroll-x-div">
+         <H2 style="color:green;text-align:center" id = "tai-tai-xiu-xiu-thong-ke-table">TTXXTXXT thong ke table</H2>
+         <div>
+            {% render_table ttxx_table %}
+         </div>
+      </div>
+      <H2 style="color:green;text-align:center" id ="{{repeat_table.title}}" >{{repeat_table.title}}</H2>
       <div>
          {% render_table repeat_table %}
       </div>
-      <H2 style="color:red;text-align:center">xen_ke_table</H2>
-      <div>
+      <H2 style="color:red;text-align:center" id ="{{xen_ke_table.title}}" >{{xen_ke_table.title}}</H2>
+      <div class="xenke-div">
          {%if xen_ke_table %}
          {% render_table xen_ke_table %}
          {%endif%}
       </div>
-      <H2 style="color:yellow;text-align:center">repeat_table_list_2_vs_above</H2>
-      <div>
-         {%if repeat_table_list_2_vs_above %}
-         {% render_table repeat_table_list_2_vs_above %}
-         {%endif%}
-      </div>
    </div>
+   <div class = 'row above-all-wrapper' style="width:100%">
+      {% for repeat_table_list_2_vs_above_cua_tai,xenketai,repeat_table_list_2_vs_above_cua_xiu,xenkexiu in above_3_tai_xius %}
+      
+      <div class = "row">
+         <div class="above-table-div above-table-div-tai" >
+            {{repeat_table_list_2_vs_above_cua_tai.title}}
+            {%if repeat_table_list_2_vs_above_cua_tai %}
+            {% render_table repeat_table_list_2_vs_above_cua_tai %}
+            {%endif%}
+         </div>
+
+         <div class="above-table-div above-table-div-tai">
+            {{xenketai.title}}
+            {%if xenketai %}
+            {% render_table xenketai %}
+            {%endif%}
+         </div>
 
 
+         <div class="above-table-div-xiu">
+            {{repeat_table_list_2_vs_above_cua_xiu.title}}
+            {%if repeat_table_list_2_vs_above_cua_xiu %}
+            {% render_table repeat_table_list_2_vs_above_cua_xiu %}
+            {%endif%}
+         </div>
+
+         <div class="above-table-div-xiu" >
+            {{xenkexiu.title}}
+            {%if xenkexiu %}
+            {% render_table xenkexiu %}
+            {%endif%}
+         </div>
+      </div>
+      
+
+      {% endfor %}
+   </div>
+table_2qualvsmore2
+{% render_table table_2qualvsmore2 %}
+<div id="" class="form-table-wrapper  " >
+            <div class="form-manager col-sm-12" >
+               <div class="col-sm-12 form-div">
+                  {% crispy taixiuform %}
+               </div>
+               <div class="col-sm-12 notification-form-div">
+                  {{form_notification |safe}}
+               </div>
+            </div>
+
+            <div class="col-sm-12 table-manager">
+{%if table_notification %}
+      {{table_notification |safe}}
+{%endif%}
+{%if taixiutable %}
+{% render_table taixiutable "drivingtest/custom_table_template_mll.html" %}
+{%endif%}
+</div>
+
+         </div>
+<div id="select-chart" class="form-table-wrapper col-sm-12 ">
+               <div class="form-manager col-sm-12" >
+                  <div class="col-sm-12 notification-form-div" >
+                     {% crispy mySelectChartOptionForm %}
+                  </div>
+                  <div class="col-sm-12 form-div">
+                  </div>
+               </div>
+            </div>
+
+
+
+
+
+   <div id="json">
+      <div id = "series" data ="{{ series|safe }}">adfdf</div>
+   </div>
+   <script type="text/javascript">
+      //<![CDATA[
+      var series = {{ series|safe }}
+      var categories = {{ categories|safe }}
+      //]]>
+   </script>
 </div>
 {% endblock %}

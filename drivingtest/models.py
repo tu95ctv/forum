@@ -16,10 +16,16 @@ Da_import_xong_global_from_model_module = False
 class TbImport(object):
     thongbao = 'chua co thong bao j'
     Da_import_xong_global_from_model_module = False
+    GLOBAL_BRIEF_ID_LINK_LIST = []
+    GLOBAL_BRIEF_ACTIVE_LIST = []
+    GLOBAL_EXACTLY_ACTIVE_LIST = []
+    GLOBAL_DUBAO_ACTIVE_LIST = {'du bao tai':[],'du bao xiu': []}
+    how_many_current_is_repeat_tai_or_xiu = ('','')#'key of current_group_cau_sign, input of create table 2 la taixiu.objects.all()'
+    for_make_fighter_dubao_link = {'du bao tai':('',''),'du bao xiu':('','')}
 class thongbao(object):
     thongbao = 'chua co thong bao j'
     log = 'chua co log gi'
-
+    
 
         
         
@@ -88,10 +94,18 @@ class LeechSite (models.Model):
     anime= models.CharField(max_length=100,null=True,blank=True)#3
     mobile= models.CharField(max_length=100,null=True,blank=True)#3
     ebook= models.CharField(max_length=100,null=True,blank=True)#3
+class TenTable(models.Model):
+    name= models.CharField(max_length=100,unique=True)
+    def __unicode__(self):
+        return self.name
+class DatCua(models.Model):
+    cua_tai_hay_xiu= models.IntegerField()
+    phien_cua = models.IntegerField(unique=True)
+    so_tien = models.IntegerField()
+    tenTable = models.ForeignKey(TenTable,blank=True)
 class TaiXiu (models.Model):
     phien_so= models.IntegerField(unique=True)#3
     ngay_gio_tao= models.DateTimeField(default=datetime.now,verbose_name=u"Ngày giờ tạo",blank=True)#3
-
     cau_1= models.IntegerField(null=True,blank=True)#3
     cau_2= models.IntegerField(null=True,blank=True)#3
     cau_3= models.IntegerField(null=True,blank=True)#3
@@ -99,3 +113,21 @@ class TaiXiu (models.Model):
     tai_1_xiu_0= models.IntegerField()#
     def __unicode__(self):
         return '+phien %s,cac cau %s,%s,%s+'%(self.phien_so,self.cau_1,self.cau_2,self.cau_3)
+class ChartOption(models.Model):    
+    Name = models.CharField(max_length=400,unique=True)
+    stt = models.IntegerField()
+    options_data_list = models.CharField(max_length=400,null=True,blank=True)
+    is_select_or_not = models.BooleanField(default = False)
+    def __unicode__(self):
+        return self.Name
+class MySelectChartOption(models.Model):
+    Name = models.CharField(max_length=400,unique=True)
+    myselect = models.ManyToManyField (ChartOption)
+    
+class LuuOption(models.Model):    
+    Name = models.CharField(max_length=400,unique=True)
+    options_data_list = models.CharField(max_length=40000,null=True,blank=True)
+    def __unicode__(self):
+        return self.Name
+    
+    

@@ -1,0 +1,4 @@
+{%for option in options %}
+ 
+ <div><input name = "{{option}}" type = "checkbox" value ="{{forloop.counter0 }}" {% if option.is_select_or_not %}checked{%endif%}>{{option}}</div>
+{% endfor %}

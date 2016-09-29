@@ -1,3 +1,4 @@
+{% load crispy_forms_tags %}
 <!DOCTYPE html>
 {% load static %}
 <html>
@@ -10,146 +11,65 @@
       <link href="{% static 'css/jquery-ui.css'%}" rel="stylesheet">
       <link href="{% static 'css/jquery-ui.theme.css'%}" rel="stylesheet">
       <link href="{% static 'timepick/bootstrap-datetimepicker.css'%}" rel="stylesheet">
-      <link href="{% static 'css/pnotify.custom.min.css'%}" rel="stylesheet">
       <link href="{% static 'css/select2.min.css'%}" rel="stylesheet">
       <link href="{% static 'css/bootstrap-fluid-adj.css'%}" rel="stylesheet">
-      
-      <link rel="icon" type="image/vnd.microsoft.icon"
-         href="{{last_OwnContact.icon_path}}" />
-      <style type="text/css">
-
-      table.table thead th.sortable { background: url('/media/images/sort_both.png') no-repeat center right; }
-   table.table thead th.asc { background: url('/media/images/sort_asc.png') no-repeat center right; }
-   table.table thead th.desc { background: url('/media/images/sort_desc.png') no-repeat center right; }
-      .main-header{
-               /*background: #6666CC;*/
-               background:{{last_OwnContact.mainheader_color}};
-               
-
-               
-
-         }
-         .footer-custom{
-            background:{{last_OwnContact.footer_custom_color}};
-   /*background: #337AB7;*/
-   }
-      .banner1 .pic-banner {
-         {%if last_OwnContact.banner_height %}
-         max-height: {{last_OwnContact.banner_height}}px;
-           {%else%}
-         max-height: 100px;
-         {%endif%}
-         width:100%;
-   }
-   .h0-logo {
-      
-      height:100px; 
-      
-   }
-   .phu-kien-tot {
-      margin-top: 10px;
-
-   }
-   
-   .product-wrap{
-      margin-right: 0px;
-   }
-      </style>
-      <title>{% block title %}{{last_OwnContact.base_title}}{% endblock %}</title>
+ 
+      <title></title>
+   </head>
    <body>
-      <header>
-         <div class = "top-bar">
-            <div class = "container ">
-               <div class = "row">
-                  <div class = "col-sm-12">
-                     <div class = "pull-left">
-                        <!-- Single button -->
-                        <div class ="lang">
-                           <div class="btn-group">
-                              <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                              VietNamese <span class="caret"></span>
-                              </button>
+      <!--
+         <header >
+            <div class ="">
+               <div class = "main-nav "  >
+                  <div class = "container">
+                     <div class = "row">
+                        <ul class="nav nav-pills">
+                           <li class="active"><a href="/taixiu2/"><i class = "glyphicon glyphicon-home"></i> Trang chủ</a></li>
+                           <li class="dropdown">
+                              {% if user.is_authenticated %}
+                           <li class="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configuration Menu<span class="caret"></span></a>
                               <ul class="dropdown-menu" role="menu">
-                                 <li> Language </li>
-                                 <li><a href="#">VietNamese</a></li>
-                                 <li><a href="#">English</a></li>
+                                 <li><a href="/omckv2/modelmanager/UserProfileForm/{{ user.userprofile.id}}/" class="show-modal-form-link force_allow_edit">Config Ca</a></li>
                               </ul>
-                           </div>
-                        </div>
-                        <!--end .lang-->
-                     </div>
-                     <div class = "pull-right top-links">
-                        <ul class = "list-unstyled">
+                           </li>
+                           <li><a href="/logout/">Sign out</a></li>
+                           {%else%}
+                           <li><a href="/login/">Login</a></li>
+                           {%endif%}
+                           <li><a href="/import100phien/">import 100 phien</a></li>
                         </ul>
                      </div>
                   </div>
                </div>
+               
             </div>
-         </div>
-   
-         <div class = "main-nav">
-            <div class = "container">
-               <div class = "row">
-                  <ul class="nav nav-pills">
-                     <li class="active"><a href="/"><i class = "glyphicon glyphicon-home"></i> Trang chủ</a></li>
-                     <li class="dropdown">
-                        
-                     {% if user.is_authenticated %}
-                     <li><a id="ca_truc_a">Ca {{ user.userprofile.ca_truc }}!</a></li>
-                     <li><a href="/omckv2/">hello {{ user.username }}!</a></li>
-                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Configuration Menu<span class="caret"></span></a>
-                        <ul class="dropdown-menu" role="menu">
-                           <li><a href="/omckv2/modelmanager/UserProfileForm/{{ user.userprofile.id}}/" class="show-modal-form-link force_allow_edit">Config Ca</a></li>
-                        </ul>
-                     </li>
-
-
-
-                     <li><a href="/omckv2/upload_excel_file/">upload_excel_file</a></li>
-                     <li><a href="/logout/">Sign out</a></li>
-                     {%else%}
-                     <li><a href="/login/">Login</a></li>
-                     {%endif%}
-                  </ul>
-               </div>
-            </div>
-         </div>
-         <!--end .main-nav -->
-      </header>
-      <!--Slieder here-->
-      <section class="content" style = "padding:40px;">
+      </header>-->
+      <section class="content" >
          {%block body_block%}
          {%endblock%}
       </section>
       <!--end .content-->
-      
       </br></br></br></br></br></br></br>
-       
-         <div class="footer-copyright">
-            <div class="container">
-               <div class="row">
-                  <div class="col-sm-12">
-                     <p>&copy; 2015 | Copy right of {{last_OwnContact.webpage}}.</p>
-                  </div>
+      <div class="footer-copyright" style = "margin-top:300px;">
+         <div class="container">
+            <div class="row">
+               <div class="col-sm-12">
+                  <p>&copy; 2015 | Copy right of {{last_OwnContact.webpage}}.</p>
                </div>
             </div>
          </div>
+      </div>
       </footer>
       <script src="{% static 'js/jquery-2.1.4.js '%}"></script>
-      <script src="{% static 'js/bootstrap.min.js' %}"></script>
+      <script src="{% static 'js/bootstrap.js' %}"></script>
       <script src="{% static 'js/jquery-ui.js' %}"></script>
       <script src="{% static 'timepick/moment-with-locales.js' %}"></script>
       <script src="{% static 'timepick/bootstrap-datetimepicker.js' %}"></script>
-      <script src="{% static 'js/bootbox.min.js' %}"></script>
-      <script src="{% static 'js/pnotify.custom.min.js' %}"></script>
       <script src="{% static 'js/select2.min.js' %}"></script>
-      <script src="{% static 'js/colResizable-1.5.min.js' %}"></script>
+      <script src="{% static 'js/canvasjs.min.js' %}"></script>
+      <script src="{% static 'js/highcharts.js' %}"></script>
+      <script src="{% static 'js/exporting.js' %}"></script>
       <script src="{% static 'js/learndriving.js' %}"></script>
-      <script type="text/javascript">
-
-</script>
-      
-      
-
+   </body>
 </html>
